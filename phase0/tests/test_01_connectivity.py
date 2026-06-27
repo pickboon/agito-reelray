@@ -36,12 +36,12 @@ def test_text_to_video():
     }
 
     payload = {
-        "model": "happyhorse-1.0",
+        "model": "happyhorse-1.0-t2v",
         "input": {
             "prompt": "A young woman with long black hair, wearing a red dress, standing in a sunlit garden, cinematic lighting, shallow depth of field, 4K quality. Character design sheet, front view.",
         },
         "parameters": {
-            "size": "1280x720",
+            "size": "1280*720",
             "duration": 5.0,  # 5 秒
         },
     }

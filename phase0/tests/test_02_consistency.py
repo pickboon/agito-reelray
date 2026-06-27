@@ -143,10 +143,10 @@ def submit_task(prompt: str, task_id_prefix: str) -> dict:
         "X-DashScope-Async": "enable",
     }
     payload = {
-        "model": "happyhorse-1.0",
+        "model": "happyhorse-1.0-t2v",
         "input": {"prompt": prompt},
         "parameters": {
-            "size": "1280x720" if RESOLUTION == "720p" else "1920x1080",
+            "size": "1280*720" if RESOLUTION == "720p" else "1920*1080",
             "duration": 5.0,
         },
     }
