@@ -147,7 +147,7 @@ def submit_task(prompt: str, task_id_prefix: str) -> dict:
         "input": {"prompt": prompt},
         "parameters": {
             "size": "1280*720" if RESOLUTION == "720p" else "1920*1080",
-            "duration": 5.0,
+            "duration": 5,
         },
     }
     try:

@@ -42,7 +42,7 @@ def test_text_to_video():
         },
         "parameters": {
             "size": "1280*720",
-            "duration": 5.0,  # 5 秒
+            "duration": 5,    # 5 秒
         },
     }
 

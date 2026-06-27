@@ -1,0 +1,11 @@
+dim,case_id,task_id,status,video_url,elapsed,prompt,error,usage
+t1_face,t1_01,5214aa16-bfdc-4c22-83f6-c3d7c3bcbcb6,SUCCEEDED,https://dashscope-a717.oss-accelerate.aliyuncs.com/1d/4e/20260627/3419032b/97147843-metadata_video_1080p_5214aa16-bfdc-4c22-83f6-c3d7c3bcbcb6.mp4,149,,,
+t1_face,t1_02,44bebb21-fcbf-468d-97fc-31efb379a609,SUCCEEDED,https://dashscope-a717.oss-accelerate.aliyuncs.com/1d/fe/20260627/3419032b/84530454-metadata_video_1080p_44bebb21-fcbf-468d-97fc-31efb379a609.mp4,8,,,
+t1_face,t1_03,dcd87903-6545-4e95-bd54-622110d35dbb,SUCCEEDED,https://dashscope-a717.oss-accelerate.aliyuncs.com/1d/8f/20260627/c8a4f442/86687058-metadata_video_1080p_dcd87903-6545-4e95-bd54-622110d35dbb.mp4,131,,,
+t1_face,t1_04,1f21f1a2-8daa-4cdd-a01d-b3af09c1154b,SUCCEEDED,https://dashscope-a717.oss-accelerate.aliyuncs.com/1d/3c/20260627/3419032b/23441780-metadata_video_1080p_1f21f1a2-8daa-4cdd-a01d-b3af09c1154b.mp4,8,,,
+t1_face,t1_05,c00e1c4a-7158-4af9-8b0e-17ba1d30cfdb,SUCCEEDED,https://dashscope-a717.oss-accelerate.aliyuncs.com/1d/f9/20260627/3419032b/50387912-metadata_video_1080p_c00e1c4a-7158-4af9-8b0e-17ba1d30cfdb.mp4,142,,,
+t4_costume,t4_01,43e56f8d-fa37-43c2-b110-40f79399e900,SUCCEEDED,https://dashscope-a717.oss-accelerate.aliyuncs.com/1d/ac/20260627/3419032b/68611929-metadata_video_1080p_43e56f8d-fa37-43c2-b110-40f79399e900.mp4,8,,,
+t4_costume,t4_02,1d8c7d54-3f46-44b9-9269-f06578aa86a0,SUCCEEDED,https://dashscope-a717.oss-accelerate.aliyuncs.com/1d/ee/20260627/3419032b/47480630-metadata_video_1080p_1d8c7d54-3f46-44b9-9269-f06578aa86a0.mp4,8,,,
+t4_costume,t4_03,5bcc34d8-b388-4ade-9288-5c229da7e63b,SUCCEEDED,https://dashscope-a717.oss-accelerate.aliyuncs.com/1d/8d/20260627/3419032b/50534516-metadata_video_1080p_5bcc34d8-b388-4ade-9288-5c229da7e63b.mp4,8,,,
+t4_costume,t4_04,eb7ca844-9bed-4f42-87b4-8a479a56960b,SUCCEEDED,https://dashscope-a717.oss-accelerate.aliyuncs.com/1d/29/20260627/3419032b/25948825-metadata_video_1080p_eb7ca844-9bed-4f42-87b4-8a479a56960b.mp4,144,,,
+t4_costume,t4_05,8a8776b6-5484-4025-98a5-dc9fb744c494,SUCCEEDED,https://dashscope-a717.oss-accelerate.aliyuncs.com/1d/44/20260627/3419032b/79742617-metadata_video_1080p_8a8776b6-5484-4025-98a5-dc9fb744c494.mp4,8,,,
