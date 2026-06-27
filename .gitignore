@@ -1,9 +1,10 @@
 .env
 .DS_Store
-phase0/videos/*.mp4
-phase0/videos/*.png
-phase0/videos/frames/
-phase0/videos/contact_sheet.html
-phase0/videos/full_contact_sheet.html
-phase0/videos/t1_t4_batch1/
+
+# Phase 0 视频/图片大文件（仅保留 CSV 和测试脚本）
+phase0/videos/**/*.mp4
+phase0/videos/**/*.png
+phase0/videos/**/*.jpg
+phase0/videos/**/*.html
+phase0/videos/**/frames/
 phase0/test_output*.mp4
