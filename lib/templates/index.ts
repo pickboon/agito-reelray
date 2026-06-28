@@ -2,6 +2,10 @@ import revenge from "./revenge.json";
 import romance from "./romance.json";
 import thriller from "./thriller.json";
 import fantasy from "./fantasy.json";
+import crossworld from "./crossworld.json";
+import ceo from "./ceo.json";
+import warlord from "./warlord.json";
+import comeback from "./comeback.json";
 
 export interface TemplateCharacter {
   name: string;
@@ -45,6 +49,10 @@ const templates: StoreTemplate[] = [
   romance as unknown as StoreTemplate,
   thriller as unknown as StoreTemplate,
   fantasy as unknown as StoreTemplate,
+  crossworld as unknown as StoreTemplate,
+  ceo as unknown as StoreTemplate,
+  warlord as unknown as StoreTemplate,
+  comeback as unknown as StoreTemplate,
 ];
 
 export function getTemplate(id: string): StoreTemplate | undefined {

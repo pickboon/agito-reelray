@@ -1,0 +1,178 @@
+{
+  "id": "ceo",
+  "name": "霸总契约",
+  "description": "平凡女孩与冷面 CEO 签订契约恋爱合同，从相互利用到真心相爱。甜虐交织的都市爱情，高颜值阵容与极致服化道，精准命中女性观众市场。",
+  "price_cents": 9900,
+  "category": "romance",
+  "tags": [
+    "霸总",
+    "契约恋爱",
+    "甜宠",
+    "都市",
+    "灰姑娘"
+  ],
+  "cover_emoji": "💎",
+  "total_scenes": 5,
+  "total_shots": 15,
+  "estimated_credits": 150000,
+  "characters": [
+    {
+      "name": "Jiang Xiaoyu",
+      "role": "protagonist",
+      "traits": "善良、倔强、有骨气，虽出身平凡但绝不卑躬屈膝",
+      "appearance": "Young East Asian woman in her early 20s, round expressive doe-eyes, soft natural beauty with minimal makeup, long dark wavy hair often in a casual ponytail, petite figure, wearing affordable but clean casual clothes — white blouse and denim jacket — later transitioning to elegant dresses"
+    },
+    {
+      "name": "Gu Yanchen",
+      "role": "love_interest",
+      "traits": "冷酷、控制欲强、内心柔软却不敢轻易付出，商业帝国继承人",
+      "appearance": "Tall handsome East Asian man in his early 30s, sharp chiseled features, cold piercing eyes that hide warmth, immaculately styled black hair, wearing perfectly tailored black three-piece suits with a platinum watch, athletic build, commanding presence that fills every room"
+    },
+    {
+      "name": "Lin Shanshan",
+      "role": "antagonist",
+      "traits": "虚荣、心机、嫉妒，Gu Yanchen 的家族联姻对象",
+      "appearance": "Glamorous East Asian woman in her late 20s, high cheekbones, sharp cat-eye makeup, perfectly straightened shoulder-length hair, always in designer outfits — red dress or white fur coat — dripping in jewelry, calculating smile, carries a designer handbag like a weapon"
+    },
+    {
+      "name": "Chen Mo",
+      "role": "ally",
+      "traits": "幽默、暖心、暗恋女主多年，男主的表弟兼助理",
+      "appearance": "Friendly young East Asian man in his mid-20s, warm smile, slightly tousled brown hair, wearing smart casual clothes — pastel shirts with rolled-up sleeves, slim build, expressive eyebrows, always holding a tablet or coffee cup, approachable everyman charm"
+    }
+  ],
+  "emotion_graph": [
+    1,
+    3,
+    4,
+    5,
+    5
+  ],
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "命运邂逅",
+      "description": "Jiang Xiaoyu 在酒店做兼职服务员时意外泼了 Gu Yanchen 一身咖啡，被他的气场震慑却倔强地道歉不卑不亢，引起他的注意。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Cinematic wide shot of a luxurious five-star hotel ballroom at night, crystal chandeliers casting warm golden light over hundreds of elegantly dressed guests at a corporate gala. Waitstaff in black uniforms move between marble tables. In the center of the frame a petite young woman in a server's uniform trips and spills coffee down the front of a tall man in an immaculate black suit. Time seems to freeze — coffee droplets suspended in air catch the chandelier light. Camera tracks the spill in slow motion from the cup to his chest then tilts up to her horrified wide eyes and his stunned cold expression. Warm amber and gold gala lighting with cool blue accents, bokeh from crystal prisms, shallow depth of field. 4K cinematic quality, comedic disaster and fateful collision.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Medium close-up of the tall CEO looking down at coffee stains spreading across his white dress shirt and black suit jacket, then slowly raising his gaze to meet the young woman's eyes. He stands a full head taller than her, creating an imposing power dynamic. She looks up at him with genuine mortification but lifts her chin with quiet dignity, not cowering. Other guests whisper and stare in the blurred background. Camera holds on the eye-line between them, subtle rack focus from his stern expression to her defiant vulnerability. Warm practical lighting from above, cool blue rim light from windows behind, corporate glamour aesthetic. 4K cinematic quality, spark of mutual recognition and class divide.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Over-the-shoulder shot from behind the CEO as he watches the young woman being scolded by the hotel manager in a service corridor. She stands with her back straight accepting the reprimand without arguing, but her hands tremble at her sides. Fluorescent service lighting is harsh and unflattering, contrasting with the glamorous ballroom beyond the corridor entrance. He steps forward and places a hand on the manager's shoulder, silencing him with a single cold look. Camera dollies in on her surprised face as she turns to see him intervene. Harsh overhead fluorescents softening as he enters frame, cool institutional greens and warm skin tones. 4K cinematic quality, unexpected chivalry and first connection.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 2,
+      "title": "契约签订",
+      "description": "Gu Yanchen 需要一个假女友应付家族联姻压力，找到 Jiang Xiaoyu 提出一份天价契约合同，她为了家人的医疗费被迫答应。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Interior wide shot of a minimalist penthouse office with floor-to-ceiling windows overlooking a glittering nighttime city skyline. A young East Asian woman in her simple white blouse and denim jacket sits on an expensive white leather sofa looking tiny and out of place in the vast sleek space. Behind a massive black marble desk, the CEO in a crisp black shirt slides a thick contract folder across the surface toward her. City lights twinkle through rain-streaked windows. Camera holds in symmetrical composition emphasizing the power imbalance, then slowly dollies in as she reaches for the folder. Cool blue-silver city light mixed with warm desk lamp glow, luxurious minimalism, high contrast. 4K cinematic quality, temptation and impossible choice.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Close-up insert shot of the contract document on the marble desk, elegant calligraphy-style printing visible: a large monetary figure circled in red, terms and conditions in fine print, two signature lines at the bottom. The young woman's hand enters frame holding a pen, hesitating, fingers trembling slightly. A man's hand — wearing a platinum watch — enters from the other side and gently steadies hers. Camera holds on the hands in extreme close-up, then tilts up to catch her face — eyes glistening with unshed tears but jaw set with resolve — and his face showing a flicker of something softer than his usual cold mask. Warm amber desk light, cool blue contract paper tones, intimate and tense atmosphere. 4K cinematic quality, the moment of no return.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Two-shot of the CEO and the young woman leaving the penthouse office together at night. She walks slightly behind him, hugging the contract folder to her chest, looking overwhelmed. He pauses at the elevator and — unexpectedly — removes his suit jacket and drapes it over her shoulders without a word. The jacket is enormous on her petite frame. She looks up at him in surprise, he stares straight ahead with a neutral expression. Camera tracks them in profile as they enter the glass elevator, city lights reflected in the glass surrounding them like stars. Cool blue elevator lighting with warm city amber glow outside, reflective glass surfaces, romantic tension. 4K cinematic quality, first gesture of care beneath the contract.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 3,
+      "title": "假戏真做",
+      "description": "在一次高端晚宴上 Lin Shanshan 当众羞辱 Jiang Xiaoyu，Gu Yanchen 霸气护妻，两人在月光下第一次真心对话。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Dynamic medium shot at a rooftop cocktail party with the city skyline behind. A glamorous woman in a red designer dress — Lin Shanshan — deliberately bumps into the young woman in a modest cocktail dress, causing her to stumble and spill champagne. Lin Shanshan laughs cruelly with her designer-clad friends, making loud cutting remarks. The young woman straightens up with quiet dignity, refusing to cry despite tears welling. Other party guests watch uncomfortably. Camera captures the humiliation in a slow push-in on the young woman's face, then a quick whip-pan to the CEO emerging from the crowd with thunderous expression. Warm party lighting with cool night sky contrast, neon city reflections, dramatic tension. 4K cinematic quality, cruelty and protective instinct.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Low-angle power shot of the CEO stepping between the young woman and her tormentor, his tall frame creating a protective wall. He stares down Lin Shanshan with absolute lethal calm, his voice carrying quiet authority that silences the entire party. He reaches behind him without looking and takes the young woman's hand in his — firmly, possessively. Lin Shanshan's smile falters and her friends scatter. Camera shoots from low angle emphasizing his commanding presence, then tilts to show the young woman's face behind him — eyes wide with shock and the first spark of real emotion. Dramatic rim lighting on his profile, warm party bokeh fading in background, cinematic teal and amber grading. 4K cinematic quality, declaration and protection.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Romantic wide shot of the CEO and the young woman standing on a moonlit terrace overlooking the glittering city below, far from the party noise. She leans against the stone railing, still wearing his oversized suit jacket, and he stands beside her with hands in his pockets, both looking at the skyline. He turns to say something softly and she laughs — a genuine warm laugh that surprises them both. Wind moves her hair. Camera slowly dollies from medium two-shot to wide, framing them against the vast city lights and the moon above. Soft moonlight blue with warm skin tones, gentle lens flare from distant city lights, intimate and hopeful atmosphere, silk and wool textures catching light. 4K cinematic quality, walls coming down and real feelings emerging.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 4,
+      "title": "风雨同舟",
+      "description": "Gu Yanchen 遭遇商业危机，Jiang Xiaoyu 放弃离开的安全选择，留下来陪他度过至暗时刻，二人感情彻底突破契约界限。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Dark moody wide shot of the CEO sitting alone in his penthouse at 3 AM, tie undone, surrounded by financial reports and empty whiskey glasses. City lights through rain-streaked windows cast long blue shadows across the floor. A news ticker on a wall-mounted TV shows his company stock plunging. He stares at the city with hollow exhausted eyes, shoulders slumped for the first time — the invincible man brought low. Camera slowly dollies in through the dark apartment, passing debris of crisis — discarded jacket, crumpled papers, cold coffee. Cool desaturated blue-grey color grading, rain reflections on surfaces, single warm lamp in the distance, oppressive lonely atmosphere. 4K cinematic quality, vulnerability and rock bottom.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Medium shot of the apartment door opening and the young woman stepping inside, drenched from the rain, carrying a thermos and a folder of documents. She has chosen to stay and fight. She walks to him, wordlessly pours hot soup into a cup, and places a stack of organized financial notes on the desk — she has been working on solutions too. He looks up at her with raw emotion breaking through his cold mask, eyes glistening. She sits beside him on the floor and they begin working together, shoulders touching. Camera circles them slowly, warm light growing as the scene progresses. Transitioning from cold blue isolation to warm amber connection, rain on windows softening to bokeh. 4K cinematic quality, choosing love over safety and partnership in crisis.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Emotionally charged close-up of the CEO and the young woman sitting on the penthouse floor at dawn, exhausted but smiling. She has fallen asleep against his shoulder, her head resting there trustingly. He looks down at her with an expression of complete tenderness and awe — realizing he has fallen in love for real. Golden dawn light streams through the windows, painting warm rectangles of light across them. He gently brushes a strand of wet hair from her sleeping face. Camera holds steady in a close two-shot, capturing every micro-expression. Soft golden sunrise grading with cream and rose tones, intimate shallow depth of field, warm and peaceful atmosphere after the storm. 4K cinematic quality, love fully realized and emotional breakthrough.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 5,
+      "title": "真心告白",
+      "description": "危机解除后，Gu Yanchen 当着全城的面撕毁契约，用一场盛大的求婚向 Jiang Xiaoyu 证明：这不是交易，是真心。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Cinematic wide shot of a corporate press conference in a modern glass atrium filled with reporters and cameras. The CEO stands at a podium in a perfectly pressed navy suit, but instead of addressing business, he pulls out the original contract and — looking directly into the camera — tears it in half, then in quarters, letting the pieces fall like confetti. The audience erupts in murmurs and camera flashes. He speaks with raw sincerity visible even from the back of the room. Camera captures the contract pieces floating down in slow motion, then tilts to find the young woman watching from the wings, hand covering her mouth in shock and joy. Cool corporate blue transitioning to warm golden as the moment hits, camera flash bokeh everywhere. 4K cinematic quality, dramatic declaration and breaking the contract.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Romantic wide shot of a rooftop garden at night transformed into a wonderland of white roses and thousands of fairy lights. The CEO stands at the end of a petal-strewn path in a black tuxedo, holding a single diamond ring. The young woman in a flowing cream dress walks slowly toward him, tears streaming down her face but smiling radiantly. He drops to one knee as she reaches him. Camera tracks her walk from behind then sweeps around to capture both their faces — his hopeful and vulnerable, hers overwhelmed with joy. Warm white and gold fairy light bokeh, cream and ivory color palette with rose gold accents, petals drifting in the breeze, dreamy romantic atmosphere. 4K cinematic quality, fairytale proposal and true love realized.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Final intimate close-up of the couple's faces as he slides the ring onto her finger and she pulls him up to kiss. Fireworks explode in the night sky behind them, showering gold and silver light across their faces. Her hands frame his face, his arms wrap around her waist, and for a moment the whole city disappears — it is just two people who found real love in an impossible situation. Camera pulls back slowly from the kiss to reveal the entire rooftop garden, the sparkling city below, and the fireworks above, making them small but centered in a world of light. Warm golden firework tones with silver and rose, lens flares, magical cinematic atmosphere, anamorphic bokeh. 4K cinematic quality, happily ever after and love transcending contract.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+{
+  "id": "warlord",
+  "name": "战神归来",
+  "description": "退役特种兵战神回归都市，发现至亲遭受恶霸欺辱。他以雷霆手段逐一清算仇敌，在血与火中重建正义秩序。硬核动作与家国情怀并重，精准命中男性向市场。",
+  "price_cents": 9900,
+  "category": "revenge",
+  "tags": [
+    "战神",
+    "特种兵",
+    "复仇",
+    "硬汉",
+    "热血"
+  ],
+  "cover_emoji": "🔥",
+  "total_scenes": 5,
+  "total_shots": 15,
+  "estimated_credits": 150000,
+  "characters": [
+    {
+      "name": "Qin Feng",
+      "role": "protagonist",
+      "traits": "沉稳、铁血、重情重义，万人敌的特种兵王",
+      "appearance": "Muscular East Asian man in his early 30s, short military buzzcut, intense hawk-like eyes, square jaw with a thin scar along his cheekbone, broad shoulders, wearing a faded olive military jacket over a black tactical t-shirt, combat boots, multiple unit patches on his sleeves, moves with controlled lethal precision"
+    },
+    {
+      "name": "Qin Mei",
+      "role": "family",
+      "traits": "温柔、坚韧、隐忍，Qin Feng 唯一的妹妹",
+      "appearance": "Young East Asian woman in her early 20s, gentle round face resembling her brother's features, long black hair in a simple braid, wearing modest worn clothing — faded floral blouse and jeans, thin and exhausted, dark circles under eyes from overwork, yet carries herself with quiet dignity"
+    },
+    {
+      "name": "Boss Wang",
+      "role": "antagonist",
+      "traits": "残暴、贪婪、欺软怕硬，控制整个城区地下势力的恶霸",
+      "appearance": "Heavyset East Asian man in his 40s, shaved head with a dragon neck tattoo, thick gold chain, wearing an open-collar black silk shirt revealing chest hair and scars, expensive leather jacket, rings on every finger, cruel grin, surrounded by bodyguards, reeks of power and corruption"
+    },
+    {
+      "name": "Colonel Zhou",
+      "role": "ally",
+      "traits": "正直、老练、Qin Feng 的军旅恩师与精神导师",
+      "appearance": "Distinguished East Asian man in his late 50s, silver military haircut, stern weathered face with deep laugh lines, wearing a crisp dark green PLA-style dress uniform with medals, ramrod straight posture, reads glasses perched on nose when studying documents, carries quiet authority"
+    }
+  ],
+  "emotion_graph": [
+    2,
+    4,
+    5,
+    5,
+    4
+  ],
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "英雄归来",
+      "description": "Qin Feng 退役回到老家，发现妹妹 Qin Mei 被当地恶霸 Boss Wang 逼债，生活在水深火热之中。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Cinematic wide shot of a rugged East Asian man in an olive military jacket stepping off a long-distance bus into a dusty small-city bus station at late afternoon. Harsh amber sunlight cuts through diesel exhaust and dust. He carries a single olive duffel bag over one shoulder, scanning the rundown streets with trained military eyes — assessing threats automatically. Faded shop signs, old cars, and construction cranes fill the background. Camera tracks him in a long steadicam shot from the bus door through the station. Warm desaturated amber and dusty earth tones, golden hour haze, anamorphic lens flare, shallow depth of field isolating him from the crowd. 4K cinematic quality, homecoming and quiet intensity.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Heartbreaking medium shot of a small shabby apartment in a crumbling residential building. A young East Asian woman in a faded floral blouse sits on the floor counting crumpled bills with trembling hands, a stack of threatening red-stamped debt notices spread around her. The apartment is nearly empty — sold-off furniture leaving marks on peeling wallpaper. A child's drawing on the wall shows a family with a soldier. She hears footsteps and looks up, eyes filling with disbelief and tears as her brother appears in the doorway. Camera dollies from her hands and the debt papers to her tear-streaked face, then reverse shot to the soldier's expression shifting from shock to controlled fury. Warm tungsten interior light with cold blue from a single window, intimate and devastated atmosphere. 4K cinematic quality, sister's suffering and brother's rage.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Intense close-up of the soldier's face as he kneels before his weeping sister, gently gripping her shoulders. His jaw muscles tighten, a vein pulses at his temple, his eyes darken with a cold killing intent that is terrifying beneath the tenderness he shows her. Behind him through the window, we see luxury black SUVs parked outside — Boss Wang's territory markers. Camera holds in extreme close-up on his eyes, which transition from warm brotherly concern to ice-cold warrior resolve. Shallow depth of field, warm amber skin tones contrasting with cold blue background, chiaroscuro from a single overhead bulb. The scar on his cheekbone catches light. 4K cinematic quality, vow of vengeance and familial love.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 2,
+      "title": "雷霆出手",
+      "description": "Boss Wang 的手下来强拆妹妹的店铺，Qin Feng 以一敌十，干净利落地解决所有人，震惊整个街区。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Wide establishing shot of a narrow commercial street lined with small shops at midday. A convoy of three black SUVs blocks the street, and a dozen thugs in leather jackets pour out carrying baseball bats and crowbars, surrounding a small family restaurant. Inside the glass door, the young woman cowers behind the counter. The soldier steps out from a side alley, calm and unhurried, rolling up his jacket sleeves to reveal muscular forearms with faded military tattoos. Pedestrians scatter. Camera tracks the thugs' arrival then whip-pans to the soldier entering frame, creating a standoff composition. Harsh midday sun, high contrast, urban grit, dust kicked up by the vehicles. 4K cinematic quality, confrontation and imminent violence.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Dynamic action sequence in a narrow street — the soldier engages multiple attackers with devastating military close-quarters combat. He disarms the first thug with a wrist lock, uses the crowbar to sweep two more off their feet, throws a spinning elbow that drops a fourth. Movements are efficient, brutal, almost surgical — no wasted energy. Dust and debris fly with each impact. One attacker swings a bat and the soldier catches it mid-swing, snaps it over his knee, and uses the broken half as a weapon. Camera uses a mix of handheld tracking shots and brief slow-motion on key impacts. Warm dusty amber grading, practical sunlight with harsh shadows, sweat and dust particles visible in the air. 4K cinematic quality, one-man army and overwhelming martial skill.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Low-angle hero shot of the soldier standing amid a dozen groaning thugs scattered on the street, barely winded, adjusting his collar with casual indifference. Blood on his knuckles, not a scratch on his face. Behind him, his sister peers through the restaurant door in awe and relief. Onlookers emerge from hiding, staring in disbelief at the devastation one man caused in under a minute. The soldier turns to the camera — to his sister — with the ghost of a gentle smile. Camera looks up from ground level, making him appear monumental against the sky. Warm golden afternoon light, dust motes settling in sunbeams, shallow depth of field with bokeh on the scattered bodies. 4K cinematic quality, dominance established and protector revealed.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 3,
+      "title": "虎穴龙潭",
+      "description": "Qin Feng 单刀赴会 Boss Wang 的地下赌场，在重重包围中谈判，要求归还所有被敲诈的钱财和地契。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Atmospheric wide shot of an underground gambling den in a converted warehouse, smoky air filled with neon light from slot machines and card tables. Dozens of gamblers and armed guards fill the space. The entrance doors swing open and the soldier walks in alone, silhouetted against bright street light behind him, his figure cutting through the haze like a blade. Every head turns. Camera tracks behind him in a long steadicam shot as he walks through the den, the crowd parting like the Red Sea. Neon red and green mixed with smoky amber, deep shadows, noir atmosphere, practical overhead industrial lights creating pools of brightness in darkness. 4K cinematic quality, lone warrior entering enemy territory.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Tense medium shot at a VIP poker table in the back of the den. Boss Wang — heavyset with dragon neck tattoo and gold chain — sits surrounded by bodyguards, swirling whiskey with a cruel amused smile. The soldier sits opposite him, perfectly still, one hand resting flat on the table. Between them lies a folder of debt documents and property deeds. Wang laughs and gestures dismissively while his guards close in. The soldier doesn't flinch, his eyes locked on Wang with predatory calm. Camera uses slow push-in on the soldier's steady hand, then cut to Wang's smile starting to waver. Warm amber and whiskey tones, cigar smoke catching light, high contrast between the two men, psychological warfare tension. 4K cinematic quality, predator versus predator and nerves of steel.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Explosive action close-up of the soldier flipping the heavy poker table in one fluid motion, sending chips and cards flying, using it as a shield against the bodyguards rushing in. He vaults over the table, grabs Boss Wang by the collar, and slams him against a concrete pillar, forearm pressed against his throat. Wang's eyes bulge with terror as guards freeze, afraid to shoot with their boss as a human shield. Cards and poker chips rain down around them in slow motion. Camera captures the table flip in dynamic low-angle, then the collar grab in intense close-up. Warm amber to red alert lighting transition, muzzle flashes from a stray gunshot illuminating faces, chaos and controlled fury. 4K cinematic quality, overwhelming force and justice delivered.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 4,
+      "title": "血战到底",
+      "description": "Boss Wang 调动所有势力围剿 Qin Feng，一场惊心动魄的巷战在老城区展开，Qin Feng 以一人之力粉碎整个犯罪网络。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Epic wide night shot of a neon-lit old-city alley district, rain beginning to fall, reflections of red and blue neon signs on wet cobblestones. Dozens of armed men in black converge on the district from all directions, blocking every exit. On a rooftop, the soldier crouches in silhouette against a blood-red neon sign, surveying the trap with cold tactical assessment. Rain begins to streak past the camera. Camera cranes from ground level up to the rooftop figure in one continuous movement. Neon-noir color grading — deep blues, hot reds, and sickly greens reflecting off wet surfaces, cinematic rain, atmospheric haze, Blade Runner-inspired urban night aesthetic. 4K cinematic quality, ambush and hunter becoming the hunted.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Visceral combat sequence in a rain-soaked alley — the soldier fights through waves of attackers using environment and military tactics. He kicks a dumpster into two men, uses a metal pipe as a weapon, scales a fire escape to drop behind a group of gunmen. Every movement is precise and devastating. Rain and blood mix on the cobblestones. Neon signs flicker and shatter from stray impacts. He takes a hit to the shoulder but doesn't slow down, ripping off his jacket to free movement. Camera uses dynamic handheld tracking with occasional slow-motion on key strikes, rain droplets visible in flight. Desaturated teal and orange grading, practical neon reflections, rain-slicked cinematography, John Wick-inspired choreography. 4K cinematic quality, relentless combat and indomitable will.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Cinematic wide shot of the soldier emerging from the far end of the alley district at dawn, walking through a corridor of groaning defeated enemies. His clothes are torn and bloodied — some his, mostly not — but his stride is unwavering. Behind him the alley is a wreck of overturned cars, shattered neon, and incapacitated thugs. Police sirens wail in the distance. First light of dawn breaks through clouds, casting golden rays down the rain-washed street. Camera tracks backward ahead of him in a long dolly shot, framing him as an unstoppable force walking toward the light. Transition from dark blue night tones to warm golden dawn, steam rising from rain-soaked streets, atmospheric haze, mythic hero framing. 4K cinematic quality, victory through fire and dawn of justice.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 5,
+      "title": "王者之师",
+      "description": "尘埃落定，Boss Wang 被绳之以法。Qin Feng 在恩师 Colonel Zhou 的帮助下建立安保公司，保护一方平安，成为真正的守护者。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Wide shot of a modern glass-fronted security company headquarters at golden hour, the building gleaming in warm sunset light. A fleet of black SUVs is parked in formation out front. The soldier — now in a sharp charcoal suit with a discreet earpiece — stands at the entrance reviewing a tablet. Behind him through the glass, uniformed security personnel train and coordinate. A sign reads the company name in gold lettering. His sister walks up beside him, well-dressed and healthy, smiling proudly. Camera dollies in from a wide establishing shot to a warm medium two-shot of siblings. Golden hour warm tones, lens flare from the setting sun reflecting off glass, corporate power meets family warmth. 4K cinematic quality, empire built and purpose found.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Interior medium shot of a sleek modern office where the soldier sits behind his desk reviewing security contracts. Colonel Zhou — distinguished in his military dress uniform — stands by the window, arms crossed, studying his former student with visible pride. Morning light streams through blinds creating dramatic striped shadows. The soldier looks up and they share a nod of mutual respect — mentor and protégé, both men who chose service over comfort. On the desk, a framed photo of the soldier in active duty alongside his unit. Camera holds on the two-shot with subtle push-in, military precision meets corporate success. Warm morning light with clean white interiors, oak and brass tones, dignified atmosphere. 4K cinematic quality, honor passed down and legacy continued.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Final heroic wide shot of the soldier standing on the rooftop of his headquarters at sunset, city skyline stretching behind him. Wind catches his suit jacket. He looks out over the city he now protects — not with anger, but with quiet resolve and earned peace. Below, streets are clean and safe, families walk without fear. His sister joins him on the rooftop, and he puts an arm around her shoulders. Camera slowly cranes up and back, revealing the full cityscape bathed in golden sunset light, the two figures growing small but centered in the frame. Birds fly across the amber sky. Warm golden and rose sunset grading, volumetric light rays, epic cinematic scope, lens flare and atmospheric haze. 4K cinematic quality, guardian of the city and hard-won peace.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    }
+  ]
+}

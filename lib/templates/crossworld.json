@@ -1,0 +1,178 @@
+{
+  "id": "crossworld",
+  "name": "穿越时空",
+  "description": "现代女孩意外穿越到古代宫廷，凭借现代智慧在波谲云诡的权谋斗争中步步为营，改变历史走向。华丽古装与权谋博弈交织，视觉冲击力极强，适合全球女性观众。",
+  "price_cents": 9900,
+  "category": "fantasy",
+  "tags": [
+    "穿越",
+    "宫廷",
+    "权谋",
+    "古装",
+    "女强"
+  ],
+  "cover_emoji": "🏯",
+  "total_scenes": 5,
+  "total_shots": 15,
+  "estimated_credits": 150000,
+  "characters": [
+    {
+      "name": "Su Wan",
+      "role": "protagonist",
+      "traits": "聪慧、机敏、独立，现代女性的果敢与柔韧并存",
+      "appearance": "Young East Asian woman in her mid-20s, bright intelligent eyes, long black hair often styled in elaborate ancient updos with jade hairpins, fair skin, slender graceful figure, initially wearing modern casual clothes then transitioning to flowing hanfu robes in pale blue and white silk with intricate embroidery"
+    },
+    {
+      "name": "Prince Li Xuan",
+      "role": "love_interest",
+      "traits": "冷峻、深沉、心怀天下，外冷内热的储君",
+      "appearance": "Handsome East Asian man in his late 20s, sharp jawline, intense dark eyes, tall athletic build, wearing dark crimson and gold dragon-embroidered royal robes, a jade crown in his long black hair, silver sword at his waist, commanding regal bearing"
+    },
+    {
+      "name": "Consort Mei",
+      "role": "antagonist",
+      "traits": "阴险、嫉妒、善于伪装，后宫中最危险的对手",
+      "appearance": "Striking East Asian woman in her early 30s, high cheekbones, narrow calculating eyes, painted red lips, elaborate phoenix hairstyle with gold ornaments, wearing rich purple and gold court robes with long flowing sleeves, always surrounded by attendants"
+    },
+    {
+      "name": "Eunuch Zhang",
+      "role": "ally",
+      "traits": "忠诚、圆滑、消息灵通，宫中的隐形盟友",
+      "appearance": "Middle-aged East Asian man, clean-shaven, round pleasant face, kind shrewd eyes, wearing modest dark blue court eunuch robes with a small jade pendant, soft-spoken posture with hands clasped, always bowing slightly"
+    }
+  ],
+  "emotion_graph": [
+    2,
+    3,
+    4,
+    5,
+    4
+  ],
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "异世降临",
+      "description": "Su Wan 在一次博物馆参观中触碰神秘玉佩，穿越到古代皇宫花园，被侍卫发现并带到太子面前。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Cinematic wide establishing shot of an ancient Chinese imperial palace garden at dawn, mist drifting between vermillion pillars and carved stone bridges over a koi pond. Cherry blossom petals fall in slow motion through golden morning light. In the center of the garden a young East Asian woman in modern jeans and a white t-shirt materializes in a flash of ethereal blue-white light, stumbling and falling to her knees on the stone path. She looks around in shock and disbelief. Camera cranes down from an aerial view through layers of morning mist to a medium shot of her disoriented face. Warm golden-pink sunrise tones contrasting with cool blue magical light, volumetric god rays through ancient trees, shallow depth of field with bokeh petals. 4K cinematic quality, wonder and disorientation.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Tense medium shot in a vast imperial courtyard surrounded by guards in bronze armor with halberds. The young woman in modern clothing kneels on white marble flags, wrists bound with silk rope, looking up defiantly at a tall handsome man in crimson royal robes standing on elevated stone steps. He gazes down at her with cold suspicion, one hand resting on his sword hilt. Palace eunuchs and courtiers watch from behind ornate lattice screens. Camera dollies slowly around the two figures in a semicircle, creating tension through movement. Harsh overhead midday sun casts sharp shadows on the marble, high contrast warm amber and bronze color grading, imperial architectural symmetry in deep focus. 4K cinematic quality, danger and first encounter.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Close-up of the young woman's face in a dimly lit palace interrogation chamber, single oil lamp casting warm flickering light on one half of her face while the other half remains in shadow. Tears of frustration glisten in her eyes but her jaw is set with determination. She holds up her modern smartphone — now a dead black rectangle — and tries to explain it to someone off-screen. Camera slowly pushes in from medium close-up to extreme close-up on her eyes reflecting the tiny flame. Behind her, shadows of ancient scrolls and bronze vessels line the walls. Rich warm amber and deep shadow color grading, chiaroscuro lighting, intimate and claustrophobic atmosphere. 4K cinematic quality, isolation and resilience.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 2,
+      "title": "初露锋芒",
+      "description": "Su Wan 被安排为宫女，凭借现代医学知识救活了中毒的太后，获得留在太子身边的机会。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Wide shot of a grand palace sickroom with silk curtains and burning incense coils. An elderly empress dowager lies on a carved rosewood bed, pale and gasping, surrounded by helpless imperial physicians in dark robes shaking their heads. The young woman in simple servant's hanfu pushes through the crowd of officials, her expression urgent and focused. She kneels beside the bed and begins performing abdominal thrusts and checking airways — modern first aid in an ancient setting. Camera tracks her movement through the crowd then settles on a low-angle medium shot of her working. Warm candlelight and cool green herbal medicine tones, steam from medicinal pots, frantic energy. 4K cinematic quality, medical emergency and desperate ingenuity.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Over-the-shoulder shot from behind the prince in crimson robes as he watches the young servant woman carefully preparing herbal remedies at a long wooden table in the palace apothecary. Dried herbs hang from ceiling beams, ceramic jars line the shelves, afternoon light filters through rice paper windows creating soft diffused illumination. She crushes herbs with a stone mortar and pestle, her movements precise and confident, explaining her method to a skeptical eunuch beside her. The prince's profile is visible in soft focus, his expression shifting from doubt to curiosity. Camera holds steady with subtle breathing movement. Warm earthy amber and green color palette, soft natural window light, peaceful scholarly atmosphere. 4K cinematic quality, earning trust through knowledge.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Triumphant medium-wide shot of the recovered empress dowager sitting up in bed with a warm smile, reaching out to grasp the young woman's hands in gratitude. The entire court watches in stunned silence — physicians bow their heads in shame, the prince stands with arms crossed, a faint impressed smile touching his lips. Golden afternoon light streams through open lattice windows illuminating dust motes in the air. Camera slowly dollies back from the intimate hand-grasp to reveal the full room of witnesses. Rich warm gold and imperial yellow color grading, ceremonial atmosphere, rays of sunlight creating halos around the two women. 4K cinematic quality, triumph and recognition.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 3,
+      "title": "暗流涌动",
+      "description": "Consort Mei 设下毒计陷害 Su Wan，太子 Li Xuan 在千钧一发之际出手相救，二人感情萌芽。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Atmospheric night shot of a palace corridor lit by swaying red silk lanterns. A woman in elaborate purple court robes — Consort Mei — whispers commands to a shadowy servant, slipping a small vial of poison into the servant's hand. Her face is half-illuminated by lantern light, one eye glinting with malice. Behind her a painted screen shows phoenix motifs. Camera follows the vial being passed in close-up then tilts up to her calculating expression, rack focus from the vial to her eyes. Deep crimson and violet color grading, heavy shadows, candlelight flickering on silk fabrics, noir-inspired cinematography. 4K cinematic quality, conspiracy and menace.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Dramatic action shot of the prince in dark robes drawing his silver sword in a flash of steel, cutting through silk curtains to reach the young woman who has collapsed beside a poisoned wine cup in a moonlit pavilion. He catches her as she falls, his face contorted with alarm and fury. Moonlight and scattered lantern light create dramatic blue-silver illumination with warm orange accents from distant fires. Cherry blossoms swirl in the night wind around them. Camera captures the sword-draw in slow motion then transitions to real-time as he catches her, handheld energy in the movement. Cool blue moonlight with warm skin tones, romantic and dangerous atmosphere, shallow depth of field. 4K cinematic quality, rescue and emotional awakening.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Intimate close-up two-shot of the prince and the young woman in a candlelit chamber. She sits on a low divan wrapped in a silk blanket, he kneels before her gently wrapping a bandage around her wrist. Their eyes meet — hers vulnerable and grateful, his fierce and protective. A single candle between them casts warm golden light on both faces, creating Rembrandt lighting on each. Camera slowly pushes in from medium two-shot to extreme close-up of their nearly-touching hands. Soft golden amber color grading, warm intimate atmosphere, silk textures and candlelight reflections, romantic tension. 4K cinematic quality, vulnerability and deepening connection.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 4,
+      "title": "权谋对决",
+      "description": "Su Wan 利用现代历史知识识破 Consort Mei 的叛国阴谋，在朝堂之上公开对质，扭转乾坤。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Epic wide shot of a vast imperial throne room with towering red lacquered pillars and a golden dragon throne. Hundreds of court officials in ranked robes stand in orderly rows on either side. The young woman in now-elegant blue and white court hanfu walks alone down the central aisle carrying a scroll of evidence, her head held high. Camera tracks her from behind in a long steadicam shot as she walks between the silent rows, then sweeps up to reveal the enormous scale of the hall and the emperor on his distant throne. Warm imperial gold and deep vermillion color grading, volumetric light from high windows, dust particles in sunbeams, grand symmetrical composition. 4K cinematic quality, courage and historic confrontation.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Intense medium shot of the young woman unrolling a long scroll before the court, pointing to maps and secret letters that prove treason. She speaks with passionate authority, her voice echoing through the hall. The camera alternates between her animated explanation and reaction shots of Consort Mei in purple robes whose composure is visibly cracking — her face draining of color, hands trembling. Dramatic overhead shaft lighting from high windows creates theatrical spotlights. Camera uses shot-reverse-shot cutting between accuser and accused. Warm golden highlights with cool blue shadows, deep wood and bronze interior tones, tension palpable in the still air. 4K cinematic quality, revelation and justice.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Low-angle dramatic shot of imperial guards in full bronze armor seizing Consort Mei by the arms as she screams and struggles, her elaborate phoenix headdress falling apart, gold ornaments scattering on the marble floor. In the foreground, the prince watches with cold satisfaction, arms crossed, his crimson robes still. Behind him the young woman stands quietly, her expression a mix of relief and sorrow rather than triumph. Camera holds at low angle emphasizing the fallen consort's desperation and the victors' authority. High contrast dramatic lighting, bronze and crimson color palette, scattered gold ornaments catching light on dark floor. 4K cinematic quality, downfall and bittersweet victory.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 5,
+      "title": "改写命运",
+      "description": "天下太平，Su Wan 选择留在古代与太子 Li Xuan 并肩治理天下，在日落时分的城墙上许下永恒誓言。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Breathtaking wide aerial shot of an ancient Chinese capital city at golden hour, tiled rooftops stretching to the horizon, the Great Wall visible in misty mountains beyond. River boats glide on a jade-green river reflecting sunset colors. The camera descends from clouds to find the prince and the young woman standing together on the highest palace wall, their robes and hair billowing in the evening wind. They are small but centered in the vast landscape, two figures against the sweep of history. Camera performs a sweeping crane movement from high aerial to medium elevation. Warm golden sunset grading with rose and amber clouds, volumetric light rays, epic cinematic scope, lens flare from the setting sun. 4K cinematic quality, epic romance and historical grandeur.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Romantic medium close-up of the prince and the young woman on the palace wall at sunset. He removes a jade pendant from his neck — the same artifact that brought her to this era — and places it in her hands, closing her fingers over it with both of his. She looks up at him with tears in her eyes and a radiant smile. Wind catches loose strands of her hair and the silk ribbons of his robes. Camera circles them slowly in a 180-degree arc against the burning sunset sky. Warm amber and rose-gold color grading, golden hour backlight creating halos, shallow depth of field with bokeh sunset, silk textures catching light. 4K cinematic quality, eternal love and fateful choice.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Final cinematic shot of the couple standing hand in hand on the palace wall silhouetted against a magnificent sunset, their joined hands raised high. Behind them the entire ancient city is illuminated in warm light, and thousands of paper lanterns begin rising from the streets below like golden fireflies filling the sky. Camera slowly pulls back and up in a grand crane movement, the couple becoming part of the vast beautiful landscape. Lanterns drift past the camera. Deep amber and crimson sunset grading transitioning to twilight blue and violet, magical golden light on everything, volumetric haze from the lanterns. 4K cinematic quality, destiny fulfilled and timeless love story.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    }
+  ]
+}

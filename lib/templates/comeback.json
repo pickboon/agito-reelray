@@ -1,0 +1,178 @@
+{
+  "id": "comeback",
+  "name": "逆袭女王",
+  "description": "被豪门婆家扫地出门的灰姑娘，真实身份竟是隐退的国际顶级设计师。带娃逆袭，从底层工坊做到时尚帝国掌门人，前夫跪求复合。极致爽感与时尚美学兼具，精准命中全球女性市场。",
+  "price_cents": 9900,
+  "category": "revenge",
+  "tags": [
+    "逆袭",
+    "时尚",
+    "女强",
+    "复仇",
+    "单亲妈妈"
+  ],
+  "cover_emoji": "👗",
+  "total_scenes": 5,
+  "total_shots": 15,
+  "estimated_credits": 150000,
+  "characters": [
+    {
+      "name": "Lin Ruoqing",
+      "role": "protagonist",
+      "traits": "才华横溢、隐忍坚韧、优雅内敛，曾是巴黎时装圈传奇设计师",
+      "appearance": "Elegant East Asian woman in her late 20s, delicate features with high cheekbones, naturally graceful posture, long dark hair often in a simple low bun with a few loose strands, initially wearing modest worn clothes — oversized sweater and jeans — later transforming into impeccably tailored minimalist designs of her own creation, always with a sketchbook nearby"
+    },
+    {
+      "name": "Heaven",
+      "role": "child",
+      "traits": "乖巧、早熟、是母亲最大的精神支柱",
+      "appearance": "Adorable East Asian girl around 5 years old, big bright eyes like her mother, cute bob haircut with bangs, wearing simple colorful children's clothes — pink hoodie and denim overalls, always carrying a small stuffed rabbit, wise beyond her years"
+    },
+    {
+      "name": "Zhao Yiming",
+      "role": "antagonist",
+      "traits": "势利、懦弱、被母亲操控的豪门公子，Lin Ruoqing 的前夫",
+      "appearance": "East Asian man in his early 30s, conventionally handsome but with weak uncertain eyes, slicked-back hair, wearing expensive but tasteless designer brands — logo-heavy belt and flashy watch, slim build with soft features, always fidgeting with his phone, lacks the backbone of his sharp-tongued mother"
+    },
+    {
+      "name": "Madame Coco",
+      "role": "ally",
+      "traits": "毒舌、眼光毒辣、时尚界教母级人物，Lin Ruoqing 的恩师",
+      "appearance": "Stylish Eurasian woman in her 60s, silver-streaked bob haircut, sharp intelligent eyes behind oversized designer glasses, wearing all-black architectural clothing — asymmetric tunic and wide-leg pants, dramatic silver jewelry, always carrying a designer tote filled with fabric swatches, speaks with authority and wit"
+    }
+  ],
+  "emotion_graph": [
+    1,
+    2,
+    4,
+    5,
+    5
+  ],
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "扫地出门",
+      "description": "Lin Ruoqing 被前夫一家赶出豪宅，婆婆当众羞辱她是个没用的废物，她带着女儿 Heaven 流落街头。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Cinematic wide shot of a modern luxury villa driveway on a cold overcast morning. An elegant East Asian woman in a modest oversized sweater stands on the gravel with a small suitcase and her young daughter clinging to her hand. Behind them, the villa's iron gates are closing. An older woman in expensive fur-trimmed coat stands in the doorway pointing and shouting insults, her son hovering weakly behind her. The woman's face is pale but composed, refusing to cry in front of her child. Camera dollies back from the closing gates, framing the mother and child as increasingly small against the imposing mansion. Cold desaturated blue-grey color grading, overcast flat lighting, autumn leaves swirling in wind, harsh concrete and iron textures. 4K cinematic quality, humiliation and maternal strength.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Intimate medium shot of the woman and her daughter sitting on a park bench in fading afternoon light, sharing a single convenience store sandwich. The little girl breaks off a piece and feeds it to her mother with a smile that breaks your heart. The woman holds back tears, stroking her daughter's hair with fierce tenderness. Behind them, city life moves on indifferent — joggers, couples, cars. Fallen leaves carpet the ground. Camera holds steady in a medium two-shot, letting the raw emotion breathe. Warm but melancholic autumn light — golden but fading, shallow depth of field blurring the uncaring world behind them, soft focus on the bond between mother and child. 4K cinematic quality, rock bottom and unconditional love.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Close-up of the woman's hands in a tiny rented room at night, pulling out a hidden leather portfolio case from the bottom of her suitcase. She opens it to reveal breathtaking fashion sketches — haute couture designs of extraordinary beauty and originality, signed with a monogram that fashion insiders would recognize. Her fingers trace the designs with longing and rekindled purpose. In the background, her daughter sleeps peacefully on a narrow cot. A single desk lamp casts warm pool of light on the sketches while the rest of the room stays in shadow. Camera pushes in slowly from her hands to the designs, then tilts up to her face — eyes blazing with quiet fire. Warm amber lamplight, cream paper tones, intimate atmosphere of rediscovered identity. 4K cinematic quality, hidden genius and the spark of rebirth.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 2,
+      "title": "东山再起",
+      "description": "Lin Ruoqing 在底层制衣工坊重新拿起针线，恩师 Madame Coco 偶然发现她的作品，决定出手相助。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Wide interior shot of a cramped garment workshop filled with industrial sewing machines, fabric bolts, and mannequins. Fluorescent lights buzz overhead. The woman sits at a machine, working late into the night after other workers have left, sewing a stunning original dress design from scrap fabric. Thread spools and pins scatter around her. Her fingers move with practiced precision and speed — the hands of a master disguised as a factory worker. Through the grimy window, city lights twinkle. Camera tracks slowly through the workshop past idle machines to find her working alone, then circles to reveal the extraordinary dress taking shape on a mannequin beside her. Harsh fluorescent mixed with warm tungsten desk lamp, fabric textures in sharp detail, blue-collar atmosphere hiding haute couture talent. 4K cinematic quality, genius in humble surroundings and determination.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Medium shot of a stylish older woman — Madame Coco in all-black architectural clothing and oversized glasses — standing in the workshop doorway, frozen in shock as she examines the dress on the mannequin. Her hand reaches out to touch the fabric construction, her expert eyes widening with recognition. She turns to the young designer with a mix of fury and delight, pointing at the signature stitching technique. Behind them, the workshop's humble surroundings contrast absurdly with the museum-quality garment between them. Camera captures Madame Coco's reaction in close-up, then whip-pans to the younger woman's bashful recognition. Warm tungsten practical lights, dramatic shadows, fashion world meets working class, rich textile textures. 4K cinematic quality, mentor reunited and talent rediscovered.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Two-shot of the two women sitting across from each other in a small café, Madame Coco sketching furiously on a napkin while the younger woman leans in with growing excitement, eyes alive with creative fire she thought was dead. Coffee cups and fabric swatches cover the tiny table. Madame Coco slides a business card across the table — a prestigious fashion house contact. The young woman picks it up and her hands tremble, not with fear this time but with hope. Outside the café window, rain begins to fall, washing the city clean. Camera holds in medium two-shot with warm practical café lighting, golden pendant lamp above, steam from coffee, intimate and conspiratorial atmosphere, transition from muted tones to warm optimistic color grading. 4K cinematic quality, opportunity seized and comeback begins.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 3,
+      "title": "惊艳全场",
+      "description": "Lin Ruoqing 以匿名身份参加全国设计大赛，作品在 T 台上惊艳全场，整个时尚界都在追问：这个天才设计师是谁？",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Spectacular wide shot of a fashion show runway in a modern exhibition hall, blinding white spotlights cutting through theatrical haze. Models in breathtaking avant-garde designs walk the runway — flowing silk gowns in impossible colors, architectural jackets with origami construction, dresses that seem to defy gravity. The audience of fashion editors and buyers leans forward in their seats, phones raised, mouths slightly open in awe. In the darkened wings, the designer watches from behind a curtain, clutching her daughter's hand, eyes shining. Camera tracks a model down the runway then sweeps to capture the audience's stunned reactions. Cool white spotlight beams with warm skin tones in audience, theatrical fog, fashion week glamour, shallow depth of field with bokeh from hundreds of phone screens. 4K cinematic quality, creative triumph and industry-shaking debut.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Close-up montage of fashion show details — fingers of audience members touching fabric textures with reverence, close-up of intricate hand-beading and impossible draping techniques on the garments, editors whispering urgently into phones, a famous fashion critic removing her glasses and wiping a tear. Each shot is 1-2 seconds of pure fashion film aesthetic. Camera uses macro lens for fabric details, shallow depth of field throughout, slow motion on the fabric movement as models walk. Clean white and jewel-tone color grading, sharp textile textures, high fashion editorial lighting with dramatic shadows. 4K cinematic quality, craftsmanship that moves people to tears.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Dramatic wide shot of the designer being called to the stage. She steps out from behind the curtain — now wearing a simple but perfectly tailored black suit of her own design, her daughter holding her hand. The audience rises to their feet in a standing ovation, camera flashes erupting like lightning. She walks to the end of the runway, tears finally flowing freely, and takes a deep bow. Her little girl bows too, adorably serious. Camera tracks her walk from behind then sweeps to a low-angle front shot of the bow, audience rising around her like a wave. Warm golden spotlight mixing with cool white flash photography, confetti-like light reflections, emotional and victorious atmosphere. 4K cinematic quality, revelation of identity and triumph over humiliation.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 4,
+      "title": "前夫跪求",
+      "description": "Lin Ruoqing 的品牌大获成功，前夫 Zhao Yiming 发现被他抛弃的妻子竟是时尚界传奇，登门跪求复合，被优雅拒绝。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Interior wide shot of a stunning new fashion atelier — minimalist white walls, floor-to-ceiling windows, mannequins draped in exquisite designs, a team of assistants working efficiently. The designer — now impeccably dressed in her own architectural cream suit — reviews sketches at a large drafting table. Through the glass entrance doors, her ex-husband appears looking disheveled and desperate, clutching flowers that look pathetic against the elegant backdrop. He pushes through the doors, assistants trying to stop him. Camera holds on the designer's calm expression as she looks up, then tracks the ex-husband's chaotic entry. Clean white and cream interiors with natural daylight, fashion studio elegance versus his rumpled desperation, stark visual contrast. 4K cinematic quality, power shift and confrontation revisited.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Emotionally charged medium shot of the ex-husband falling to his knees on the polished atelier floor, flowers scattering, grasping at the designer's hands. She stands above him — not cruel, not gloating, but with the quiet dignity of someone who has outgrown their cage. She gently but firmly removes his hands from hers and steps back. Behind her, her design team watches silently. Through the window, billboard-sized advertisements featuring her designs are visible on a building across the street. Camera shoots from a slight low angle on the kneeling man, then cuts to a straight-on medium shot of her composed face — eyes clear, no tears this time. Warm natural window light, clean interior tones, fashion industry power aesthetic. 4K cinematic quality, rejection delivered with grace and earned superiority.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Over-the-shoulder shot from behind the designer as she watches her ex-husband walk away through the glass doors, his shoulders slumped, flowers left on the floor. She turns back to her work, picking up a pencil and immediately returning to a sketch as if nothing happened — the ultimate statement that he no longer matters. Her daughter runs in from a back room and climbs onto her lap, and she kisses the top of the girl's head while continuing to draw. The atelier returns to its productive rhythm around them. Camera dollies back from the intimate mother-daughter moment to reveal the full beautiful workspace — her empire. Warm golden afternoon light streaming through windows, cream and blush color palette, peaceful productive atmosphere, fashion atelier beauty. 4K cinematic quality, moving on completely and building a future.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 5,
+      "title": "时尚帝国",
+      "description": "Lin Ruoqing 的品牌登上巴黎时装周封面，她带着女儿站在埃菲尔铁塔前，从一个被扫地出门的女人成为真正的时尚帝国女王。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Epic wide shot of a Paris fashion week runway show in a grand historic venue with crystal chandeliers and gold-leaf ceilings. The collection finale features twenty models in a cohesive breathtaking collection walking in formation, led by the designer herself in a show-stopping ivory gown. The international fashion elite — Anna Wintour types — sit front row, all standing and applauding. Camera cranes down from the chandeliers through the theatrical lighting to the runway, sweeping the length of the procession. Rich gold and ivory color grading with champagne and blush tones, crystal light refractions, haute couture spectacle, fashion film quality lighting and composition. 4K cinematic quality, global triumph and creative coronation.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Emotional medium shot backstage at the Paris show — the designer kneels to hug her daughter tightly, both of them laughing and crying. Madame Coco stands nearby dabbing her eyes with a silk handkerchief, nodding with immense pride. The chaos of backstage — models changing, assistants rushing, champagne being opened — swirls around them in beautiful blur. The little girl holds up a child's drawing that says 'Mama #1' and the designer presses it to her heart. Camera captures the embrace in warm close-up, then pulls back to show the joyful controlled chaos. Warm golden backstage lighting with tungsten practicals, silk and tulle textures everywhere, intimate family moment amid global success. 4K cinematic quality, personal joy within professional triumph.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Final cinematic wide shot of the designer and her daughter walking hand in hand along the Seine at twilight, the Eiffel Tower sparkling with lights behind them. They stop on a bridge and look at the city of lights spread before them. The designer lifts her daughter onto the bridge railing and they both gaze at the view — a mother who rebuilt everything from nothing, and a child who never doubted her. Camera slowly cranes up and away, the two figures becoming part of the magnificent Paris panorama, city lights reflecting on the river below. Deep twilight blue and violet grading with warm golden city lights and sparkling Eiffel Tower, romantic Parisian atmosphere, volumetric light from street lamps, cinematic wide composition. 4K cinematic quality, empire achieved and the world at their feet.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    }
+  ]
+}
