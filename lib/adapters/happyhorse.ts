@@ -112,10 +112,15 @@ export class HappyHorseAdapter implements IVideoModelAdapter {
   private mapStatus(raw: string): TaskStatus {
     const map: Record<string, TaskStatus> = {
       pending: "pending",
+      PENDING: "pending",
       running: "running",
+      RUNNING: "running",
       succeeded: "completed",
+      SUCCEEDED: "completed",
       completed: "completed",
+      COMPLETED: "completed",
       failed: "failed",
+      FAILED: "failed",
     };
     return map[raw] ?? "pending";
   }
