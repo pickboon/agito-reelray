@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { putR2Object, generateR2Key } from "@/lib/r2";
+import { createServerSupabaseClient } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
   try {
+    const supabase = await createServerSupabaseClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
     if (!file) {

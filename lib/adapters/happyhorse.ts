@@ -26,7 +26,9 @@ export class HappyHorseAdapter implements IVideoModelAdapter {
   }
 
   private get apiKey(): string {
-    return process.env.HAPPYHORSE_API_KEY ?? "";
+    const key = process.env.HAPPYHORSE_API_KEY;
+    if (!key) throw new Error("Missing env: HAPPYHORSE_API_KEY");
+    return key;
   }
 
   async submit(params: GenerateParams): Promise<SubmitResult> {
@@ -54,6 +56,7 @@ export class HappyHorseAdapter implements IVideoModelAdapter {
         Authorization: `Bearer ${this.apiKey}`,
       },
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(30000),
     });
 
     if (!response.ok) {
@@ -73,6 +76,7 @@ export class HappyHorseAdapter implements IVideoModelAdapter {
 
     const response = await fetch(endpoint, {
       headers: { Authorization: `Bearer ${this.apiKey}` },
+      signal: AbortSignal.timeout(30000),
     });
 
     if (!response.ok) {
@@ -99,8 +103,8 @@ export class HappyHorseAdapter implements IVideoModelAdapter {
   }
 
   async getCost(params: GenerateParams): Promise<CostEstimate> {
-    // 标准消耗：720p = 10,000 Credits / 1080p = 15,000 Credits
-    const credits = params.aspectRatio === "1:1" ? 10000 : 10000;
+    // 标准消耗：9:16/1:1 = 10,000 Credits，16:9 横屏 = 12,000 Credits
+    const credits = params.aspectRatio === "16:9" ? 12000 : 10000;
     return { credits, durationSeconds: params.duration };
   }
 

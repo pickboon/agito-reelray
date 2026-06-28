@@ -47,14 +47,15 @@ export async function POST(request: NextRequest) {
     const newBalance = sub.credits_remaining - creditsToConsume;
 
     // 更新 subscription 余额
-    await supabase
+    const { error: subErr } = await supabase
       .from("subscriptions")
       .update({ credits_remaining: newBalance, updated_at: new Date().toISOString() })
       .eq("user_id", user.id)
       .eq("status", "active");
+    if (subErr) console.error("[generate] subscriptions update error:", subErr.message);
 
     // 写入 credit_transactions
-    await supabase.from("credit_transactions").insert({
+    const { error: txErr } = await supabase.from("credit_transactions").insert({
       user_id: user.id,
       type: "consume",
       amount: -creditsToConsume,
@@ -62,9 +63,10 @@ export async function POST(request: NextRequest) {
       description: `Generate shot: ${mode}`,
       reference_id: shot_id,
     });
+    if (txErr) console.error("[generate] credit_transactions insert error:", txErr.message);
 
     // 更新 shot 状态
-    await supabase
+    const { error: shotErr } = await supabase
       .from("shots")
       .update({
         status: "submitted",
@@ -74,9 +76,10 @@ export async function POST(request: NextRequest) {
         updated_at: new Date().toISOString(),
       })
       .eq("id", shot_id);
+    if (shotErr) console.error("[generate] shots update error:", shotErr.message);
 
     // 写入 generation_logs
-    await supabase.from("generation_logs").insert({
+    const { error: logErr } = await supabase.from("generation_logs").insert({
       shot_id,
       model: model ?? "happyhorse-1.1-t2v",
       mode,
@@ -84,9 +87,10 @@ export async function POST(request: NextRequest) {
       status: "submitted",
       credits_consumed: creditsToConsume,
     });
+    if (logErr) console.error("[generate] generation_logs insert error:", logErr.message);
 
     // 启动后台轮询（不阻塞响应）
-    pollTaskInBackground(supabase, user.id, shot_id, result.taskId, adapter, creditsToConsume);
+    pollTaskInBackground(supabase, user.id, shot_id, result.taskId, adapter, creditsToConsume, params);
 
     return NextResponse.json({
       task_id: result.taskId,
@@ -147,7 +151,8 @@ async function pollTaskInBackground(
   shotId: string,
   taskId: string,
   adapter: ReturnType<typeof getAdapter>,
-  creditsConsumed: number
+  creditsConsumed: number,
+  originalParams: GenerateParams
 ) {
   const MAX_POLLS = 25;
   const POLL_INTERVAL_MS = 10_000;
@@ -163,7 +168,7 @@ async function pollTaskInBackground(
       const result = await adapter.poll(taskId);
 
       // 更新 generation_logs
-      await supabase.from("generation_logs").insert({
+      const { error: pollLogErr } = await supabase.from("generation_logs").insert({
         shot_id: shotId,
         model: adapter.modelId,
         mode: "t2v",
@@ -174,9 +179,10 @@ async function pollTaskInBackground(
         elapsed_seconds: result.elapsedSeconds,
         credits_consumed: result.status === "completed" ? creditsConsumed : 0,
       });
+      if (pollLogErr) console.error(`[Poll] generation_logs insert error:`, pollLogErr.message);
 
       if (result.status === "completed") {
-        await supabase
+        const { error: completeErr } = await supabase
           .from("shots")
           .update({
             status: "completed",
@@ -186,6 +192,7 @@ async function pollTaskInBackground(
             updated_at: new Date().toISOString(),
           })
           .eq("id", shotId);
+        if (completeErr) console.error("[Poll] shots update error (completed):", completeErr.message);
         return;
       }
 
@@ -196,12 +203,7 @@ async function pollTaskInBackground(
           retryCount++;
 
           try {
-            const retryResult = await adapter.submit({
-              prompt: "", // 从 shot 获取
-              mode: "t2v",
-              aspectRatio: "9:16",
-              duration: 5,
-            });
+            const retryResult = await adapter.submit(originalParams);
             taskId = retryResult.taskId;
             continue;
           } catch {
@@ -219,13 +221,14 @@ async function pollTaskInBackground(
 
         if (sub) {
           const refunded = sub.credits_remaining + creditsConsumed;
-          await supabase
+          const { error: refundSubErr } = await supabase
             .from("subscriptions")
             .update({ credits_remaining: refunded })
             .eq("user_id", userId)
             .eq("status", "active");
+          if (refundSubErr) console.error("[Poll] subscriptions refund update error:", refundSubErr.message);
 
-          await supabase.from("credit_transactions").insert({
+          const { error: refundTxErr } = await supabase.from("credit_transactions").insert({
             user_id: userId,
             type: "refund",
             amount: creditsConsumed,
@@ -233,9 +236,10 @@ async function pollTaskInBackground(
             description: `Refund for failed generation: ${taskId}`,
             reference_id: shotId,
           });
+          if (refundTxErr) console.error("[Poll] credit_transactions refund insert error:", refundTxErr.message);
         }
 
-        await supabase
+        const { error: failShotErr } = await supabase
           .from("shots")
           .update({
             status: "failed",
@@ -244,6 +248,7 @@ async function pollTaskInBackground(
             updated_at: new Date().toISOString(),
           })
           .eq("id", shotId);
+        if (failShotErr) console.error("[Poll] shots update error (failed):", failShotErr.message);
         return;
       }
     } catch (error) {
@@ -252,7 +257,7 @@ async function pollTaskInBackground(
   }
 
   // 超时
-  await supabase
+  const { error: timeoutErr } = await supabase
     .from("shots")
     .update({
       status: "failed",
@@ -260,4 +265,5 @@ async function pollTaskInBackground(
       updated_at: new Date().toISOString(),
     })
     .eq("id", shotId);
+  if (timeoutErr) console.error("[Poll] shots update error (timeout):", timeoutErr.message);
 }

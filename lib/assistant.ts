@@ -4,8 +4,10 @@ let client: OpenAI | null = null;
 
 function getClient(): OpenAI {
   if (!client) {
+    const apiKey = process.env.DEEPSEEK_API_KEY;
+    if (!apiKey) throw new Error("Missing env: DEEPSEEK_API_KEY");
     client = new OpenAI({
-      apiKey: process.env.DEEPSEEK_API_KEY,
+      apiKey,
       baseURL: process.env.DEEPSEEK_BASE_URL,
     });
   }
@@ -45,5 +47,9 @@ export async function callAssistantJSON<T>(
     response_format: { type: "json_object" },
   });
   const content = response.choices[0]?.message?.content ?? "{}";
-  return JSON.parse(content) as T;
+  try {
+    return JSON.parse(content) as T;
+  } catch {
+    return {} as T;
+  }
 }

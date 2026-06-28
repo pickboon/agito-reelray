@@ -1,25 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getR2SignedUrl } from "@/lib/r2";
+import { createServerSupabaseClient } from "@/lib/supabase";
 
 export async function GET(req: NextRequest) {
   try {
+    const supabase = await createServerSupabaseClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
     const urlParam = req.nextUrl.searchParams.get("url");
     if (!urlParam) {
       return NextResponse.json({ error: "Missing url parameter" }, { status: 400 });
     }
 
-    // If it's an external URL (e.g., HappyHorse output), proxy it
-    const isInternal = urlParam.includes(process.env.CLOUDFLARE_R2_PUBLIC_URL || "r2.cloudflarestorage.com");
-
-    if (isInternal) {
-      // Generate signed URL for internal R2 objects
-      const key = urlParam.split("/").slice(-2).join("/");
-      const signedUrl = await getR2SignedUrl(key);
-      return NextResponse.json({ url: signedUrl });
+    // 仅允许合法 R2 URL，防止 SSRF
+    const r2PublicUrl = process.env.R2_PUBLIC_URL ?? "";
+    if (!r2PublicUrl || !urlParam.startsWith(r2PublicUrl)) {
+      return NextResponse.json(
+        { error: "Invalid URL: must start with R2_PUBLIC_URL" },
+        { status: 400 }
+      );
     }
 
-    // Proxy external video
-    const response = await fetch(urlParam);
+    const response = await fetch(urlParam, { signal: AbortSignal.timeout(15000) });
     if (!response.ok) {
       return NextResponse.json(
         { error: `Failed to fetch: ${response.status}` },
@@ -27,7 +29,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const contentType = response.headers.get("content-type") || "video/mp4";
+    const contentType = response.headers.get("content-type") || "application/octet-stream";
     const buffer = await response.arrayBuffer();
 
     return new NextResponse(buffer, {

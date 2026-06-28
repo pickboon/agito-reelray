@@ -13,7 +13,7 @@ interface Project {
   id: string;
   title: string;
   status: string;
-  template: string;
+  template_id?: string;
   description: string;
   created_at: string;
 }
@@ -21,9 +21,9 @@ interface Project {
 interface Character {
   id: string;
   name: string;
-  role: string;
+  role?: string;
   description: string;
-  image_url: string | null;
+  reference_image_url: string | null;
 }
 
 interface Episode {
@@ -31,7 +31,7 @@ interface Episode {
   title: string;
   episode_number: number;
   status: string;
-  updated_at: string;
+  created_at: string;
 }
 
 export default function ProjectDetailPage({
@@ -112,8 +112,8 @@ export default function ProjectDetailPage({
           >
             {project.status}
           </Badge>
-          {project.template && (
-            <Badge variant="outline">{project.template}</Badge>
+          {project.template_id && (
+            <Badge variant="outline">{project.template_id}</Badge>
           )}
         </div>
         {project.description && (
@@ -205,7 +205,7 @@ export default function ProjectDetailPage({
                           {ep.title}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {new Date(ep.updated_at).toLocaleDateString("zh-CN")}
+                          {new Date(ep.created_at).toLocaleDateString("zh-CN")}
                         </p>
                       </div>
                     </div>

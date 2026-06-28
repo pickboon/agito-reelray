@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+const stripeKey = process.env.STRIPE_SECRET_KEY;
+if (!stripeKey) throw new Error("Missing env: STRIPE_SECRET_KEY");
+
+const stripe = new Stripe(stripeKey, {
   apiVersion: "2026-06-24.dahlia",
 });
 
@@ -41,7 +44,7 @@ export async function POST(req: NextRequest) {
 
         if (userId && credits > 0) {
           // Add credits for bundle purchase
-          await addCredits(userId, credits, "bundle_purchase", session.id);
+          await addCredits(userId, credits, "purchase", session.id);
         }
         break;
       }
@@ -96,16 +99,36 @@ async function addCredits(
   stripeRef: string
 ) {
   const { createClient } = await import("@supabase/supabase-js");
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
+  const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!sbUrl) throw new Error("Missing env: NEXT_PUBLIC_SUPABASE_URL");
+  if (!sbKey) throw new Error("Missing env: SUPABASE_SERVICE_ROLE_KEY");
+  const supabase = createClient(sbUrl, sbKey);
+
+  // 查询当前余额作为 creditsBefore
+  const { data: sub } = await supabase
+    .from("subscriptions")
+    .select("credits_remaining")
+    .eq("user_id", userId)
+    .eq("status", "active")
+    .single();
+
+  const creditsBefore = sub?.credits_remaining ?? 0;
+  const balanceAfter = creditsBefore + credits;
+
+  // 更新 subscription 余额
+  await supabase
+    .from("subscriptions")
+    .update({ credits_remaining: balanceAfter, updated_at: new Date().toISOString() })
+    .eq("user_id", userId)
+    .eq("status", "active");
 
   await supabase.from("credit_transactions").insert({
     user_id: userId,
     amount: credits,
     type,
-    stripe_reference: stripeRef,
+    balance_after: balanceAfter,
+    reference_id: stripeRef,
   });
 }
 
@@ -116,10 +139,11 @@ async function upsertSubscription(
   stripeSubId: string
 ) {
   const { createClient } = await import("@supabase/supabase-js");
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
+  const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!sbUrl) throw new Error("Missing env: NEXT_PUBLIC_SUPABASE_URL");
+  if (!sbKey) throw new Error("Missing env: SUPABASE_SERVICE_ROLE_KEY");
+  const supabase = createClient(sbUrl, sbKey);
 
   const { data: existing } = await supabase
     .from("subscriptions")
@@ -151,24 +175,26 @@ async function upsertSubscription(
 
 async function cancelSubscription(userId: string) {
   const { createClient } = await import("@supabase/supabase-js");
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
+  const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!sbUrl) throw new Error("Missing env: NEXT_PUBLIC_SUPABASE_URL");
+  if (!sbKey) throw new Error("Missing env: SUPABASE_SERVICE_ROLE_KEY");
+  const supabase = createClient(sbUrl, sbKey);
 
   await supabase
     .from("subscriptions")
-    .update({ status: "cancelled", updated_at: new Date().toISOString() })
+    .update({ status: "canceled", updated_at: new Date().toISOString() })
     .eq("user_id", userId)
     .eq("status", "active");
 }
 
 async function renewSubscriptionCredits(stripeSubId: string) {
   const { createClient } = await import("@supabase/supabase-js");
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
+  const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!sbUrl) throw new Error("Missing env: NEXT_PUBLIC_SUPABASE_URL");
+  if (!sbKey) throw new Error("Missing env: SUPABASE_SERVICE_ROLE_KEY");
+  const supabase = createClient(sbUrl, sbKey);
 
   const { data: sub } = await supabase
     .from("subscriptions")

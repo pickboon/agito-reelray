@@ -3,14 +3,21 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 let r2Client: S3Client | null = null;
 
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) throw new Error(`Missing env: ${name}`);
+  return value;
+}
+
 function getClient(): S3Client {
   if (!r2Client) {
+    const accountId = requireEnv("R2_ACCOUNT_ID");
     r2Client = new S3Client({
       region: "auto",
-      endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+      endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
       credentials: {
-        accessKeyId: process.env.R2_ACCESS_KEY_ID!,
-        secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
+        accessKeyId: requireEnv("R2_ACCESS_KEY_ID"),
+        secretAccessKey: requireEnv("R2_SECRET_ACCESS_KEY"),
       },
     });
   }
