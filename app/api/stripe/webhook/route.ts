@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 // 订阅套餐 + 充值包的 credits 映射
 const CREDITS_MAP: Record<string, number> = {
@@ -13,6 +14,32 @@ const CREDITS_MAP: Record<string, number> = {
   large: 600_000,
 };
 
+// 不可恢复错误：用户删除、记录不存在等 → 不触发 Stripe 重试
+// 数据库超时、连接失败等 → 返回 500 让 Stripe 重试
+function isRetryableError(err: unknown): boolean {
+  if (!(err instanceof Error)) return true;
+  const msg = err.message.toLowerCase();
+  if (
+    msg.includes("timeout") ||
+    msg.includes("connection") ||
+    msg.includes("econnrefused") ||
+    msg.includes("deadlock") ||
+    msg.includes("could not serialize") ||
+    msg.includes("network")
+  ) {
+    return true;
+  }
+  return false;
+}
+
+function getAdminClient(): SupabaseClient {
+  const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!sbUrl) throw new Error("Missing env: NEXT_PUBLIC_SUPABASE_URL");
+  if (!sbKey) throw new Error("Missing env: SUPABASE_SERVICE_ROLE_KEY");
+  return createClient(sbUrl, sbKey);
+}
+
 export async function POST(req: NextRequest) {
   const stripeKey = process.env.STRIPE_SECRET_KEY;
   if (!stripeKey) throw new Error("Missing env: STRIPE_SECRET_KEY");
@@ -21,7 +48,10 @@ export async function POST(req: NextRequest) {
   // P3-5: 可选 IP 白名单检查
   const allowedIps = process.env.STRIPE_WEBHOOK_IPS;
   if (allowedIps) {
-    const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? req.headers.get("x-real-ip") ?? "unknown";
+    const clientIp =
+      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+      req.headers.get("x-real-ip") ??
+      "unknown";
     const ipList = allowedIps.split(",").map((ip) => ip.trim());
     if (!ipList.includes(clientIp)) {
       console.warn(`[webhook] IP ${clientIp} 不在白名单中，拒绝`);
@@ -46,6 +76,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
+  const supabase = getAdminClient();
+
+  // ── 幂等去重：event.id 已处理过则直接返回 ──
+  const { data: existingEvent } = await supabase
+    .from("webhook_events")
+    .select("event_id")
+    .eq("event_id", event.id)
+    .maybeSingle();
+
+  if (existingEvent) {
+    console.log(`[webhook] event ${event.id} (${event.type}) 已处理，跳过`);
+    return NextResponse.json({ received: true });
+  }
+
   try {
     switch (event.type) {
       case "checkout.session.completed": {
@@ -53,12 +97,11 @@ export async function POST(req: NextRequest) {
         const userId = session.metadata?.user_id;
 
         if (userId) {
-          // 优先处理 bundle 充值包
           const bundleKey = session.metadata?.bundle;
           if (bundleKey) {
             const credits = CREDITS_MAP[bundleKey] || 0;
             if (credits > 0) {
-              await addCredits(userId, credits, "purchase", session.id);
+              await addCredits(supabase, userId, credits, "purchase", session.id);
             }
           }
           // 订阅套餐由 subscription.created/updated 事件处理，此处不重复
@@ -74,7 +117,7 @@ export async function POST(req: NextRequest) {
 
         if (userId && plan && subscription.status === "active") {
           const credits = CREDITS_MAP[plan] || 0;
-          await upsertSubscription(userId, plan, credits, subscription.id);
+          await upsertSubscription(supabase, userId, plan, credits, subscription.id);
         }
         break;
       }
@@ -83,24 +126,42 @@ export async function POST(req: NextRequest) {
         const subscription = event.data.object as Stripe.Subscription;
         const userId = subscription.metadata?.user_id;
         if (userId) {
-          await cancelSubscription(userId);
+          await cancelSubscription(supabase, userId);
         }
         break;
       }
 
       case "invoice.payment_succeeded": {
         const invoice = event.data.object as Stripe.Invoice;
-        const subscriptionId = (invoice as unknown as Record<string, unknown>).subscription as string | undefined;
+        const subscriptionId = (
+          invoice as unknown as Record<string, unknown>
+        ).subscription as string | undefined;
         if (subscriptionId) {
-          await renewSubscriptionCredits(subscriptionId);
+          await renewSubscriptionCredits(supabase, subscriptionId);
         }
         break;
       }
     }
 
+    // 处理成功 → 记录幂等（ON CONFLICT 忽略，防止并发写入）
+    const { error: insertErr } = await supabase
+      .from("webhook_events")
+      .upsert(
+        { event_id: event.id, event_type: event.type },
+        { onConflict: "event_id", ignoreDuplicates: true }
+      );
+    if (insertErr) {
+      console.warn(`[webhook] 幂等记录写入失败（可忽略）: ${insertErr.message}`);
+    }
+
     return NextResponse.json({ received: true });
   } catch (error) {
     console.error("[Stripe Webhook Error]", error);
+    if (!isRetryableError(error)) {
+      // 不可恢复错误：记录日志并返回 200，避免 Stripe 无意义重试
+      console.warn(`[webhook] 不可恢复错误，跳过重试: ${(error as Error).message}`);
+      return NextResponse.json({ received: true });
+    }
     return NextResponse.json(
       { error: "Webhook processing failed" },
       { status: 500 }
@@ -108,70 +169,102 @@ export async function POST(req: NextRequest) {
   }
 }
 
+// ── addCredits：乐观锁防竞态，失败重试一次 ──
 async function addCredits(
+  supabase: SupabaseClient,
   userId: string,
   credits: number,
   type: string,
   stripeRef: string
 ) {
-  const { createClient } = await import("@supabase/supabase-js");
-  const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!sbUrl) throw new Error("Missing env: NEXT_PUBLIC_SUPABASE_URL");
-  if (!sbKey) throw new Error("Missing env: SUPABASE_SERVICE_ROLE_KEY");
-  const supabase = createClient(sbUrl, sbKey);
-
-  // 查询当前余额作为 creditsBefore
-  const { data: sub } = await supabase
+  const { data: sub, error: selErr } = await supabase
     .from("subscriptions")
     .select("credits_remaining")
     .eq("user_id", userId)
     .eq("status", "active")
-    .single();
+    .maybeSingle();
 
-  const creditsBefore = sub?.credits_remaining ?? 0;
+  if (selErr || !sub) {
+    console.warn(`[webhook] addCredits: user ${userId} 无 active subscription，跳过`);
+    return;
+  }
+
+  const creditsBefore = sub.credits_remaining ?? 0;
   const balanceAfter = creditsBefore + credits;
 
-  // 更新 subscription 余额
-  await supabase
+  const { data: updated, error } = await supabase
     .from("subscriptions")
-    .update({ credits_remaining: balanceAfter, updated_at: new Date().toISOString() })
+    .update({
+      credits_remaining: balanceAfter,
+      updated_at: new Date().toISOString(),
+    })
     .eq("user_id", userId)
-    .eq("status", "active");
+    .eq("status", "active")
+    .eq("credits_remaining", creditsBefore)
+    .select("credits_remaining")
+    .maybeSingle();
+
+  let finalBalance = balanceAfter;
+
+  if (error || !updated) {
+    // 乐观锁失败 → 重新读取并重试一次
+    console.warn(`[webhook] addCredits 乐观锁冲突，重试: ${error?.message}`);
+    const { data: sub2 } = await supabase
+      .from("subscriptions")
+      .select("credits_remaining")
+      .eq("user_id", userId)
+      .eq("status", "active")
+      .maybeSingle();
+
+    if (sub2) {
+      const balanceAfter2 = (sub2.credits_remaining ?? 0) + credits;
+      const { data: updated2 } = await supabase
+        .from("subscriptions")
+        .update({
+          credits_remaining: balanceAfter2,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("user_id", userId)
+        .eq("status", "active")
+        .eq("credits_remaining", sub2.credits_remaining)
+        .select("credits_remaining")
+        .maybeSingle();
+
+      if (updated2) {
+        finalBalance = balanceAfter2;
+      } else {
+        console.error(`[webhook] addCredits 重试也失败，user=${userId}`);
+      }
+    }
+  }
 
   await supabase.from("credit_transactions").insert({
     user_id: userId,
     amount: credits,
     type,
-    balance_after: balanceAfter,
+    balance_after: finalBalance,
     reference_id: stripeRef,
   });
 }
 
+// ── upsertSubscription：新建无需锁，更新加乐观锁 ──
 async function upsertSubscription(
+  supabase: SupabaseClient,
   userId: string,
   plan: string,
   monthlyCredits: number,
   stripeSubId: string
 ) {
-  const { createClient } = await import("@supabase/supabase-js");
-  const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!sbUrl) throw new Error("Missing env: NEXT_PUBLIC_SUPABASE_URL");
-  if (!sbKey) throw new Error("Missing env: SUPABASE_SERVICE_ROLE_KEY");
-  const supabase = createClient(sbUrl, sbKey);
-
   const { data: existing } = await supabase
     .from("subscriptions")
     .select("id, credits_remaining")
     .eq("user_id", userId)
     .eq("status", "active")
-    .single();
+    .maybeSingle();
 
   if (existing) {
-    // 已有记录：累加 credits，不覆盖
     const newBalance = (existing.credits_remaining ?? 0) + monthlyCredits;
-    await supabase
+    const { data: updated, error } = await supabase
       .from("subscriptions")
       .update({
         plan,
@@ -179,7 +272,34 @@ async function upsertSubscription(
         stripe_subscription_id: stripeSubId,
         updated_at: new Date().toISOString(),
       })
-      .eq("id", existing.id);
+      .eq("id", existing.id)
+      .eq("credits_remaining", existing.credits_remaining)
+      .select("id")
+      .maybeSingle();
+
+    if (error || !updated) {
+      console.warn(`[webhook] upsertSubscription 乐观锁冲突，重试: ${error?.message}`);
+      const { data: existing2 } = await supabase
+        .from("subscriptions")
+        .select("id, credits_remaining")
+        .eq("user_id", userId)
+        .eq("status", "active")
+        .maybeSingle();
+
+      if (existing2) {
+        const newBalance2 = (existing2.credits_remaining ?? 0) + monthlyCredits;
+        await supabase
+          .from("subscriptions")
+          .update({
+            plan,
+            credits_remaining: newBalance2,
+            stripe_subscription_id: stripeSubId,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", existing2.id)
+          .eq("credits_remaining", existing2.credits_remaining);
+      }
+    }
   } else {
     await supabase.from("subscriptions").insert({
       user_id: userId,
@@ -191,14 +311,7 @@ async function upsertSubscription(
   }
 }
 
-async function cancelSubscription(userId: string) {
-  const { createClient } = await import("@supabase/supabase-js");
-  const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!sbUrl) throw new Error("Missing env: NEXT_PUBLIC_SUPABASE_URL");
-  if (!sbKey) throw new Error("Missing env: SUPABASE_SERVICE_ROLE_KEY");
-  const supabase = createClient(sbUrl, sbKey);
-
+async function cancelSubscription(supabase: SupabaseClient, userId: string) {
   await supabase
     .from("subscriptions")
     .update({ status: "canceled", updated_at: new Date().toISOString() })
@@ -206,32 +319,57 @@ async function cancelSubscription(userId: string) {
     .eq("status", "active");
 }
 
-async function renewSubscriptionCredits(stripeSubId: string) {
-  const { createClient } = await import("@supabase/supabase-js");
-  const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!sbUrl) throw new Error("Missing env: NEXT_PUBLIC_SUPABASE_URL");
-  if (!sbKey) throw new Error("Missing env: SUPABASE_SERVICE_ROLE_KEY");
-  const supabase = createClient(sbUrl, sbKey);
-
+// ── renewSubscriptionCredits：乐观锁防重复发放 ──
+async function renewSubscriptionCredits(
+  supabase: SupabaseClient,
+  stripeSubId: string
+) {
   const { data: sub } = await supabase
     .from("subscriptions")
     .select("id, user_id, plan, credits_remaining")
     .eq("stripe_subscription_id", stripeSubId)
-    .single();
+    .maybeSingle();
 
-  if (!sub) return;
+  if (!sub) {
+    console.warn(
+      `[webhook] renewSubscriptionCredits: subscription ${stripeSubId} 不存在，跳过`
+    );
+    return;
+  }
 
   const credits = CREDITS_MAP[sub.plan] || 0;
-  if (credits > 0) {
-    // 累加 credits 而非覆盖
-    const newBalance = (sub.credits_remaining ?? 0) + credits;
-    await supabase
+  if (credits <= 0) return;
+
+  const newBalance = (sub.credits_remaining ?? 0) + credits;
+  const { data: updated, error } = await supabase
+    .from("subscriptions")
+    .update({
+      credits_remaining: newBalance,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", sub.id)
+    .eq("credits_remaining", sub.credits_remaining)
+    .select("id")
+    .maybeSingle();
+
+  if (error || !updated) {
+    console.warn(`[webhook] renewSubscriptionCredits 乐观锁冲突，重试: ${error?.message}`);
+    const { data: sub2 } = await supabase
       .from("subscriptions")
-      .update({
-        credits_remaining: newBalance,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", sub.id);
+      .select("id, credits_remaining")
+      .eq("id", sub.id)
+      .maybeSingle();
+
+    if (sub2) {
+      const newBalance2 = (sub2.credits_remaining ?? 0) + credits;
+      await supabase
+        .from("subscriptions")
+        .update({
+          credits_remaining: newBalance2,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", sub2.id)
+        .eq("credits_remaining", sub2.credits_remaining);
+    }
   }
 }

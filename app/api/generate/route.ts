@@ -109,24 +109,61 @@ export async function POST(request: NextRequest) {
 
     const result = await adapter.submit(params);
 
-    // 扣除 Credits（原子操作）
+    // 扣除 Credits（乐观锁防并发竞态）
     const creditsToConsume = 10000;
-    const newBalance = sub.credits_remaining - creditsToConsume;
+    const currentBalance = sub.credits_remaining ?? 0;
+    const newBalance = currentBalance - creditsToConsume;
 
-    // 更新 subscription 余额
-    const { error: subErr } = await supabase
+    const { data: updated, error: subErr } = await supabase
       .from("subscriptions")
       .update({ credits_remaining: newBalance, updated_at: new Date().toISOString() })
       .eq("user_id", user.id)
-      .eq("status", "active");
-    if (subErr) console.error("[generate] subscriptions update error:", subErr.message);
+      .eq("status", "active")
+      .eq("credits_remaining", currentBalance)
+      .select("credits_remaining")
+      .maybeSingle();
+
+    let finalBalance = newBalance;
+
+    if (subErr || !updated) {
+      // 乐观锁失败 → 重新读取并重试一次
+      console.warn("[generate] credits deduction optimistic lock failed, retrying");
+      const { data: sub2 } = await supabase
+        .from("subscriptions")
+        .select("credits_remaining")
+        .eq("user_id", user.id)
+        .eq("status", "active")
+        .single();
+
+      if (sub2) {
+        const currentBalance2 = sub2.credits_remaining ?? 0;
+        const newBalance2 = currentBalance2 - creditsToConsume;
+        const { data: updated2, error: retryErr } = await supabase
+          .from("subscriptions")
+          .update({ credits_remaining: newBalance2, updated_at: new Date().toISOString() })
+          .eq("user_id", user.id)
+          .eq("status", "active")
+          .eq("credits_remaining", currentBalance2)
+          .select("credits_remaining")
+          .maybeSingle();
+
+        if (retryErr || !updated2) {
+          console.error("[generate] credits deduction retry failed:", retryErr?.message);
+          return NextResponse.json({ error: "Credits deduction failed (concurrent modification)" }, { status: 409 });
+        }
+        finalBalance = newBalance2;
+      } else {
+        console.error("[generate] subscription not found after retry");
+        return NextResponse.json({ error: "No active subscription" }, { status: 402 });
+      }
+    }
 
     // 写入 credit_transactions
     const { error: txErr } = await supabase.from("credit_transactions").insert({
       user_id: user.id,
       type: "consume",
       amount: -creditsToConsume,
-      balance_after: newBalance,
+      balance_after: finalBalance,
       description: `Generate shot: ${mode}`,
       reference_id: shot_id,
     });
@@ -336,7 +373,7 @@ async function pollTaskInBackground(
           }
         }
 
-        // 重试耗尽，退还 Credits
+        // 重试耗尽，退还 Credits（乐观锁防并发竞态）
         const { data: sub } = await supabase
           .from("subscriptions")
           .select("credits_remaining")
@@ -345,19 +382,51 @@ async function pollTaskInBackground(
           .single();
 
         if (sub) {
-          const refunded = sub.credits_remaining + creditsConsumed;
-          const { error: refundSubErr } = await supabase
+          const currentBalance = sub.credits_remaining ?? 0;
+          const refunded = currentBalance + creditsConsumed;
+          const { data: updated, error: refundSubErr } = await supabase
             .from("subscriptions")
             .update({ credits_remaining: refunded })
             .eq("user_id", userId)
-            .eq("status", "active");
-          if (refundSubErr) console.error("[Poll] subscriptions refund update error:", refundSubErr.message);
+            .eq("status", "active")
+            .eq("credits_remaining", currentBalance)
+            .select("credits_remaining")
+            .maybeSingle();
+
+          let finalBalance = refunded;
+
+          if (refundSubErr || !updated) {
+            // 乐观锁失败 → 重新读取并重试一次
+            console.warn("[Poll] refund optimistic lock failed, retrying");
+            const { data: sub2 } = await supabase
+              .from("subscriptions")
+              .select("credits_remaining")
+              .eq("user_id", userId)
+              .eq("status", "active")
+              .single();
+            if (sub2) {
+              const refunded2 = (sub2.credits_remaining ?? 0) + creditsConsumed;
+              const { data: updated2, error: retryErr } = await supabase
+                .from("subscriptions")
+                .update({ credits_remaining: refunded2 })
+                .eq("user_id", userId)
+                .eq("status", "active")
+                .eq("credits_remaining", sub2.credits_remaining)
+                .select("credits_remaining")
+                .maybeSingle();
+              if (retryErr || !updated2) {
+                console.error("[Poll] subscriptions refund retry failed:", retryErr?.message);
+              } else {
+                finalBalance = refunded2;
+              }
+            }
+          }
 
           const { error: refundTxErr } = await supabase.from("credit_transactions").insert({
             user_id: userId,
             type: "refund",
             amount: creditsConsumed,
-            balance_after: refunded,
+            balance_after: finalBalance,
             description: `Refund for failed generation: ${taskId}`,
             reference_id: shotId,
           });

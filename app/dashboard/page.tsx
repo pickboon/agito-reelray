@@ -60,7 +60,7 @@ export default function DashboardPage() {
           .select("credits_remaining, plan")
           .eq("user_id", userId)
           .eq("status", "active")
-          .single(),
+          .maybeSingle(),
       ]);
 
       if (projectsRes.error) {

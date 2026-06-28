@@ -36,3 +36,12 @@ export function validateCsrf(request: NextRequest): boolean {
   const headerToken = request.headers.get(CSRF_HEADER_NAME);
   return cookieToken === headerToken;
 }
+
+// ── 客户端辅助：从 cookie 读取 CSRF token ──
+// 供前端 fetch 请求设置 x-csrf-token header
+// SSR 环境下 document 不存在，返回空字符串
+export function getCsrfHeader(): string {
+  if (typeof document === "undefined") return "";
+  const match = document.cookie.match(/__csrf_token=([^;]+)/);
+  return match?.[1] ?? "";
+}

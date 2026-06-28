@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check, Zap, Star, Sparkles, Coins, Crown } from "lucide-react";
+import { getCsrfHeader } from "@/lib/csrf";
 
 const PLANS = [
   {
@@ -104,13 +105,18 @@ const BUNDLES = [
 
 export default function PricingPage() {
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
   const handleCheckout = async (type: "subscription" | "bundle", id: string) => {
     setCheckoutLoading(id);
+    setCheckoutError(null);
     try {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-csrf-token": getCsrfHeader(),
+        },
         body: JSON.stringify(
           type === "subscription" ? { type, plan: id } : { type, bundle: id }
         ),
@@ -119,10 +125,12 @@ export default function PricingPage() {
       if (data.url) {
         window.location.href = data.url;
       } else {
-        alert(data.error || "结算失败");
+        setCheckoutError(data.error ?? "结算失败");
+        setTimeout(() => setCheckoutError(null), 3000);
       }
     } catch {
-      alert("请求失败，请重试");
+      setCheckoutError("请求失败，请重试");
+      setTimeout(() => setCheckoutError(null), 3000);
     } finally {
       setCheckoutLoading(null);
     }
@@ -159,6 +167,13 @@ export default function PricingPage() {
             1 集 720p 短片 约消耗 10,000 Credits
           </p>
         </div>
+
+        {/* 错误提示 */}
+        {checkoutError && (
+          <div className="max-w-md mx-auto rounded-md bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive text-center">
+            {checkoutError}
+          </div>
+        )}
 
         {/* 订阅套餐 */}
         <section>
