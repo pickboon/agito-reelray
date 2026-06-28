@@ -32,21 +32,21 @@ export default function MobileNav() {
               className="text-sm text-muted-foreground hover:text-foreground py-2"
               onClick={() => setIsOpen(false)}
             >
-              Templates
+              模板库
             </Link>
             <Link
               href="/pricing"
               className="text-sm text-muted-foreground hover:text-foreground py-2"
               onClick={() => setIsOpen(false)}
             >
-              Pricing
+              定价
             </Link>
             <Link
               href="/login"
-              className="text-sm font-medium px-4 py-2 rounded-md bg-brand-gold text-background text-center hover:bg-brand-gold/90 transition-colors"
+              className="text-sm text-muted-foreground hover:text-foreground py-2"
               onClick={() => setIsOpen(false)}
             >
-              Sign In
+              登录
             </Link>
           </div>
         </div>

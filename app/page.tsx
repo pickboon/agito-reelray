@@ -26,19 +26,19 @@ export default function Home() {
               href="/dashboard/templates"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              Templates
+              模板库
             </Link>
             <Link
               href="/pricing"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              Pricing
+              定价
             </Link>
             <Link
               href="/login"
-              className="text-sm font-medium px-4 py-2 rounded-md bg-brand-gold text-background hover:bg-brand-gold/90 transition-colors"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              Sign In
+              登录
             </Link>
           </div>
 
@@ -74,18 +74,18 @@ export default function Home() {
                 href="/login"
                 className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-md bg-brand-gold text-background font-semibold hover:bg-brand-gold/90 transition-colors"
               >
-                Start Free
+                免费开始
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <a
                 href="#demo"
                 className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-md border border-brand-gold text-brand-gold font-semibold hover:bg-brand-gold/10 transition-colors"
               >
-                Watch Demo
+                观看演示
               </a>
             </div>
 
-            <p className="mt-16 text-xs text-muted-foreground/60">
+            <p className="mt-16 text-xs text-muted-foreground/80">
               基于 HappyHorse 1.1 · 生成成功率 96.9%
             </p>
           </div>
@@ -244,14 +244,14 @@ export default function Home() {
 
                   <div className="px-4">
                     <div className="aspect-video bg-black rounded-lg flex items-center justify-center relative">
-                      <div className="h-12 w-12 rounded-full bg-brand-gold/80 flex items-center justify-center cursor-pointer hover:bg-brand-gold transition-colors">
+                      <button type="button" aria-label="播放演示视频" className="h-12 w-12 rounded-full bg-brand-gold/80 flex items-center justify-center hover:bg-brand-gold transition-colors">
                         <Play className="h-5 w-5 text-background ml-0.5" />
-                      </div>
+                      </button>
                     </div>
                   </div>
 
                   <p className="text-xs text-muted-foreground p-4 text-center">
-                    Sample (Coming Soon)
+                    演示视频制作中，敬请期待
                   </p>
                 </div>
               ))}
@@ -267,7 +267,7 @@ export default function Home() {
         <section id="pricing" className="py-24 px-6 bg-secondary/30">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-4">
-              ¥500 资源包起步，或 ¥149/月订阅
+              选择适合你的方案
             </h2>
             <p className="text-center text-muted-foreground mb-16">
               选择匹配你产能的方案。
@@ -328,7 +328,7 @@ export default function Home() {
                 >
                   {plan.popular && (
                     <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-gold text-background text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">
-                      Most Popular
+                      最受欢迎
                     </span>
                   )}
 
@@ -357,14 +357,14 @@ export default function Home() {
                   </ul>
 
                   <Link
-                    href="/pricing"
+                    href="/login"
                     className={`w-full text-center py-3 rounded-md font-medium transition-colors ${
                       plan.popular
                         ? "bg-brand-gold text-background hover:bg-brand-gold/90"
                         : "border border-border text-foreground hover:bg-secondary"
                     }`}
                   >
-                    Subscribe
+                    订阅
                   </Link>
                 </div>
               ))}
@@ -376,16 +376,16 @@ export default function Home() {
                 href="/login"
                 className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-md bg-brand-gold text-background font-semibold text-lg hover:bg-brand-gold/90 transition-colors"
               >
-                Get Started Free
+                免费开始
                 <ArrowRight className="h-5 w-5" />
               </Link>
               <p className="mt-4 text-sm text-muted-foreground">
-                资源包亦可按需购买——{" "}
+                按量购买资源包？{" "}
                 <Link
                   href="/pricing"
                   className="text-brand-gold hover:underline"
                 >
-                  view pricing
+                  查看定价详情
                 </Link>
               </p>
             </div>
@@ -404,19 +404,19 @@ export default function Home() {
               href="/dashboard/templates"
               className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
-              Templates
+              模板库
             </Link>
             <Link
               href="/pricing"
               className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
-              Pricing
+              定价
             </Link>
             <Link
               href="/contact"
               className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
-              Contact
+              联系我们
             </Link>
           </div>
         </div>
