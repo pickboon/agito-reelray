@@ -3,6 +3,7 @@ import { createServerSupabaseClient } from "@/lib/supabase";
 import { getAdapter } from "@/lib/adapters";
 import type { GenerateParams } from "@/lib/adapters";
 import { checkConsistency } from "@/lib/engine/consistency";
+import { mergeAnchors } from "@/lib/engine/multi-character";
 
 // POST /api/generate — 提交生成任务
 export async function POST(request: NextRequest) {
@@ -12,7 +13,7 @@ export async function POST(request: NextRequest) {
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const body = await request.json();
-    const { shot_id, model, mode, prompt, reference_image_url, aspect_ratio, duration, seed } = body;
+    const { shot_id, model, mode, prompt, reference_image_url, aspect_ratio, duration, seed, reference_character_ids } = body;
 
     if (!shot_id || !prompt || !mode) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -30,9 +31,23 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Insufficient credits" }, { status: 402 });
     }
 
-    // r2v 模式：自动使用角色锚点图（如果没有手动传入 reference_image_url）
+    // 确定 referenceImageUrl
     let finalRefImageUrl = reference_image_url;
-    if (mode === "r2v" && !finalRefImageUrl) {
+    let finalPrompt = prompt;
+
+    // 多角色模式：合并多个锚点图
+    if (Array.isArray(reference_character_ids) && reference_character_ids.length > 1) {
+      const merged = await mergeAnchors(reference_character_ids);
+      finalRefImageUrl = merged.mergedImageUrl;
+
+      // 自动追加位置描述
+      const positionDesc = reference_character_ids
+        .map((_: string, i: number) => `Character ${i + 1} ${positionLabel(i, reference_character_ids.length)}`)
+        .join(", ");
+      finalPrompt = `${prompt} [${positionDesc}]`;
+    }
+    // 单角色 r2v：自动使用锚点图
+    else if (mode === "r2v" && !finalRefImageUrl) {
       const { data: shotRow } = await supabase
         .from("shots")
         .select("reference_character_id")
@@ -55,7 +70,7 @@ export async function POST(request: NextRequest) {
     // 提交到 HappyHorse
     const adapter = getAdapter(model ?? "happyhorse-1.1");
     const params: GenerateParams = {
-      prompt,
+      prompt: finalPrompt,
       mode,
       referenceImageUrl: finalRefImageUrl,
       aspectRatio: aspect_ratio ?? "9:16",
@@ -89,15 +104,22 @@ export async function POST(request: NextRequest) {
     if (txErr) console.error("[generate] credit_transactions insert error:", txErr.message);
 
     // 更新 shot 状态
+    const shotUpdate: Record<string, unknown> = {
+      status: "submitted",
+      task_id: result.taskId,
+      model: model ?? "happyhorse-1.1-t2v",
+      credits_consumed: creditsToConsume,
+      updated_at: new Date().toISOString(),
+    };
+
+    // 保存多角色引用
+    if (Array.isArray(reference_character_ids) && reference_character_ids.length > 0) {
+      shotUpdate.reference_character_ids = reference_character_ids;
+    }
+
     const { error: shotErr } = await supabase
       .from("shots")
-      .update({
-        status: "submitted",
-        task_id: result.taskId,
-        model: model ?? "happyhorse-1.1-t2v",
-        credits_consumed: creditsToConsume,
-        updated_at: new Date().toISOString(),
-      })
+      .update(shotUpdate)
       .eq("id", shot_id);
     if (shotErr) console.error("[generate] shots update error:", shotErr.message);
 
@@ -125,6 +147,18 @@ export async function POST(request: NextRequest) {
     console.error("[POST /api/generate]", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
+}
+
+function positionLabel(index: number, total: number): string {
+  if (total === 2) return index === 0 ? "on the left" : "on the right";
+  if (total === 3) {
+    if (index === 0) return "on the left";
+    if (index === 1) return "in the center";
+    return "on the right";
+  }
+  // 4+ 角色
+  const positions = ["on the far left", "on the left", "in the center", "on the right", "on the far right"];
+  return positions[index] ?? `at position ${index + 1}`;
 }
 
 // GET /api/generate — 轮询任务状态

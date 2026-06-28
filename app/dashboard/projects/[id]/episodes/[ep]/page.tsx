@@ -3,7 +3,7 @@
 import { useEffect, useState, use } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -22,6 +22,7 @@ import {
   Play,
   Clock,
   Coins,
+  Users,
 } from "lucide-react";
 
 interface Episode {
@@ -42,12 +43,21 @@ interface Shot {
   video_url: string | null;
 }
 
+interface Character {
+  id: string;
+  name: string;
+  role?: string;
+  anchor_image_url?: string | null;
+  anchor_status?: string | null;
+}
+
 const statusIcon: Record<string, string> = {
   pending: "⏳",
   submitted: "🔄",
   processing: "⚙️",
   completed: "✅",
   failed: "❌",
+  needs_review: "⚠️",
 };
 
 export default function EpisodeDetailPage({
@@ -58,9 +68,12 @@ export default function EpisodeDetailPage({
   const { id, ep } = use(params);
   const [episode, setEpisode] = useState<Episode | null>(null);
   const [shots, setShots] = useState<Shot[]>([]);
+  const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [assistantOpen, setAssistantOpen] = useState(false);
+  const [multiMode, setMultiMode] = useState(false);
+  const [selectedChars, setSelectedChars] = useState<string[]>([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -81,12 +94,26 @@ export default function EpisodeDetailPage({
         return;
       }
 
-      setEpisode(epRes.data as Episode);
+      const epData = epRes.data as Episode;
+      setEpisode(epData);
       setShots((shotsRes.data ?? []) as Shot[]);
+
+      const { data: charsData } = await supabase
+        .from("characters")
+        .select("*")
+        .eq("project_id", epData.project_id);
+
+      setCharacters((charsData ?? []) as Character[]);
       setLoading(false);
     }
     fetchData();
   }, [ep]);
+
+  const toggleChar = (charId: string) => {
+    setSelectedChars((prev) =>
+      prev.includes(charId) ? prev.filter((c) => c !== charId) : [...prev, charId]
+    );
+  };
 
   if (loading) {
     return (
@@ -126,6 +153,96 @@ export default function EpisodeDetailPage({
           </Badge>
         </div>
       </div>
+
+      {/* 角色选择器 */}
+      <section className="border border-border rounded-lg p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+            <Users className="h-4 w-4 text-brand-cyan" />
+            角色选择
+          </h3>
+          <Button
+            size="sm"
+            variant={multiMode ? "default" : "outline"}
+            className="h-7 text-xs"
+            onClick={() => {
+              setMultiMode((prev) => !prev);
+              if (!multiMode) setSelectedChars([]);
+            }}
+          >
+            {multiMode ? "多角色模式" : "单角色模式"}
+          </Button>
+        </div>
+
+        {characters.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {characters.map((char) => {
+              const isSelected = selectedChars.includes(char.id);
+              return (
+                <button
+                  key={char.id}
+                  onClick={() => {
+                    if (!multiMode) {
+                      setSelectedChars(isSelected ? [] : [char.id]);
+                    } else {
+                      toggleChar(char.id);
+                    }
+                  }}
+                  className={`flex items-center gap-2 rounded-md border px-2.5 py-1.5 text-xs transition-colors ${
+                    isSelected
+                      ? "border-brand-cyan bg-brand-cyan/10 text-brand-cyan"
+                      : "border-border bg-background text-foreground hover:border-muted-foreground"
+                  }`}
+                >
+                  {char.anchor_image_url ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={char.anchor_image_url}
+                      alt={char.name}
+                      className="h-5 w-5 rounded object-cover"
+                    />
+                  ) : (
+                    <Users className="h-4 w-4" />
+                  )}
+                  <span>{char.name}</span>
+                  {isSelected && <Badge className="h-4 px-1 text-[9px]">✓</Badge>}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {/* 多角色预览 */}
+        {multiMode && selectedChars.length > 1 && (
+          <div className="mt-3">
+            <p className="text-xs text-muted-foreground mb-2">排列预览：</p>
+            <div className="flex gap-1 overflow-x-auto">
+              {selectedChars.map((charId, i) => {
+                const char = characters.find((c) => c.id === charId);
+                return (
+                  <div key={charId} className="flex flex-col items-center">
+                    <div className="h-12 w-12 rounded bg-brand-cyan/10 flex items-center justify-center">
+                      {char?.anchor_image_url ? (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img
+                          src={char.anchor_image_url}
+                          alt={char?.name}
+                          className="h-10 w-10 rounded object-cover"
+                        />
+                      ) : (
+                        <Users className="h-5 w-5 text-brand-cyan" />
+                      )}
+                    </div>
+                    <span className="text-[10px] text-muted-foreground mt-1">
+                      {i + 1}. {char?.name}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </section>
 
       {/* Shot 列表 */}
       <div className="flex gap-4">

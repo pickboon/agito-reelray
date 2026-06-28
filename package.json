@@ -33,6 +33,7 @@
     "openai": "^4",
     "react": "^19",
     "react-dom": "^19",
+    "sharp": "^0.35.2",
     "stripe": "^17",
     "tailwind-merge": "^3",
     "tw-animate-css": "^1"
