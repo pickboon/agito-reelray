@@ -1,49 +1,178 @@
 {
   "id": "thriller",
-  "name": "Thriller",
-  "genre": "thriller",
-  "description": "Crime, horror, and twist-ending stories with dark atmosphere and tension",
-  "target_markets": ["North America", "Latin America"],
-  "character_blueprints": [
+  "name": "悬疑惊悚",
+  "description": "密室悬疑惊悚剧。一觉醒来身处密室，记忆支离破碎。随着线索浮现，真相层层剥开，最后的反转颠覆一切认知。氛围压抑，节奏紧凑，适合北美与拉美市场。",
+  "price_cents": 14900,
+  "category": "thriller",
+  "tags": [
+    "悬疑",
+    "惊悚",
+    "密室",
+    "反转",
+    "烧脑"
+  ],
+  "cover_emoji": "🔍",
+  "total_scenes": 5,
+  "total_shots": 15,
+  "estimated_credits": 150000,
+  "characters": [
     {
+      "name": "Detective Mara Cross",
       "role": "protagonist",
-      "name": "Det. Cross",
-      "description": "Weathered detective, tired eyes, five o'clock shadow, rumpled trench coat.",
-      "prompt_template": "Middle-aged detective, tired determined eyes, stubble, rumpled dark trench coat, serious expression"
+      "traits": "坚韧、直觉敏锐、背负黑暗过往，不放过任何细节",
+      "appearance": "East Asian woman in her mid-30s, tired but sharp dark eyes, dark circles, messy dark hair tied back loosely, rumpled dark trench coat over a plain shirt, determined jaw, detective badge on belt"
     },
     {
+      "name": "Vera Sinclair",
       "role": "suspect",
-      "name": "Vera",
-      "description": "Enigmatic woman, dark hair, unreadable expression, elegant but unsettling.",
-      "prompt_template": "Mysterious woman in her 30s, dark hair, elegant dark clothing, unreadable expression, slightly unsettling"
+      "traits": "神秘莫测、优雅冷艳、每句话都像谜语",
+      "appearance": "Striking East Asian woman in her early 30s, sleek black bob haircut, pale skin, dark red lipstick, elegant black turtleneck and tailored trousers, unreadable expression, slightly tilted head"
     },
     {
+      "name": "Tommy Reeves",
       "role": "victim",
-      "name": "Tom",
-      "description": "Nervous young man, fidgety, ordinary appearance, constantly looking over shoulder.",
-      "prompt_template": "Anxious young man in his late 20s, nervous expression, ordinary casual clothing, looking around nervously"
+      "traits": "紧张焦虑、隐藏秘密、看似无辜但疑点重重",
+      "appearance": "Young East Asian man in his late 20s, nervous twitchy demeanor, unkempt hair, sweat on forehead, wrinkled casual shirt, constantly glancing around, bitten fingernails"
+    },
+    {
+      "name": "Captain Zhou",
+      "role": "mentor",
+      "traits": "老练沉稳、经验丰富、Mara的上级和信任锚点",
+      "appearance": "Middle-aged East Asian man in his 50s, short graying hair, reading glasses, police uniform or plain suit, calm authoritative expression, deep-set wise eyes, coffee mug always in hand"
     }
   ],
-  "scene_library": [
-    { "name": "Dark Alley", "prompt": "Narrow dark alley at night, wet ground reflecting dim street lights, fog, ominous shadows, gritty urban" },
-    { "name": "Abandoned Factory", "prompt": "Abandoned industrial factory interior, broken windows, dust particles in light beams, decaying machinery" },
-    { "name": "Police Station", "prompt": "Busy police station interior, fluorescent lighting, cluttered desks, interrogation room visible, tense atmosphere" },
-    { "name": "Dim Apartment", "prompt": "Dimly lit apartment room, single desk lamp, shadows on walls, cluttered evidence board, noir atmosphere" }
+  "emotion_graph": [
+    3,
+    4,
+    5,
+    5,
+    4
   ],
-  "color_grade": {
-    "name": "Noir Dark",
-    "description": "Low saturation dark tones with heavy shadows",
-    "temperature": "neutral-cool",
-    "contrast": "very-high",
-    "saturation": "low"
-  },
-  "shot_rhythm": {
-    "pacing": "varied",
-    "avg_shot_duration": 5,
-    "style_notes": "Jump cuts for shock, POV shots for tension, voyeuristic angles, slow reveals"
-  },
-  "prompt_templates": {
-    "en": "Cinematic thriller shot, {character} in {scene}, {action}, dark moody lighting, desaturated tones, high contrast shadows, noir atmosphere, 4K quality",
-    "zh": "惊悚电影镜头，{character}在{scene}中，{action}，暗调光影，低饱和色调，高对比阴影，黑色电影氛围，4K画质"
-  }
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "密室觉醒",
+      "description": "Mara 在一间陌生密室中醒来，身边有一具尸体和一把沾血的刀。记忆模糊，她必须在警方到达前搞清楚发生了什么。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Disorienting POV shot opening on complete darkness. A faint buzzing sound. Slowly a dim yellow bulb flickers to life overhead revealing a concrete-walled room. Camera tilts down from ceiling to reveal a young East Asian woman lying on the cold floor, slowly opening her eyes. She pushes herself up confused, pressing her hand to her temple. Camera is slightly tilted and unsteady matching her disorientation. Harsh single-bulb lighting creates deep shadows in corners. Desaturated cold color grading with sickly yellow cast. Dust particles visible in the light beam. 4K cinematic quality, claustrophobic dread and confusion.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Wide shot revealing the full concrete room. An East Asian woman in a rumpled trench coat stands in the center slowly turning to survey the space. Against the far wall lies a motionless male body in a pool of dark liquid. A bloody kitchen knife lies nearby. She stumbles backward in shock, hand flying to her mouth. The single overhead bulb swings slightly casting moving shadows across the walls. One heavy metal door with no handle on the inside. Concrete walls show scratch marks. Harsh top-down lighting, deep noir shadows, desaturated teal and gray color grading. 4K cinematic quality, horror discovery and rising panic.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Extreme close-up montage: a woman trembling blood-stained hands, a broken wristwatch stopped at 3:47 AM, a crumpled photograph on the floor showing two people, a phone with a cracked screen showing 17 missed calls. Camera lingers on each detail with rack focus transitions. Each insert lit by the single harsh overhead bulb creating sharp contrast. Muffled distant sirens implied. Cold desaturated color grading, macro lens detail, noir atmosphere. 4K cinematic quality, forensic evidence and fragmented memory.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 2,
+      "title": "迷雾调查",
+      "description": "Mara 逃出密室后回到警局，开始秘密调查。线索指向神秘女子 Vera，但她似乎总有完美的不在场证明。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Interior shot of a busy police precinct at night under harsh fluorescent lighting. Desks cluttered with files and coffee cups. An East Asian woman detective in a dark trench coat sits at her desk pinning photographs and evidence on a large cork board. Red string connects suspects to locations. Her face illuminated by a desk lamp casting dramatic side lighting while overhead fluorescents buzz above. Other officers work in blurred background. Camera slowly tracks along the evidence board. Cool blue-green fluorescent color grading, noir detective atmosphere. 4K cinematic quality, methodical investigation and growing obsession.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Medium shot in a sterile police interrogation room. A striking East Asian woman with a sleek black bob sits calmly at a metal table, legs crossed. She wears an elegant black turtleneck. Across from her a female detective in a trench coat leans forward aggressively. The suspect smiles enigmatically unfazed by questions. A two-way mirror reflects the harsh overhead light. Camera frames them in tense profile composition. Cold institutional lighting, stark shadows, sterile white and gray color palette. 4K cinematic quality, psychological cat-and-mouse and impenetrable composure.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Over-the-shoulder shot of a detective reviewing security camera footage on a monitor in a dark room. Grainy black-and-white footage shows a mysterious woman entering a building at the exact time of the murder. The detective pauses the frame and zooms in but the face is obscured by a hat and shadow. Her reflection in the dark monitor shows narrowed suspicious eyes. Blue monitor glow illuminates her face in the pitch-black room. Multiple screens show different angles. 4K cinematic quality, digital investigation and elusive truth.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 3,
+      "title": "暗夜追捕",
+      "description": "Mara 跟踪 Vera 到一处废弃仓库，却在黑暗中遭遇袭击，勉强逃脱。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Night exterior shot of a detective in a dark trench coat following a mysterious woman through rain-slicked industrial back alleys. The suspect in black walks purposefully under flickering sodium street lights while the detective keeps 30 meters behind staying in shadows. Puddles reflect neon signs and street lights. Steam rises from manhole covers. Camera tracks behind the detective in a long-lens surveillance style. Orange sodium light mixed with deep blue shadows, noir cinematography, wet reflective surfaces. Handheld camera tension. 4K cinematic quality, pursuit through urban labyrinth and mounting dread.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Interior shot of a vast abandoned warehouse, moonlight streaming through broken skylights creating shafts of cold blue light. Rusted metal catwalks and stacked shipping containers create a maze. A detective moves cautiously through the space, flashlight beam cutting through dust and darkness. Shadows seem to move at the edge of vision. A sudden metallic clang echoes. She spins around flashlight sweeping the darkness. Deep noir shadows, volumetric light from skylights, industrial decay. Camera follows in tense over-the-shoulder tracking. 4K cinematic quality, entering the trap and primal fear.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Violent action shot in the dark warehouse. A dark figure lunges from behind a shipping container at the detective. She reacts instinctively ducking and grappling with the attacker. Flashlight falls to the ground rolling, its beam spinning wildly across walls and ceiling creating disorienting strobe effects. Two figures struggle in silhouette. A metal pipe clangs against concrete. Sparks fly as something scrapes the floor. Chaotic handheld camera, harsh contrast between flashlight beam and darkness, motion blur. 4K cinematic quality, ambush and desperate survival.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 4,
+      "title": "绝境边缘",
+      "description": "Mara 受伤但发现了关键证据，所有线索指向一个她不愿相信的人。真相即将大白，但危险也逼近。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Close-up of a detective sitting in her car at night pressing a bloodied cloth to a cut on her forehead. Dashboard clock reads 2:34 AM. Rain streaks down the windshield distorting street lights into smeared bokeh. She opens a manila folder on the passenger seat and her eyes widen in shock. Dome light casts warm pool of light inside while outside is cold and blurred. Camera pushes in slowly from outside through the rain-streaked window onto her horrified expression. 4K cinematic quality, painful revelation and trust shattered.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Medium shot in a dimly lit apartment. A detective sits across from a middle-aged police captain at a small kitchen table. She slides photographs across toward him. He puts on reading glasses and examines them, expression shifting from skepticism to grave concern. Single pendant lamp creates warm cone of light while rest of apartment is in shadow. Coffee mugs and case files cover the table. Intimate two-shot composition, warm practical lighting against cool shadows. 4K cinematic quality, seeking counsel and dangerous truth.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Tense wide shot of a detective walking alone down a long empty hospital corridor at night. Fluorescent lights flicker overhead, some tubes dead creating pools of darkness. She holds a keycard in her hand. At the far end a door stands slightly ajar with warm light spilling out. Her footsteps echo. Camera tracks from the far end making her appear small and vulnerable. Cold blue-green fluorescent color grading, institutional horror atmosphere, one-point perspective. 4K cinematic quality, approaching the final truth and personal danger.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 5,
+      "title": "真相大白",
+      "description": "所有碎片拼合。Mara 在最终对峙中揭开真相，凶手身份出人意料，但逻辑严丝合缝。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Dramatic wide shot in a dimly lit office. A detective stands in the doorway confronting a person sitting in a leather chair facing the window. The chair slowly turns to reveal the face of someone the detective trusted deeply. Between them on the desk lies an open case file and a gun. Rain lashes the window behind the seated figure. A single desk lamp creates dramatic Rembrandt lighting. Camera positioned behind the detective looking toward the chair reveal. Noir cinematography, deep shadows, tension at breaking point. 4K cinematic quality, ultimate confrontation and shocking revelation.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Extreme close-up sequence: detective eyes filling with tears of anger and betrayal, a hand slowly pushing a gun across a desk, a framed photograph falling face-down on the floor, handcuffs clicking shut on wrists. Each shot held for a beat with rack focus transitions. Color grading shifts from cold blue to slightly warmer tone as resolution comes. Macro lens details, dramatic side lighting, shallow depth of field. 4K cinematic quality, emotional devastation meeting justice served.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Final shot of a detective standing alone on the steps of a police station at dawn. First golden rays of sunlight break through storm clouds casting warm light on her exhausted but resolute face. She takes a deep breath and looks up at the clearing sky. Behind her the station doors close. Police cars sit in the parking lot. Camera slowly pulls back and cranes up revealing the waking city. Color grading transitions from cold night blue to warm dawn amber. Volumetric light through residual rain mist. 4K cinematic quality, bittersweet resolution and the weight of truth.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    }
+  ]
 }

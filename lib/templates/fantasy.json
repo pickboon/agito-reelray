@@ -1,49 +1,178 @@
 {
   "id": "fantasy",
-  "name": "Fantasy",
-  "genre": "fantasy",
-  "description": "Isekai, cultivation, and mythical world stories with epic visual scale",
-  "target_markets": ["Southeast Asia", "Latin America"],
-  "character_blueprints": [
+  "name": "古风仙侠",
+  "description": "仙侠修真史诗。凡人少年偶得仙缘，踏上修真之路，历经试炼与决战，最终飞升成仙。视觉壮观，意境悠远，适合东南亚与拉美市场。",
+  "price_cents": 14900,
+  "category": "fantasy",
+  "tags": [
+    "仙侠",
+    "修真",
+    "古风",
+    "史诗",
+    "飞升"
+  ],
+  "cover_emoji": "🐉",
+  "total_scenes": 5,
+  "total_shots": 15,
+  "estimated_credits": 150000,
+  "characters": [
     {
+      "name": "Kai Lin",
       "role": "protagonist",
-      "name": "Kai",
-      "description": "Young warrior with determined eyes, flowing robes mixed with armor, mystical markings.",
-      "prompt_template": "Young warrior with flowing dark robes and light armor, determined gaze, mystical glowing markings on hands"
+      "traits": "天赋异禀、意志坚定、重情重义，从凡人一路攀登至仙道巅峰",
+      "appearance": "Young East Asian man in his early 20s, determined dark eyes, long dark hair partially tied in a warrior topknot, wearing flowing dark blue robes with silver embroidery over light armor, mystical glowing runes on his forearms, lean athletic build"
     },
     {
-      "role": "mentor",
       "name": "Elder Yun",
-      "description": "Wise elderly figure, long white beard, flowing traditional robes, serene expression.",
-      "prompt_template": "Wise elderly man with long white beard, flowing traditional white robes, serene knowing expression, holding a staff"
+      "role": "mentor",
+      "traits": "仙风道骨、智慧深邃、看似严厉实则慈悲",
+      "appearance": "Elderly East Asian man with flowing white beard and hair, wearing pristine white flowing traditional robes with gold trim, serene knowing expression, holding a jade staff that glows faintly, ageless wise eyes"
     },
     {
-      "role": "villain",
       "name": "Dark Lord Zar",
-      "description": "Imposing dark figure, black ornate armor, glowing red eyes, intimidating presence.",
-      "prompt_template": "Imposing dark warrior in ornate black armor, glowing red eyes, dark aura, intimidating towering presence"
+      "role": "antagonist",
+      "traits": "上古魔神、力量无穷、曾是天界堕仙",
+      "appearance": "Imposing towering figure in ornate black and crimson armor with demonic motifs, glowing red eyes visible through a horned helmet, dark aura emanating from his body, deep menacing voice, crackling dark energy around his hands"
+    },
+    {
+      "name": "Spirit Fox Mei",
+      "role": "companion",
+      "traits": "千年灵狐化形、聪慧灵动、忠诚守护",
+      "appearance": "Beautiful East Asian woman in her early 20s with fox-like features, amber eyes, silver-white hair flowing to her waist, wearing flowing white and pale blue silk robes, fox ears occasionally visible, graceful ethereal movements"
     }
   ],
-  "scene_library": [
-    { "name": "Crystal Palace", "prompt": "Magnificent crystal palace interior, glowing crystals, ethereal light, grand throne room, fantasy architecture" },
-    { "name": "Enchanted Forest", "prompt": "Mystical enchanted forest, bioluminescent plants, floating particles, magical atmosphere, ancient trees" },
-    { "name": "Battlefield", "prompt": "Epic fantasy battlefield, magical energy clashes, dramatic sky, scattered warriors, cinematic scale" },
-    { "name": "Mountain Peak Temple", "prompt": "Ancient temple on mountain peak above clouds, sunrise, mystical fog, sacred atmosphere, epic vista" }
+  "emotion_graph": [
+    2,
+    3,
+    4,
+    5,
+    5
   ],
-  "color_grade": {
-    "name": "Epic Fantasy",
-    "description": "High saturation with magical glow effects",
-    "temperature": "varied",
-    "contrast": "high",
-    "saturation": "high"
-  },
-  "shot_rhythm": {
-    "pacing": "epic",
-    "avg_shot_duration": 7,
-    "style_notes": "Wide establishing shots for scale, slow motion for power moments, sweeping camera movements"
-  },
-  "prompt_templates": {
-    "en": "Epic cinematic shot, {character} in {scene}, {action}, magical lighting effects, high saturation, fantasy atmosphere, volumetric light, 4K quality",
-    "zh": "史诗电影镜头，{character}在{scene}中，{action}，魔法光效，高饱和度，奇幻氛围，体积光，4K画质"
-  }
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "凡尘觉醒",
+      "description": "少年 Kai 在山村中过着平凡生活，直到一日天降异象，他在山中偶得上古仙人遗留的法器，灵根觉醒。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Breathtaking aerial establishing shot of a misty Chinese mountain village at dawn. Terraced rice paddies cascade down lush green hillsides. A small river winds through traditional wooden houses with curved tile roofs. Morning mist swirls between ancient pine trees. A young East Asian man in simple hemp clothing carries firewood along a narrow path. Golden sunrise light breaks through clouds illuminating the peaks. Epic fantasy landscape cinematography, lush saturated greens and warm golden light, volumetric mist. 4K cinematic quality, peaceful mortal world before destiny calls.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Dramatic wide shot of a young East Asian man in simple clothing standing on a mountain cliff edge as a massive celestial event unfolds above. A pillar of brilliant white and gold light descends from the heavens, splitting the clouds. Energy ripples across the landscape, bending trees and scattering leaves. He shields his eyes with one arm, robes and hair whipping in the supernatural wind. The camera cranes up from his awestruck face to reveal the full cosmic spectacle. Epic fantasy VFX lighting, god-rays, volumetric clouds, high dynamic range. 4K cinematic quality, divine intervention and destiny awakening.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Close-up shot inside a hidden mountain cave illuminated by ethereal blue-green light. A young East Asian man reaches toward a floating ancient jade artifact that pulses with inner light. Mystical runes carved into the cave walls glow in response. His fingertips touch the artifact and blue energy arcs between them, traveling up his arm and creating glowing rune patterns on his skin. His eyes snap open glowing with inner power. Cave crystals refract light into rainbow patterns. Mystical fantasy lighting, macro detail on the energy transfer. 4K cinematic quality, spiritual awakening and power inheritance.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 2,
+      "title": "仙门修炼",
+      "description": "Kai 被带入云端之上的仙门宗门，在师父 Elder Yun 的指导下开始艰苦的修真训练，与灵狐 Mei 结伴。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Magnificent wide shot of a celestial mountain sect floating among clouds. Ornate Chinese-style palaces with jade roofs and golden pillars sit atop impossibly tall mountain peaks connected by rainbow bridges. Waterfalls cascade off the edges into clouds below. Cranes fly across the frame. Cherry blossom petals drift in the wind. A young man in blue robes stands at an entrance arch gazing up in wonder. Epic fantasy architecture, heavenly atmosphere, saturated jewel-tone colors, volumetric god-rays through clouds. 4K cinematic quality, ascending to the immortal realm and awe-inspiring scale.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Dynamic training montage shot in a celestial martial arts courtyard. A young East Asian man in flowing blue robes practices sword forms under the watchful eye of an elderly white-robed master on a raised platform. Ethereal energy flows from the sword creating luminous trails in the air. Other disciples practice in the background. Cherry blossoms fall around them. The camera tracks in a sweeping arc around the student as he executes a powerful strike that releases a wave of blue energy. Wuxia wirework style, flowing fabric and hair, mystical energy effects. 4K cinematic quality, cultivation training and growing power.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Gentle medium shot at a moonlit garden pavilion in the immortal sect. A young East Asian man sits on stone steps meditating, soft blue energy swirling around him. A beautiful silver-haired woman in white silk robes appears beside him, fox ears briefly visible in the moonlight. She sits next to him and they share a peaceful moment looking at the moons reflected in a still pond. Firefly-like spirit particles float in the air. Silver moonlight mixed with warm lantern glow. Ethereal romantic atmosphere, xianxia fantasy beauty. 4K cinematic quality, companionship and spiritual harmony.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 3,
+      "title": "魔劫降临",
+      "description": "上古魔神 Dark Lord Zar 突破封印，黑暗力量席卷仙界。Kai 的师门遭受重创，他必须提前面对远超自身实力的敌人。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Apocalyptic wide shot of a massive dark portal tearing open in the sky above the immortal mountain sect. Black and crimson lightning crackles around the rift. A colossal armored dark figure emerges from the portal, dwarfing the mountain palaces below. Dark energy tendrils spread across the sky like cracks in reality. The celestial buildings shake and jade tiles shatter. Disciples scatter in panic. The camera tilts up from the terrified faces below to the overwhelming dark presence above. Epic fantasy destruction, dark apocalyptic lighting, red and black color palette. 4K cinematic quality, ancient evil unleashed and cosmic threat.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Intense battle shot on a crumbling celestial bridge. A young East Asian man in blue robes fights against waves of dark shadow creatures, his sword blazing with blue-white energy. Each strike releases arcs of light that destroy the shadows. Behind him an elderly white-robed master holds up a protective barrier dome of golden light that cracks under bombardment from dark energy bolts. Debris and energy sparks fly everywhere. Camera circles the action dynamically. Wuxia combat cinematography, blue and gold light versus dark crimson energy. 4K cinematic quality, desperate defense and overwhelming odds.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Emotional close-up of a young East Asian man cradling a wounded elderly master in his arms amid the ruins of a celestial pavilion. The old man places a trembling hand on the young man chest, transferring the last of his golden spiritual energy. Tears stream down the young man face as golden light flows into him. Broken jade pillars and scattered cherry blossoms surround them. Dust and embers float in the air. The camera slowly pushes in on the transfer of power and legacy. Warm golden light against dark destruction, emotional devastation. 4K cinematic quality, mentor sacrifice and inherited burden.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 4,
+      "title": "终极决战",
+      "description": "Kai 集齐力量，在天地之间的战场上与 Dark Lord Zar 展开终极对决。光明与黑暗的碰撞撼动天地。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Epic wide shot of a vast celestial battlefield above the clouds. A young warrior in glowing blue robes and armor floats in the air, sword raised, surrounded by a constellation of blue energy orbs. Across from him a towering dark lord in black crimson armor emanates waves of dark energy. Between them the air crackles with opposing forces. Lightning splits the sky. Below them mountains crack and oceans churn. The camera pulls back to show the cosmic scale of the confrontation. Epic fantasy battle, blue-gold versus red-black energy, volumetric god-rays and dark mist. 4K cinematic quality, ultimate showdown and cosmic stakes.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Dynamic action shot of two powerful figures clashing in mid-air above clouds. A young warrior swings a blazing blue energy sword meeting a massive dark energy blade from an armored dark lord. The impact creates a massive shockwave that ripples outward, scattering clouds in a perfect ring. Energy sparks of blue and red explode at the contact point. Both warriors push against each other with full force, faces contorted with effort. Camera captures the collision in slow motion then speeds up as the shockwave expands. Wirework wuxia style, epic fantasy VFX. 4K cinematic quality, equal power clash and earth-shaking impact.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Climactic shot of a young warrior channeling all his spiritual energy into one final attack. His body glows with blinding white-gold light, ancient runes blazing on every inch of his skin and robes. Behind him a massive ethereal dragon made of pure light materializes, coiling around him protectively. He thrusts his sword forward and the dragon surges toward the dark lord in a beam of devastating light. The dark figure raises both arms trying to block but is overwhelmed. Camera tracks the energy beam from warrior to target. Ultimate fantasy power moment, golden-white divine light piercing darkness. 4K cinematic quality, transcendent power and final strike.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 5,
+      "title": "飞升成仙",
+      "description": "战斗结束，天地恢复清明。Kai 在万道金光中完成飞升，踏上新旅程。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Serene wide shot of the celestial battlefield now at peace. Dark clouds have cleared revealing a breathtaking sunrise panorama above the clouds. Golden light floods the landscape. The mountain sect slowly rebuilds itself, jade tiles floating back into place through residual magic. Surviving disciples emerge from shelters looking up in wonder. Cherry blossoms bloom spontaneously. The camera slowly cranes up through layers of golden clouds. Restoration and renewal, warm golden and rose color grading, heavenly atmosphere. 4K cinematic quality, darkness vanquished and world reborn.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Majestic medium shot of a young warrior standing on the highest peak of the immortal mountain, bathed in divine golden light descending from the heavens. His blue robes have transformed to flowing white and gold immortal garments. His hair flows freely in the celestial wind. A staircase of pure light materializes before him leading upward into the heavens. A silver-haired fox spirit woman stands nearby watching with tearful pride. He turns to look back one last time with a serene smile. Epic ascension scene, golden god-rays, volumetric light staircase. 4K cinematic quality, transcendence and bittersweet farewell.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Final breathtaking shot of a warrior ascending a staircase of light into the cosmos. Each step he takes creates ripples of golden energy. The camera follows from below then sweeps around and pulls back to reveal the entire world below him, mountains and oceans stretching to the horizon under a sky full of stars and galaxies. He reaches the top and dissolves into a constellation of brilliant stars that form a new pattern in the sky. Ethereal choir atmosphere implied. Deep space colors mixed with warm gold, cosmic scale. 4K cinematic quality, ascension to immortality and eternal legend.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    }
+  ]
 }

@@ -3,60 +3,63 @@ import romance from "./romance.json";
 import thriller from "./thriller.json";
 import fantasy from "./fantasy.json";
 
-export interface CharacterBlueprint {
+export interface TemplateCharacter {
+  name: string;
   role: string;
-  name: string;
-  description: string;
-  prompt_template: string;
+  traits: string;
+  appearance: string;
 }
 
-export interface ScenePreset {
-  name: string;
+export interface TemplateShot {
+  shot_number: number;
   prompt: string;
+  mode: "t2v";
+  duration: number;
 }
 
-export interface ColorPreset {
-  name: string;
+export interface TemplateScene {
+  scene_number: number;
+  title: string;
   description: string;
-  temperature: string;
-  contrast: string;
-  saturation: string;
+  shots: TemplateShot[];
 }
 
-export interface ShotRhythmTemplate {
-  pacing: string;
-  avg_shot_duration: number;
-  style_notes: string;
-}
-
-export interface Template {
+export interface StoreTemplate {
   id: string;
   name: string;
-  genre: "revenge" | "romance" | "thriller" | "fantasy";
   description: string;
-  target_markets: string[];
-  character_blueprints: CharacterBlueprint[];
-  scene_library: ScenePreset[];
-  color_grade: ColorPreset;
-  shot_rhythm: ShotRhythmTemplate;
-  prompt_templates: Record<string, string>;
+  price_cents: number;
+  category: "revenge" | "romance" | "thriller" | "fantasy";
+  tags: string[];
+  cover_emoji: string;
+  total_scenes: number;
+  total_shots: number;
+  estimated_credits: number;
+  characters: TemplateCharacter[];
+  emotion_graph: number[];
+  scenes: TemplateScene[];
 }
 
-const templates: Record<string, Template> = {
-  revenge: revenge as Template,
-  romance: romance as Template,
-  thriller: thriller as Template,
-  fantasy: fantasy as Template,
-};
+const templates: StoreTemplate[] = [
+  revenge as unknown as StoreTemplate,
+  romance as unknown as StoreTemplate,
+  thriller as unknown as StoreTemplate,
+  fantasy as unknown as StoreTemplate,
+];
 
-export function getTemplate(id: string): Template | undefined {
-  return templates[id];
+export function getTemplate(id: string): StoreTemplate | undefined {
+  return templates.find((t) => t.id === id);
 }
 
-export function getAllTemplates(): Template[] {
-  return Object.values(templates);
+export function getAllTemplates(): StoreTemplate[] {
+  return templates;
+}
+
+export function getTemplatesByCategory(category: string): StoreTemplate[] {
+  if (category === "all") return templates;
+  return templates.filter((t) => t.category === category);
 }
 
 export function getTemplateIds(): string[] {
-  return Object.keys(templates);
+  return templates.map((t) => t.id);
 }

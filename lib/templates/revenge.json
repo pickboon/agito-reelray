@@ -1,49 +1,178 @@
 {
   "id": "revenge",
-  "name": "Revenge",
-  "genre": "revenge",
-  "description": "CEO/Elite/Rebirth drama - power struggles, betrayal, and triumphant comebacks",
-  "target_markets": ["North America", "Southeast Asia"],
-  "character_blueprints": [
+  "name": "复仇逆袭",
+  "description": "都市商战复仇大戏。被背叛的商业天才蛰伏归来，步步为营，在权谋与博弈中完成绝地反击。节奏凌厉，情绪张力极强，适合北美与东南亚市场。",
+  "price_cents": 9900,
+  "category": "revenge",
+  "tags": [
+    "商战",
+    "复仇",
+    "逆袭",
+    "都市",
+    "权谋"
+  ],
+  "cover_emoji": "⚡",
+  "total_scenes": 5,
+  "total_shots": 15,
+  "estimated_credits": 150000,
+  "characters": [
     {
+      "name": "Lena Chen",
       "role": "protagonist",
-      "name": "Lena",
-      "description": "Sharp-eyed CEO in her late 20s. Tall, confident posture. Designer suit, minimal jewelry. Cold expression with piercing gaze.",
-      "prompt_template": "A young CEO woman, late 20s, sharp features, wearing a tailored black suit, confident and commanding presence"
+      "traits": "冷静、果决、高智商，外表优雅但内心充满复仇火焰",
+      "appearance": "Late 20s East Asian woman, sharp cheekbones, piercing dark eyes, sleek black hair pulled back, wearing a tailored charcoal suit with minimal jewelry, commanding posture"
     },
     {
+      "name": "Victor Li",
       "role": "antagonist",
-      "name": "Mr. Li",
-      "description": "Middle-aged businessman, calculating eyes, expensive watch. Always smiling but eyes betray malice.",
-      "prompt_template": "Middle-aged businessman in his 50s, wearing an expensive dark suit, calculating smile, luxury watch visible"
+      "traits": "老谋深算、贪婪、伪善，表面儒雅实则狠辣",
+      "appearance": "Middle-aged East Asian man in his 50s, silver-streaked hair, expensive pinstripe suit, gold cufflinks, calculating smile that never reaches his cold eyes"
     },
     {
+      "name": "Alex Wang",
+      "role": "ally",
+      "traits": "天才黑客、玩世不恭、重情义，Lena的昔日战友",
+      "appearance": "Young man in his late 20s, messy dark hair, black hoodie under a leather jacket, sharp eyes behind thin-frame glasses, confident smirk"
+    },
+    {
+      "name": "Diana Zhao",
       "role": "rival",
-      "name": "Alex",
-      "description": "Young ambitious executive, charming exterior, competitive nature. Modern business casual.",
-      "prompt_template": "Young professional man in his late 20s, charming appearance, modern business casual, competitive gaze"
+      "traits": "野心勃勃、八面玲珑、亦敌亦友",
+      "appearance": "Elegant woman in her early 30s, bob haircut, red lipstick, designer dress, sharp intelligent gaze, always holding a champagne glass"
     }
   ],
-  "scene_library": [
-    { "name": "Luxury Penthouse", "prompt": "Modern luxury penthouse interior, floor-to-ceiling windows, city skyline at night, minimalist furniture, cold blue lighting" },
-    { "name": "Corporate Office", "prompt": "Sleek corporate executive office, glass walls, modern desk, dramatic side lighting, power atmosphere" },
-    { "name": "Banquet Hall", "prompt": "Elegant banquet hall, crystal chandeliers, round tables with white linens, warm golden lighting" },
-    { "name": "Underground Parking", "prompt": "Dark underground parking garage, concrete pillars, harsh fluorescent lights, dramatic shadows" }
+  "emotion_graph": [
+    2,
+    3,
+    4,
+    5,
+    5
   ],
-  "color_grade": {
-    "name": "Cold Power",
-    "description": "High contrast cold tones with gold accents",
-    "temperature": "cool",
-    "contrast": "high",
-    "saturation": "medium"
-  },
-  "shot_rhythm": {
-    "pacing": "fast",
-    "avg_shot_duration": 4,
-    "style_notes": "Quick cuts during confrontations, slow zooms for reveals, Dutch angles for tension"
-  },
-  "prompt_templates": {
-    "en": "Cinematic shot, {character} in {scene}, {action}, dramatic lighting, cold color grading, high contrast, shallow depth of field, 4K quality",
-    "zh": "电影质感镜头，{character}在{scene}中，{action}，戏剧性光影，冷色调，高对比度，浅景深，4K画质"
-  }
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "坠落深渊",
+      "description": "Lena 被Victor设局陷害，在公司董事会上被公开羞辱并驱逐，失去一切。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Cinematic wide shot of a modern corporate boardroom with floor-to-ceiling windows overlooking a rain-soaked city skyline at dusk. A young East Asian woman in a charcoal suit stands alone at the head of a long mahogany table surrounded by empty leather chairs. Cold blue-white fluorescent lighting casts harsh shadows. Her fists are clenched at her sides. Papers scattered across the table. Camera slowly dollies in revealing barely contained fury and humiliation. High contrast desaturated color grading with steel blue tones, shallow depth of field, anamorphic lens flare. 4K cinematic quality, dramatic atmosphere.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Medium close-up of a middle-aged East Asian businessman in an expensive pinstripe suit standing at the boardroom window, back partially turned to camera. He adjusts his gold cufflink with a satisfied smirk while watching rain. The reflection in glass shows the young woman being escorted out by security guards. Warm amber desk lamp light contrasts with cold blue ambient lighting. Camera racks focus from his smirking reflection to the scene outside. Noir-influenced cinematography, deep shadows, high contrast, shallow depth of field. 4K cinematic quality, tension and malice.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Low-angle tracking shot following a young East Asian woman in a disheveled charcoal suit walking through an underground parking garage at night. Harsh overhead fluorescent lights flicker creating alternating pools of light and shadow. She carries a single cardboard box with personal belongings. Her heels echo on wet concrete. Camera tracks alongside her at waist height capturing rigid posture and trembling jaw. One tear falls but she quickly wipes it away. Cold blue-green color grading, high contrast, industrial atmosphere. Steam rises from a drain grate. 4K cinematic quality, emotional devastation and quiet resolve.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 2,
+      "title": "暗夜蛰伏",
+      "description": "Lena 在简陋的出租屋里重新站起来，联络旧日盟友 Alex，开始谋划复仇。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Interior shot of a small dimly-lit studio apartment at night. Multiple computer monitors glow with financial data, stock charts, and corporate documents. A young East Asian woman sits cross-legged on the floor surrounded by papers and red string connecting photographs on a wall-mounted conspiracy board. Light comes only from screens and a single desk lamp creating dramatic chiaroscuro. Her face illuminated in patches of warm amber and cold blue. Empty coffee cups suggest days of work. Camera slowly pans from the board to her focused expression. 4K cinematic quality, determined atmosphere, thriller color grading.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Two-shot in a dimly lit ramen shop at midnight. A young East Asian woman in casual dark clothing sits across from a young man with messy hair and thin-frame glasses wearing a black hoodie. Neon signs from outside cast pink and blue reflections on the wet window behind them. Steam rises from bowls of ramen. He slides a USB drive across the counter with a confident grin. She picks it up and examines it with a slight smile. Warm practical lighting mixed with cool neon tones, shallow depth of field, intimate atmosphere. 4K cinematic quality, alliance and conspiracy.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Close-up over-the-shoulder shot of a young East Asian woman hands rapidly typing on a laptop keyboard in a dark room. Screen illuminates her face with scrolling code and financial records. A red string on the wall connects a photograph to shell company documents and offshore bank accounts. Her eyes narrow as she finds crucial evidence. Camera pushes in slowly on the screen showing a wire transfer of millions to a Cayman Islands account. Blue monitor glow, dark ambient, sharp focus on the data. 4K cinematic quality, revelation and strategic advantage.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 3,
+      "title": "步步为营",
+      "description": "Lena 以新身份重返商界，在一场高端晚宴上与 Victor 正面交锋，释放第一个陷阱。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Steadicam shot following a stunning young East Asian woman in a backless emerald evening gown ascending a grand marble staircase at a luxury hotel ballroom entrance. Golden chandeliers cast warm light over elegantly dressed guests. She pauses at the top surveying the room with cool confidence. Her hair styled in an elegant updo, diamond earrings catching light. Camera circles her slowly as she takes a champagne flute from a passing waiter. Rich golden and amber color grading, opulent atmosphere, shallow depth of field with bokeh from chandeliers. 4K cinematic quality, dramatic entrance and transformation.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Tense medium shot at a luxury banquet table. A young East Asian woman in an emerald gown and a middle-aged businessman in pinstripe sit across from each other. Crystal glasses and fine china between them. He leans forward with a charming smile but eyes are wary. She returns the smile with icy composure swirling red wine in her glass. Other guests blurred in background. Camera slowly pushes in tightening the frame as tension builds. Warm golden practical lighting with cool fill, split lighting on both faces suggesting duality. 4K cinematic quality, psychological warfare and hidden menace.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Close-up insert shot of a manicured female hand discreetly placing a small wireless earpiece behind a champagne tower at a luxury gala. Camera pulls back to reveal the young woman in emerald gown exchanging a subtle nod with a young man in a tuxedo across the room who touches his own earpiece. The champagne tower reflects golden bokeh light. Other guests mill about unaware. Rack focus from the earpiece to the conspiratorial glance. Warm ambient lighting, spy-thriller atmosphere, shallow depth of field. 4K cinematic quality, covert operation and precision timing.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 4,
+      "title": "绝地反击",
+      "description": "Victor 的公司被揭露财务造假，股价崩盘。Lena 在关键时刻现身，完成致命一击。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Dynamic wide shot of a modern corporate trading floor in chaos. Multiple large screens display plunging stock charts with red numbers and flashing BREAKING NEWS banners. Traders shout and gesture frantically. In the foreground a middle-aged businessman in a disheveled pinstripe suit grips his desk, face drained of color, watching his empire crumble. Camera dollies through the trading floor capturing the pandemonium. Red and white emergency lighting mixes with cool monitor glow. Handheld camera feel for urgency. 4K cinematic quality, financial catastrophe and dramatic reversal of fortune.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Low-angle power shot of a young East Asian woman in a sharp white suit stepping out of a black luxury car in front of a modern glass skyscraper. Wind catches her hair as she adjusts her blazer with absolute composure. Behind her news vans and reporters rush toward the building. Camera looks up at her from ground level making her appear towering and invincible against the glass tower reflecting stormy skies. Dramatic backlighting creates a halo effect. Cool steel-blue color grading with warm highlights on her face. 4K cinematic quality, triumphant return and absolute authority.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Intense close-up shot-reverse-shot in a corporate hallway. A young East Asian woman in a white suit confronts a disheveled middle-aged businessman whose tie is loose and hair disarrayed. She holds up a thick folder of evidence, her expression cold and unwavering. He backs against the wall eyes wide with shock and rage. Camera alternates between her ice-cold eyes and his crumbling composure. Harsh overhead fluorescent lighting, stark shadows, institutional gray-green walls. Razor-thin depth of field. 4K cinematic quality, final confrontation and reckoning.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 5,
+      "title": "王者归来",
+      "description": "尘埃落定。Lena 站在曾经被驱逐的会议室窗前，俯瞰城市，完成蜕变。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Silhouette wide shot of a young East Asian woman standing at floor-to-ceiling windows of a penthouse corner office at sunrise. Golden morning light floods the room casting long warm rays across polished hardwood floors. The city skyline stretches below bathed in amber and rose light. She stands with hands clasped behind her back in a powerful stance. Camera slowly dollies back revealing the magnificent view and her commanding presence. Warm golden hour color grading, lens flares, volumetric light rays through windows. 4K cinematic quality, triumph and new beginning.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Medium shot of a young East Asian woman in a cream-colored power suit sitting at the head of a corporate boardroom table, now filled with attentive executives who look to her with respect. Morning sunlight streams through windows creating warm backlight. She gestures confidently while presenting a strategy on a sleek display screen. The same mahogany table from the opening scene but now she owns the room. Camera slowly orbits the table. Warm optimistic color grading with golden tones, professional atmosphere, shallow depth of field. 4K cinematic quality, earned authority and leadership.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Final close-up of a young East Asian woman face in soft golden hour light, a subtle but genuine smile forming on her lips for the first time. She stands on a rooftop terrace with the city skyline behind her at magic hour, clouds painted in amber and violet. Wind gently moves her hair. She looks out over the city not with triumph but with quiet peace and hard-won wisdom. Camera slowly pulls back and up revealing the vast urban landscape below as birds fly across the frame. Warm cinematic color grading, lens flare, hopeful atmosphere, anamorphic bokeh. 4K cinematic quality, closure and earned serenity.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    }
+  ]
 }

@@ -1,43 +1,178 @@
 {
   "id": "romance",
-  "name": "Romance",
-  "genre": "romance",
-  "description": "Contract marriage / love-after-marriage stories with warm emotional tones",
-  "target_markets": ["Global"],
-  "character_blueprints": [
+  "name": "甜宠恋爱",
+  "description": "现代都市甜宠剧。霸道总裁与独立女孩的浪漫邂逅，从误解到心动，从试探到告白。温暖治愈，节奏轻快，适合全球女性受众市场。",
+  "price_cents": 9900,
+  "category": "romance",
+  "tags": [
+    "甜宠",
+    "恋爱",
+    "都市",
+    "治愈",
+    "浪漫"
+  ],
+  "cover_emoji": "💕",
+  "total_scenes": 5,
+  "total_shots": 15,
+  "estimated_credits": 150000,
+  "characters": [
     {
+      "name": "Maya Lin",
       "role": "protagonist",
-      "name": "Maya",
-      "description": "Warm and expressive young woman, natural beauty, casual chic style, bright smile.",
-      "prompt_template": "Young woman in her mid-20s, warm natural beauty, casual chic clothing, bright expressive eyes, gentle smile"
+      "traits": "独立、温暖、有主见，外表柔弱但内心坚强",
+      "appearance": "Young East Asian woman in her mid-20s, warm natural beauty, shoulder-length dark hair with soft waves, expressive brown eyes, wearing casual chic outfits with soft colors, gentle but determined smile"
     },
     {
+      "name": "Ethan Zhao",
       "role": "love_interest",
-      "name": "Ethan",
-      "description": "Quietly handsome man, reserved demeanor, soft features, well-groomed.",
-      "prompt_template": "Handsome man in his late 20s, reserved expression, soft features, clean-cut appearance, warm sweater"
+      "traits": "表面冷淡实则温柔，不善表达但行动派，工作狂",
+      "appearance": "Handsome East Asian man in his late 20s, tall and well-built, clean-cut short hair, sharp jawline, wearing tailored dark sweaters and coats, reserved expression that softens when he smiles"
+    },
+    {
+      "name": "Chloe Xu",
+      "role": "best_friend",
+      "traits": "开朗活泼、八卦达人、Maya的闺蜜兼恋爱军师",
+      "appearance": "Energetic East Asian woman in her mid-20s, trendy bob haircut with highlights, colorful fashionable outfits, big expressive eyes, always animated and gesturing"
+    },
+    {
+      "name": "Ryan Fang",
+      "role": "rival",
+      "traits": "温柔体贴、暗恋Maya的大学同学，制造情感张力",
+      "appearance": "Friendly East Asian man in his late 20s, warm smile, casual academic style with glasses, cardigans and button-ups, kind eyes, approachable demeanor"
     }
   ],
-  "scene_library": [
-    { "name": "Cozy Cafe", "prompt": "Warm cozy cafe interior, wooden tables, soft natural light through windows, plants, intimate atmosphere" },
-    { "name": "Modern Apartment", "prompt": "Modern apartment living room, soft warm lighting, comfortable sofa, bookshelves, homey feeling" },
-    { "name": "Seaside", "prompt": "Beautiful seaside at golden hour, gentle waves, warm sunset colors, romantic atmosphere, soft breeze" },
-    { "name": "Flower Garden", "prompt": "Lush flower garden in bloom, dappled sunlight, colorful flowers, dreamy soft focus background" }
+  "emotion_graph": [
+    3,
+    4,
+    2,
+    4,
+    5
   ],
-  "color_grade": {
-    "name": "Warm Glow",
-    "description": "Warm tones with soft light and gentle contrast",
-    "temperature": "warm",
-    "contrast": "low",
-    "saturation": "medium-high"
-  },
-  "shot_rhythm": {
-    "pacing": "medium",
-    "avg_shot_duration": 6,
-    "style_notes": "Slow pans for emotional moments, close-ups for reactions, golden hour lighting for key scenes"
-  },
-  "prompt_templates": {
-    "en": "Cinematic shot, {character} in {scene}, {action}, warm golden hour lighting, soft bokeh, gentle color grading, romantic atmosphere, 4K quality",
-    "zh": "电影质感镜头，{character}在{scene}中，{action}，温暖黄金时刻光线，柔和虚化，温柔调色，浪漫氛围，4K画质"
-  }
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "意外邂逅",
+      "description": "Maya 在咖啡店打工时，与冷面总裁 Ethan 因一杯拿铁意外相遇，第一印象糟糕却留下深刻印象。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Warm establishing shot of a charming artisan coffee shop interior on a rainy morning. Soft golden pendant lights hang over wooden counters. Steam rises from espresso machines. A young East Asian woman with shoulder-length wavy hair in a cream apron works behind the counter, carefully crafting latte art. Rain streaks down the large front window. Lush green plants line the shelves. The camera glides from the rainy street outside through the window to settle on her focused expression. Warm amber and cream color grading, cozy atmosphere, soft natural light mixed with warm practicals. 4K cinematic quality, inviting and intimate.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Medium shot of a tall handsome East Asian man in a dark tailored coat entering a coffee shop, shaking raindrops from his umbrella. He looks up from his phone with a slightly impatient expression. Behind the counter a young East Asian woman in a cream apron looks up and their eyes meet for a brief moment. He approaches the counter and orders without looking at her. She fumbles slightly, spilling milk on the counter, and mutters an apology. He glances up with mild annoyance. Warm practical lighting from pendant lamps, rain visible through windows, soft focus background. 4K cinematic quality, meet-cute tension and first impressions.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Close-up shot of a young East Asian woman hands holding a coffee cup with an elaborate heart-shaped latte art, pushing it across the counter toward camera. Her warm brown eyes look up with a slightly defiant but charming smile. Reverse shot reveals the handsome man receiving the cup, his stern expression softening into surprise as he notices the art. Their fingers briefly touch on the cup and both pull back slightly. Warm golden lighting, steam rising between them, shallow depth of field with creamy bokeh. 4K cinematic quality, spark of connection and unexpected warmth.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 2,
+      "title": "心动日常",
+      "description": "命运让两人反复相遇。Ethan 开始以各种借口出现在 Maya 身边，两人在日常互动中逐渐产生好感。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Montage-style medium shot in a modern bookstore cafe section. A young East Asian woman with wavy hair sits at a small table reading a novel, a latte beside her. A tall handsome East Asian man in a dark sweater appears at the next table, pretending to browse books while stealing glances at her. She notices and hides a smile behind her book. Warm afternoon sunlight streams through large windows creating beautiful light patterns. Dust motes float in the golden beams. Soft warm color grading with cream and amber tones, dreamy atmosphere. 4K cinematic quality, serendipitous connection and growing attraction.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Two-shot of a young East Asian couple walking side by side along a tree-lined city street in autumn. Golden leaves fall slowly around them. The woman in a soft beige cardigan laughs at something, covering her mouth. The man in a navy coat walks with hands in pockets, a rare genuine smile on his face. Their shoulders brush accidentally and neither pulls away. Warm golden hour backlighting creates a halo of light around them. Fallen leaves crunch underfoot. Soft focus background of charming storefronts. 4K cinematic quality, autumn romance and effortless chemistry.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Intimate close-up shot at a night market food stall. A young East Asian woman takes a bite of a street food skewer, eyes lighting up with delight, sauce on her lip. The young East Asian man beside her watches her with an expression of quiet fondness, then reaches over with a napkin to gently dab the corner of her mouth. She freezes, eyes wide, cheeks flushing pink. Warm string lights create beautiful bokeh behind them. Steam rises from grills nearby. Golden warm color grading, soft focus, tender moment. 4K cinematic quality, intimate gesture and heart-fluttering proximity.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 3,
+      "title": "误会风波",
+      "description": "Maya 发现 Ethan 隐瞒了真实身份，加上 Ethan 的商业伙伴 Ryan 出现制造误会，两人关系跌入冰点。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Emotional medium shot in a modern glass office building lobby. A young East Asian woman in casual clothing stands frozen, staring at a large corporate portrait on the wall showing the man she has been dating in a business suit as CEO. Her expression shifts from confusion to hurt to anger. Busy professionals walk past her in soft focus. Cool blue-white corporate lighting contrasts with the warm memories implied by her outfit. Camera slowly pushes in on her devastated face. 4K cinematic quality, betrayal revelation and emotional shock.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Tense two-shot on a rain-slicked city street at night. A young East Asian woman confronts a tall East Asian man in a dark coat, her eyes glistening with unshed tears and anger. She gestures accusingly while he stands with hands at his sides, jaw tight, unable to find words. Neon reflections shimmer on the wet pavement. Rain falls steadily between them. A passing taxi headlights sweep across them dramatically. Cool blue and magenta neon color grading, wet atmosphere, emotional distance visualized. 4K cinematic quality, painful confrontation and broken trust.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Quiet interior shot of a young East Asian woman sitting alone on her apartment window seat at night, hugging her knees to her chest. City lights twinkle through rain-streaked windows behind her. A single warm bedside lamp illuminates her tear-stained face in soft amber light. She holds her phone, staring at an unsent message. Her best friend sits beside her on the window seat, gently putting an arm around her shoulders. Intimate warm lighting against the cold blue city outside, emotional vulnerability. 4K cinematic quality, heartbreak and comfort from friendship.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 4,
+      "title": "真心和解",
+      "description": "Ethan 放下身段，用最笨拙但真诚的方式向 Maya 道歉，两人在初遇的咖啡店重归于好。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Wide shot of the same charming coffee shop from the opening scene, now bathed in warm morning light. The tall handsome East Asian man stands nervously outside the door, rehearsing what to say, running his hand through his hair. Through the window we see the young East Asian woman behind the counter, looking surprised as she spots him. He takes a deep breath and pushes the door open. A small bell chimes. Warm golden interior light contrasts with soft daylight outside. Camera positioned outside looking in through the glass. 4K cinematic quality, nervous hope and full-circle moment.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Close-up shot of a young East Asian man hands carefully placing a hand-drawn card and a single sunflower on a coffee shop counter. The card shows clumsy hand-drawn illustrations of their moments together. Camera tilts up to reveal his vulnerable, earnest face as he pushes them toward the young woman across the counter. She picks up the card and reads it, her expression gradually softening from guarded to touched. Tears well in her eyes but she smiles. Warm amber lighting, intimate framing, shallow depth of field. 4K cinematic quality, sincere apology and emotional breakthrough.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Beautiful medium shot of a young East Asian couple embracing in a warm coffee shop. The woman buries her face in the man chest while he wraps his arms around her, chin resting on her head with eyes closed in relief. Golden afternoon light pours through the window behind them creating a warm silhouette. Other customers are blurred in soft focus. Steam rises from forgotten coffee cups on the counter. The camera slowly pulls back revealing the whole cozy scene. Warm golden color grading, lens flare, tender atmosphere. 4K cinematic quality, reconciliation and earned forgiveness.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "scene_number": 5,
+      "title": "浪漫告白",
+      "description": "Ethan 在城市的屋顶花园精心布置了一场告白，两人在星光下确认彼此，故事温暖落幕。",
+      "shots": [
+        {
+          "shot_number": 1,
+          "prompt": "Stunning wide shot of a rooftop garden terrace decorated with hundreds of warm fairy lights and candles at twilight. The city skyline glows softly in the background in deep blue and amber. White flower arrangements line the pathway. A tall handsome East Asian man in a crisp white shirt stands nervously at the center, hands behind his back. String lights create a canopy of warm golden bokeh above. The sky transitions from sunset pink to twilight blue. Magical romantic atmosphere, warm and cool tones blending beautifully. 4K cinematic quality, grand romantic gesture and breathtaking setting.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 2,
+          "prompt": "Medium shot of a young East Asian woman stepping onto the rooftop terrace, her hand covering her mouth in amazement as she takes in the fairy-light decorated garden. She wears a simple but beautiful summer dress, hair flowing in the gentle evening breeze. The man walks toward her with a shy smile and extends his hand. She takes it and he leads her through the candlelit path. Camera tracks alongside them as warm light plays across their faces. Soft golden bokeh, gentle lens flares, dreamy color grading. 4K cinematic quality, wonder and romantic enchantment.",
+          "mode": "t2v",
+          "duration": 5
+        },
+        {
+          "shot_number": 3,
+          "prompt": "Intimate close-up of a young East Asian couple on a rooftop at night, city lights twinkling below. The man gently cups the woman face in both hands, his thumbs brushing her cheekbones. She looks up at him with shining eyes and a radiant smile. He leans in slowly and their foreheads touch. Warm fairy light bokeh surrounds them like stars. The camera slowly orbits around them in a 180-degree arc. City skyline soft-focus behind. Warm golden and rose color grading, anamorphic lens, magical atmosphere. 4K cinematic quality, true love confession and perfect moment.",
+          "mode": "t2v",
+          "duration": 5
+        }
+      ]
+    }
+  ]
 }
