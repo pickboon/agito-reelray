@@ -54,6 +54,7 @@ export class HappyHorseAdapter implements IVideoModelAdapter {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.apiKey}`,
+        "X-DashScope-Async": "enable",
       },
       body: JSON.stringify(body),
       signal: AbortSignal.timeout(30000),
