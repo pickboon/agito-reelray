@@ -224,7 +224,7 @@ export default function Home() {
               {[
                 { label: "复仇", video: "/demos/revenge_gala.mp4" },
                 { label: "甜宠", video: "/demos/ceo_office.mp4" },
-                { label: "悬疑", video: "/demos/revenge_gala.mp4" },
+                { label: "悬疑", video: "/demos/thriller_room.mp4" },
               ].map((item) => (
                 <div
                   key={item.label}
