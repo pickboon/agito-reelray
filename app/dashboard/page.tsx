@@ -19,10 +19,15 @@ interface RecentProject {
   id: string;
   title: string;
   status: string;
-  template: string;
+  template_id: string | null;
   updated_at: string;
-  episodes: { count: number }[];
 }
+
+const statusMap: Record<string, string> = {
+  draft: "草稿",
+  generating: "生成中",
+  completed: "已完成",
+};
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -33,48 +38,51 @@ export default function DashboardPage() {
   useEffect(() => {
     async function fetchData() {
       const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
+
+      // 先确保 session 已就绪（登录后 cookie 可能还未写入）
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
         setError("未登录");
         setLoading(false);
         return;
       }
 
+      const userId = session.user.id;
+
       const [projectsRes, subRes] = await Promise.all([
         supabase
           .from("projects")
-          .select("id, title, status, template, updated_at")
+          .select("id, title, status, template_id, updated_at, episodes(count)")
           .order("updated_at", { ascending: false })
           .limit(5),
         supabase
           .from("subscriptions")
           .select("credits_remaining, plan")
-          .eq("user_id", user.id)
+          .eq("user_id", userId)
           .eq("status", "active")
           .single(),
       ]);
 
       if (projectsRes.error) {
+        console.error("[Dashboard] projects fetch error:", projectsRes.error);
         setError("加载项目失败");
         setLoading(false);
         return;
       }
 
-      const { count: epCount } = await supabase
-        .from("episodes")
-        .select("*", { count: "exact", head: true })
-        .in(
-          "project_id",
-          (projectsRes.data ?? []).map((p) => p.id)
-        );
+      const data = projectsRes.data ?? [];
+      const epCount = data.reduce((sum, p) => {
+        const episodes = (p as Record<string, unknown>).episodes as { count: number }[] | undefined;
+        return sum + (episodes?.[0]?.count ?? 0);
+      }, 0);
 
       setStats({
-        projectCount: projectsRes.data?.length ?? 0,
-        episodeCount: epCount ?? 0,
+        projectCount: data.length,
+        episodeCount: epCount,
         creditsRemaining: subRes.data?.credits_remaining ?? 0,
         plan: subRes.data?.plan ?? "free",
       });
-      setProjects((projectsRes.data ?? []) as RecentProject[]);
+      setProjects(data as unknown as RecentProject[]);
       setLoading(false);
     }
     fetchData();
@@ -248,17 +256,13 @@ export default function DashboardPage() {
                           {project.title}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {project.template} ·{" "}
+                          {project.template_id ?? "自定义"} ·{" "}
                           {new Date(project.updated_at).toLocaleDateString("zh-CN")}
                         </p>
                       </div>
                     </div>
-                    <Badge
-                      variant={
-                        project.status === "active" ? "default" : "secondary"
-                      }
-                    >
-                      {project.status}
+                    <Badge variant="secondary">
+                      {statusMap[project.status] ?? project.status}
                     </Badge>
                   </CardContent>
                 </Card>
