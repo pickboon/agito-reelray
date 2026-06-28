@@ -42,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${jetbrainsMono.variable} dark`}>
+    <html lang="en" className={`${jetbrainsMono.variable} dark scroll-smooth`}>
       <body className="min-h-screen bg-background font-sans antialiased">
         <TooltipProvider>{children}</TooltipProvider>
       </body>
