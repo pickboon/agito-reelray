@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Film, Github, Loader2, LogIn } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Suspense, useState, useTransition, type FormEvent } from "react";
+import { Suspense, useState, type FormEvent } from "react";
 import Link from "next/link";
 
 function LoginForm() {
@@ -25,13 +25,14 @@ function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
-  const [isPending, startTransition] = useTransition();
+  const [loading, setLoading] = useState(false);
 
-  function handleEmailLogin(e: FormEvent) {
+  async function handleEmailLogin(e: FormEvent) {
     e.preventDefault();
     setFormError(null);
+    setLoading(true);
 
-    startTransition(async () => {
+    try {
       const supabase = createClient();
       const { error: authError } = await supabase.auth.signInWithPassword({
         email,
@@ -44,7 +45,11 @@ function LoginForm() {
       }
 
       router.push(redirectTo);
-    });
+    } catch {
+      setFormError("登录失败，请重试");
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleGitHubLogin() {
@@ -90,7 +95,7 @@ function LoginForm() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                disabled={isPending}
+                disabled={loading}
               />
             </div>
             <div className="space-y-1.5">
@@ -102,21 +107,21 @@ function LoginForm() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                disabled={isPending}
+                disabled={loading}
               />
             </div>
             <Button
               type="submit"
               className="w-full bg-foreground text-background hover:bg-foreground/90"
               size="lg"
-              disabled={isPending || !email || !password}
+              disabled={loading || !email || !password}
             >
-              {isPending ? (
+              {loading ? (
                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
               ) : (
                 <LogIn className="mr-2 h-5 w-5" />
               )}
-              {isPending ? "加载中…" : "登录"}
+              {loading ? "加载中…" : "登录"}
             </Button>
           </form>
 
