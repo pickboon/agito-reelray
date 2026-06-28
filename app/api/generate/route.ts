@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServerSupabaseClient } from "@/lib/supabase";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getAdapter } from "@/lib/adapters";
 import type { GenerateParams } from "@/lib/adapters";
 import { checkConsistency } from "@/lib/engine/consistency";

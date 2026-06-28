@@ -1,5 +1,5 @@
 import sharp from "sharp";
-import { createAdminClient } from "@/lib/supabase";
+import { createAdminClient } from "@/lib/supabase/server";
 import { uploadFile, generateR2Key } from "@/lib/r2";
 
 const TILE_WIDTH = 512;

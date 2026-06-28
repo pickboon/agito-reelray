@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { putR2Object, generateR2Key } from "@/lib/r2";
-import { createServerSupabaseClient } from "@/lib/supabase";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export async function POST(req: NextRequest) {
   try {
