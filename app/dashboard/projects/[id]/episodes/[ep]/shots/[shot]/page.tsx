@@ -7,10 +7,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Play, Video, Hash, Clock, Image } from "lucide-react";
+import { ArrowLeft, Play, Video, Hash, Clock, Image, CheckCircle, Loader2 } from "lucide-react";
 
 interface Shot {
   id: string;
@@ -26,6 +25,19 @@ interface Shot {
   elapsed_seconds: number | null;
   credits_consumed: number | null;
   error_message: string | null;
+  consistency_score?: number | null;
+  consistency_checks?: {
+    faceSimilarity: number;
+    colorPalette: number;
+    clothingConsistency: number;
+    overallScore: number;
+  } | null;
+}
+
+function scoreColor(score: number): string {
+  if (score >= 0.8) return "text-green-600";
+  if (score >= 0.6) return "text-yellow-600";
+  return "text-red-600";
 }
 
 export default function ShotDetailPage({
@@ -39,6 +51,7 @@ export default function ShotDetailPage({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
+  const [checkingConsistency, setCheckingConsistency] = useState(false);
 
   useEffect(() => {
     async function fetchShot() {
@@ -62,6 +75,16 @@ export default function ShotDetailPage({
     fetchShot();
   }, [shot]);
 
+  const refreshData = async () => {
+    const supabase = createClient();
+    const { data: updated } = await supabase
+      .from("shots")
+      .select("*")
+      .eq("id", shot)
+      .single();
+    if (updated) setData(updated as Shot);
+  };
+
   const handleGenerate = async () => {
     if (!prompt.trim()) return;
     setGenerating(true);
@@ -80,21 +103,33 @@ export default function ShotDetailPage({
       if (!res.ok) {
         alert(json.error || "生成失败");
       } else {
-        // Refresh data
-        const supabase = createClient();
-        const { data: updated } = await supabase
-          .from("shots")
-          .select("*")
-          .eq("id", shot)
-          .single();
-        if (updated) {
-          setData(updated as Shot);
-        }
+        await refreshData();
       }
     } catch {
       alert("生成请求失败");
     } finally {
       setGenerating(false);
+    }
+  };
+
+  const handleCheckConsistency = async () => {
+    setCheckingConsistency(true);
+    try {
+      const res = await fetch("/api/engine/check-consistency", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ shotId: data?.id }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        alert(json.error || "一致性检查失败");
+      } else {
+        await refreshData();
+      }
+    } catch {
+      alert("检查请求失败");
+    } finally {
+      setCheckingConsistency(false);
     }
   };
 
@@ -254,6 +289,67 @@ export default function ShotDetailPage({
               </div>
             </CardContent>
           </Card>
+
+          {/* 一致性评分 */}
+          {data.video_url && (
+            <Card>
+              <CardContent className="space-y-3 py-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-semibold text-foreground">
+                    一致性评分
+                  </h3>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-6 text-xs gap-1"
+                    disabled={checkingConsistency}
+                    onClick={handleCheckConsistency}
+                  >
+                    {checkingConsistency ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <CheckCircle className="h-3 w-3" />
+                    )}
+                    {checkingConsistency ? "检查中…" : "检查"}
+                  </Button>
+                </div>
+                {data.consistency_score != null ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">综合评分</span>
+                      <span className={`font-mono font-semibold ${scoreColor(data.consistency_score)}`}>
+                        {(data.consistency_score * 100).toFixed(0)}%
+                      </span>
+                    </div>
+                    {data.consistency_checks && (
+                      <div className="space-y-1.5 text-xs">
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground">面部相似度</span>
+                          <span className={scoreColor(data.consistency_checks.faceSimilarity)}>
+                            {(data.consistency_checks.faceSimilarity * 100).toFixed(0)}%
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground">色彩一致性</span>
+                          <span className={scoreColor(data.consistency_checks.colorPalette)}>
+                            {(data.consistency_checks.colorPalette * 100).toFixed(0)}%
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground">服装一致性</span>
+                          <span className={scoreColor(data.consistency_checks.clothingConsistency)}>
+                            {(data.consistency_checks.clothingConsistency * 100).toFixed(0)}%
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground">尚未检查</p>
+                )}
+              </CardContent>
+            </Card>
+          )}
 
           {/* 生成统计 */}
           {data.elapsed_seconds != null && (

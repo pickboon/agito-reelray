@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase";
 import { getAdapter } from "@/lib/adapters";
 import type { GenerateParams } from "@/lib/adapters";
+import { checkConsistency } from "@/lib/engine/consistency";
 
 // POST /api/generate — 提交生成任务
 export async function POST(request: NextRequest) {
@@ -215,6 +216,43 @@ async function pollTaskInBackground(
           })
           .eq("id", shotId);
         if (completeErr) console.error("[Poll] shots update error (completed):", completeErr.message);
+
+        // 自动执行一致性检查
+        try {
+          const { data: shotRow } = await supabase
+            .from("shots")
+            .select("reference_character_id")
+            .eq("id", shotId)
+            .single();
+
+          let anchorUrl = "";
+          if (shotRow?.reference_character_id) {
+            const { data: charRow } = await supabase
+              .from("characters")
+              .select("anchor_image_url")
+              .eq("id", shotRow.reference_character_id)
+              .single();
+            anchorUrl = charRow?.anchor_image_url ?? "";
+          }
+
+          if (anchorUrl && result.videoUrl) {
+            const consistency = await checkConsistency(shotId, anchorUrl, result.videoUrl);
+            const needsReview = consistency.overallScore < 0.6;
+
+            await supabase
+              .from("shots")
+              .update({
+                consistency_score: consistency.overallScore,
+                consistency_checks: consistency as unknown as Record<string, unknown>,
+                status: needsReview ? "needs_review" : "completed",
+                updated_at: new Date().toISOString(),
+              })
+              .eq("id", shotId);
+          }
+        } catch (consErr) {
+          console.error("[Poll] consistency check error:", consErr);
+        }
+
         return;
       }
 
