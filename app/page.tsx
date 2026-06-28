@@ -200,7 +200,7 @@ export default function Home() {
         >
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-16">
-              How It Works
+              工作原理
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
@@ -257,7 +257,7 @@ export default function Home() {
         <section id="demo" className="py-24 px-6">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-16">
-              See the Difference
+              效果对比
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
