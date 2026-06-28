@@ -100,3 +100,77 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #3f3f5a;
 }
+
+/* ========== Cyber HUD Keyframes ========== */
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0.03;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0.08;
+  }
+}
+
+@keyframes neon-gold-pulse {
+  0% {
+    box-shadow: 0 0 5px #FACC15;
+  }
+  100% {
+    box-shadow: 0 0 20px #FACC15;
+  }
+}
+
+@keyframes neon-cyan-pulse {
+  0% {
+    box-shadow: 0 0 5px #00F0FF;
+  }
+  100% {
+    box-shadow: 0 0 20px #00F0FF;
+  }
+}
+
+@keyframes cursor-blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes hud-fade-in {
+  0% {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ========== Cyber HUD Utility Classes ========== */
+
+.animate-scanline {
+  animation: scanline 10s linear infinite;
+}
+
+.animate-neon-gold {
+  animation: neon-gold-pulse 2s ease-in-out infinite alternate;
+}
+
+.animate-neon-cyan {
+  animation: neon-cyan-pulse 2s ease-in-out infinite alternate;
+  animation-delay: 1s;
+}
+
+.animate-cursor-blink {
+  animation: cursor-blink 1s step-end infinite alternate;
+}
+
+.animate-hud-fade-in {
+  animation: hud-fade-in 0.5s ease-out forwards;
+}

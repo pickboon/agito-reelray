@@ -10,10 +10,30 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ReelRay - Lock Your Characters. Go Global.",
+  title: "ReelRay — AI Character Consistency for Short Drama Creators",
   description:
-    "AI-powered short drama production platform with character locking, multi-language lip sync, and built-in AI assistant.",
-  keywords: ["AI video", "short drama", "character locking", "r2v", "content creation"],
+    "AI-powered character consistency engine for short drama creators going global. Upload characters once, they stay the same across every episode. TikTok & YouTube ready. Free trial available.",
+  keywords: [
+    "AI short drama",
+    "character consistency",
+    "AI video generation",
+    "short drama overseas",
+    "TikTok short drama",
+    "ReelShort",
+    "DramaBox",
+  ],
+  openGraph: {
+    title: "ReelRay — AI Character Consistency for Short Drama Creators",
+    description:
+      "AI-powered character consistency engine for short drama creators going global. Upload characters once, they stay the same across every episode.",
+    url: "https://reelray.ai",
+    siteName: "ReelRay",
+    locale: "en_US",
+    type: "website",
+  },
+  alternates: {
+    canonical: "https://reelray.ai",
+  },
 };
 
 export default function RootLayout({

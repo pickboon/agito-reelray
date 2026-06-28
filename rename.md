@@ -26,15 +26,27 @@
 3. 开发完成后 `git add` / `git commit`（每个修改必须 commit + 回传 hash）
 4. 部署: `git push main` → CF Pages 自动部署
 
-## Phase 0 验证链
-- HappyHorse API 角色锁定成功率测试
-- 样片制作（3 集 × 1-2 分钟）
-- 5 个种子客户触达验证
-- 决策节点：成功率 ≥ 40% + ≥ 2 家意愿 → Phase 1
+## 最新 commit
+`69063f8` — P0+P1 六维审计修复 18 问题清零, lint 0✗0, tsc 0✗0
+
+## Phase 0 验证链（已完成 ✅）
+- HappyHorse API 角色锁定成功率测试 ✅
+- 全维度摸底 32 条 (31/32, 96.9%) ✅
+- 1.0 vs 1.1 对比 7/7 对 ✅
+- 多镜头叙事连贯性 A/B 组 10/10 ✅
+- 人工视觉审查：r2v 参考图锚定方案确认有效 ✅
+- 水印风险已消除（商用版无水印）✅
+- 种子客户触达 ⏳
+- 决策节点：全部判据通过 → Phase 1
+
+## Phase 1 进度（进行中）
+- 平台脚手架完成：10 个页面 + 8 个 API 路由 + 零 lint 零 type 错误 (commit `6e5ff09`)
+- 六维审计修复：18 问题清零 (commit `69063f8`)
 
 ## 设定文件
 完整设定 8 文件位于 workspace: `~/.qclaw/workspace-agent-96d43c9f/`
 - AGENTS.md / SOUL.md / IDENTITY.md / USER.md / HEARTBEAT.md / TOOLS.md / DECISION_SYSTEM.md / KNOWLEDGE.md
 
 ## 更新日志
+- 2026-06-28: Phase 0 完成，Phase 1 脚手架 + 六维审计修复完成
 - 2026-06-27: 项目初始化，Phase 0 启动
