@@ -57,19 +57,18 @@ export async function POST(request: NextRequest) {
       const bundleInfo = BUNDLES[bundle as keyof typeof BUNDLES];
       if (!bundleInfo) return NextResponse.json({ error: "Invalid bundle" }, { status: 400 });
 
+      const priceId = bundle === "small"
+        ? process.env.NEXT_PUBLIC_STRIPE_SMALL_BUNDLE_PRICE_ID
+        : bundle === "medium"
+        ? process.env.NEXT_PUBLIC_STRIPE_MEDIUM_BUNDLE_PRICE_ID
+        : process.env.NEXT_PUBLIC_STRIPE_LARGE_BUNDLE_PRICE_ID;
+
+      if (!priceId) return NextResponse.json({ error: "Bundle not configured" }, { status: 500 });
+
       const session = await stripe.checkout.sessions.create({
         customer: customerId,
         mode: "payment",
-        line_items: [
-          {
-            price_data: {
-              currency: "cny",
-              product_data: { name: `${bundleInfo.name} Credit Pack` },
-              unit_amount: bundleInfo.price * 100, // 分
-            },
-            quantity: 1,
-          },
-        ],
+        line_items: [{ price: priceId, quantity: 1 }],
         success_url: `${siteUrl}/dashboard?bundle_purchased=true`,
         cancel_url: `${siteUrl}/pricing`,
         metadata: { user_id: user.id, bundle, credits: String(bundleInfo.credits) },

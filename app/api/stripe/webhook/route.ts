@@ -8,10 +8,13 @@ const stripe = new Stripe(stripeKey, {
   apiVersion: "2026-06-24.dahlia" as any,
 });
 
+// 订阅套餐 + 充值包的 credits 映射
 const CREDITS_MAP: Record<string, number> = {
+  // 订阅套餐 (metadata.plan)
   starter: 20_000,
   pro: 80_000,
   studio: 300_000,
+  // 充值包 (metadata.bundle)
   small: 45_000,
   medium: 200_000,
   large: 600_000,
@@ -40,11 +43,17 @@ export async function POST(req: NextRequest) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
         const userId = session.metadata?.user_id;
-        const credits = CREDITS_MAP[session.metadata?.bundle || ""] || 0;
 
-        if (userId && credits > 0) {
-          // Add credits for bundle purchase
-          await addCredits(userId, credits, "purchase", session.id);
+        if (userId) {
+          // 优先处理 bundle 充值包
+          const bundleKey = session.metadata?.bundle;
+          if (bundleKey) {
+            const credits = CREDITS_MAP[bundleKey] || 0;
+            if (credits > 0) {
+              await addCredits(userId, credits, "purchase", session.id);
+            }
+          }
+          // 订阅套餐由 subscription.created/updated 事件处理，此处不重复
         }
         break;
       }
@@ -73,7 +82,6 @@ export async function POST(req: NextRequest) {
 
       case "invoice.payment_succeeded": {
         const invoice = event.data.object as Stripe.Invoice;
-        // invoice.subscription is typed as string | null in older Stripe types
         const subscriptionId = (invoice as unknown as Record<string, unknown>).subscription as string | undefined;
         if (subscriptionId) {
           await renewSubscriptionCredits(subscriptionId);

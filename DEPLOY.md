@@ -123,6 +123,9 @@ npm run deploy
 | `NEXT_PUBLIC_STRIPE_STARTER_PRICE_ID` | Plaintext | Stripe Dashboard → Products → Price IDs | Starter 套餐价格 ID (`price_...`) |
 | `NEXT_PUBLIC_STRIPE_PRO_PRICE_ID` | Plaintext | Stripe Dashboard → Products → Price IDs | Pro 套餐价格 ID (`price_...`) |
 | `NEXT_PUBLIC_STRIPE_STUDIO_PRICE_ID` | Plaintext | Stripe Dashboard → Products → Price IDs | Studio 套餐价格 ID (`price_...`) |
+| `NEXT_PUBLIC_STRIPE_SMALL_BUNDLE_PRICE_ID` | Plaintext | Stripe Dashboard → Products → Price IDs | Small 充值包价格 ID (`price_...`) |
+| `NEXT_PUBLIC_STRIPE_MEDIUM_BUNDLE_PRICE_ID` | Plaintext | Stripe Dashboard → Products → Price IDs | Medium 充值包价格 ID (`price_...`) |
+| `NEXT_PUBLIC_STRIPE_LARGE_BUNDLE_PRICE_ID` | Plaintext | Stripe Dashboard → Products → Price IDs | Large 充值包价格 ID (`price_...`) |
 
 ### Cloudflare R2 (对象存储)
 

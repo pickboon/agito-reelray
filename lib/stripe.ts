@@ -13,17 +13,18 @@ export function getStripe(): Stripe {
   return stripeClient;
 }
 
+// 价格单位：USD，与 Stripe 配置的 Price 保持一致
 export const PLANS = {
   free: { name: "Free", credits: 1000, price: 0 },
-  starter: { name: "Starter", credits: 20000, price: 149 },
-  pro: { name: "Pro", credits: 80000, price: 499 },
-  studio: { name: "Studio", credits: 300000, price: 1499 },
+  starter: { name: "Starter", credits: 20000, price: 22 },
+  pro: { name: "Pro", credits: 80000, price: 44 },
+  studio: { name: "Studio", credits: 300000, price: 221 },
 } as const;
 
 export const BUNDLES = {
-  small: { name: "Small", credits: 45000, price: 500 },
-  medium: { name: "Medium", credits: 200000, price: 2000 },
-  large: { name: "Large", credits: 600000, price: 5000 },
+  small: { name: "Small", credits: 45000, price: 74 },
+  medium: { name: "Medium", credits: 200000, price: 148 },
+  large: { name: "Large", credits: 600000, price: 296 },
 } as const;
 
 export const CREDIT_COSTS = {
