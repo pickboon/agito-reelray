@@ -4,6 +4,7 @@ import { getAdapter } from "@/lib/adapters";
 import type { GenerateParams } from "@/lib/adapters";
 import { checkConsistency } from "@/lib/engine/consistency";
 import { mergeAnchors } from "@/lib/engine/multi-character";
+import { moderateText } from "@/lib/moderation";
 
 // POST /api/generate — 提交生成任务
 export async function POST(request: NextRequest) {
@@ -17,6 +18,15 @@ export async function POST(request: NextRequest) {
 
     if (!shot_id || !prompt || !mode) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+
+    // ── 内容安全审核（Prompt + 角色描述） ──
+    const modResult = await moderateText(prompt);
+    if (!modResult.pass) {
+      return NextResponse.json(
+        { error: "内容未通过安全审核", detail: modResult.reason, label: modResult.label },
+        { status: 422 }
+      );
     }
 
     // 校验 Credits
