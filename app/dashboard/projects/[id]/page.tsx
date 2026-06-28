@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
+import { useEffect, useState, use, useCallback } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Plus, Users, Film, ArrowLeft } from "lucide-react";
+import { Plus, Users, Film, ArrowLeft, Anchor, Loader2 } from "lucide-react";
 
 interface Project {
   id: string;
@@ -24,6 +24,8 @@ interface Character {
   role?: string;
   description: string;
   reference_image_url: string | null;
+  anchor_image_url?: string | null;
+  anchor_status?: string | null;
 }
 
 interface Episode {
@@ -33,6 +35,13 @@ interface Episode {
   status: string;
   created_at: string;
 }
+
+const anchorStatusBadge: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
+  pending: { label: "待生成", variant: "outline" },
+  generating: { label: "生成中", variant: "secondary" },
+  completed: { label: "已完成", variant: "default" },
+  failed: { label: "失败", variant: "destructive" },
+};
 
 export default function ProjectDetailPage({
   params,
@@ -45,34 +54,56 @@ export default function ProjectDetailPage({
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [anchorLoading, setAnchorLoading] = useState<Record<string, boolean>>({});
+
+  const fetchData = useCallback(async () => {
+    const supabase = createClient();
+    const [projectRes, charsRes, epsRes] = await Promise.all([
+      supabase.from("projects").select("*").eq("id", id).single(),
+      supabase.from("characters").select("*").eq("project_id", id),
+      supabase
+        .from("episodes")
+        .select("*")
+        .eq("project_id", id)
+        .order("episode_number", { ascending: true }),
+    ]);
+
+    if (projectRes.error) {
+      setError("加载项目失败");
+      setLoading(false);
+      return;
+    }
+
+    setProject(projectRes.data as Project);
+    setCharacters((charsRes.data ?? []) as Character[]);
+    setEpisodes((epsRes.data ?? []) as Episode[]);
+    setLoading(false);
+  }, [id]);
 
   useEffect(() => {
-    async function fetchData() {
-      const supabase = createClient();
-
-      const [projectRes, charsRes, epsRes] = await Promise.all([
-        supabase.from("projects").select("*").eq("id", id).single(),
-        supabase.from("characters").select("*").eq("project_id", id),
-        supabase
-          .from("episodes")
-          .select("*")
-          .eq("project_id", id)
-          .order("episode_number", { ascending: true }),
-      ]);
-
-      if (projectRes.error) {
-        setError("加载项目失败");
-        setLoading(false);
-        return;
-      }
-
-      setProject(projectRes.data as Project);
-      setCharacters((charsRes.data ?? []) as Character[]);
-      setEpisodes((epsRes.data ?? []) as Episode[]);
-      setLoading(false);
-    }
     fetchData();
-  }, [id]);
+  }, [fetchData]);
+
+  const handleGenerateAnchor = async (characterId: string) => {
+    setAnchorLoading((prev) => ({ ...prev, [characterId]: true }));
+    try {
+      const res = await fetch("/api/engine/generate-anchor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ characterId }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        alert(json.error || "锚点图生成失败");
+      }
+      // 刷新数据
+      await fetchData();
+    } catch {
+      alert("请求失败，请重试");
+    } finally {
+      setAnchorLoading((prev) => ({ ...prev, [characterId]: false }));
+    }
+  };
 
   if (loading) {
     return (
@@ -144,26 +175,67 @@ export default function ProjectDetailPage({
           </Card>
         ) : (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {characters.map((char) => (
-              <Card key={char.id}>
-                <CardContent className="flex items-start gap-3 py-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-cyan/10">
-                    <Users className="h-5 w-5 text-brand-cyan" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-foreground truncate">
-                      {char.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground">{char.role}</p>
-                    {char.description && (
-                      <p className="text-xs text-muted-foreground/70 mt-1 line-clamp-2">
-                        {char.description}
-                      </p>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            {characters.map((char) => {
+              const aStatus = char.anchor_status ?? "pending";
+              const statusInfo = anchorStatusBadge[aStatus] ?? anchorStatusBadge.pending;
+              const isLoading = anchorLoading[char.id] ?? false;
+
+              return (
+                <Card key={char.id}>
+                  <CardContent className="flex items-start gap-3 py-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-cyan/10">
+                      <Users className="h-5 w-5 text-brand-cyan" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-medium text-foreground truncate">
+                          {char.name}
+                        </p>
+                        <Badge variant={statusInfo.variant} className="text-[10px] px-1.5">
+                          {statusInfo.label}
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground">{char.role}</p>
+                      {char.description && (
+                        <p className="text-xs text-muted-foreground/70 mt-1 line-clamp-2">
+                          {char.description}
+                        </p>
+                      )}
+
+                      {/* 锚点图缩略图 */}
+                      {char.anchor_image_url && (
+                        <div className="mt-2">
+                          <video
+                            src={char.anchor_image_url}
+                            className="w-full h-16 object-cover rounded"
+                            muted
+                            playsInline
+                          />
+                        </div>
+                      )}
+
+                      {/* 生成锚点按钮 */}
+                      <div className="mt-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="gap-1 h-6 text-xs w-full"
+                          disabled={isLoading || aStatus === "generating" || !char.reference_image_url}
+                          onClick={() => handleGenerateAnchor(char.id)}
+                        >
+                          {isLoading || aStatus === "generating" ? (
+                            <Loader2 className="h-3 w-3 animate-spin" />
+                          ) : (
+                            <Anchor className="h-3 w-3" />
+                          )}
+                          {aStatus === "completed" ? "重新生成锚点" : "生成锚点"}
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         )}
       </section>

@@ -29,12 +29,34 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Insufficient credits" }, { status: 402 });
     }
 
+    // r2v 模式：自动使用角色锚点图（如果没有手动传入 reference_image_url）
+    let finalRefImageUrl = reference_image_url;
+    if (mode === "r2v" && !finalRefImageUrl) {
+      const { data: shotRow } = await supabase
+        .from("shots")
+        .select("reference_character_id")
+        .eq("id", shot_id)
+        .single();
+
+      if (shotRow?.reference_character_id) {
+        const { data: charRow } = await supabase
+          .from("characters")
+          .select("anchor_image_url")
+          .eq("id", shotRow.reference_character_id)
+          .single();
+
+        if (charRow?.anchor_image_url) {
+          finalRefImageUrl = charRow.anchor_image_url;
+        }
+      }
+    }
+
     // 提交到 HappyHorse
     const adapter = getAdapter(model ?? "happyhorse-1.1");
     const params: GenerateParams = {
       prompt,
       mode,
-      referenceImageUrl: reference_image_url,
+      referenceImageUrl: finalRefImageUrl,
       aspectRatio: aspect_ratio ?? "9:16",
       duration: duration ?? 5,
       seed,
