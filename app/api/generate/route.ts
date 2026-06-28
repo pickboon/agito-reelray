@@ -6,23 +6,29 @@ import { checkConsistency } from "@/lib/engine/consistency";
 import { mergeAnchors } from "@/lib/engine/multi-character";
 import { moderateText } from "@/lib/moderation";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { validateCsrf } from "@/lib/csrf";
 
 // POST /api/generate — 提交生成任务
 export async function POST(request: NextRequest) {
   try {
+    // P2-6: CSRF 验证
+    if (!validateCsrf(request)) {
+      return NextResponse.json({ error: "Invalid request" }, { status: 403 });
+    }
+
     const clientIp = request.headers.get("x-forwarded-for") ?? "unknown";
     if (!checkRateLimit(`generate:${clientIp}`, 10, 60000)) {
       return NextResponse.json({ error: "Too many requests" }, { status: 429 });
     }
     const supabase = await createServerSupabaseClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!user) return NextResponse.json({ error: "Authorization required" }, { status: 401 });
 
     const body = await request.json();
     const { shot_id, model, mode, prompt, reference_image_url, aspect_ratio, duration, seed, reference_character_ids } = body;
 
     if (!shot_id || !prompt || !mode) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+      return NextResponse.json({ error: "Invalid request" }, { status: 400 });
     }
 
     // ── 内容安全审核（Prompt + 关联数据） ──
@@ -37,7 +43,7 @@ export async function POST(request: NextRequest) {
     const modResult = await moderateText(textToModerate);
     if (!modResult.pass) {
       return NextResponse.json(
-        { error: "内容未通过安全审核", detail: modResult.reason, label: modResult.label },
+        { error: "Content does not meet safety standards" },
         { status: 422 }
       );
     }
@@ -51,7 +57,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (!sub || sub.credits_remaining < 10000) {
-      return NextResponse.json({ error: "Insufficient credits" }, { status: 402 });
+      return NextResponse.json({ error: "Insufficient balance" }, { status: 402 });
     }
 
     // 确定 referenceImageUrl
@@ -146,7 +152,7 @@ export async function POST(request: NextRequest) {
       .eq("id", shot_id);
     if (shotErr) console.error("[generate] shots update error:", shotErr.message);
 
-    // 写入 generation_logs
+    // P3-7: generation_logs 仅存储 mode + shot_id，不存完整 prompt
     const { error: logErr } = await supabase.from("generation_logs").insert({
       shot_id,
       model: model ?? "happyhorse-1.1-t2v",
@@ -192,12 +198,12 @@ export async function GET(request: NextRequest) {
     const shotId = searchParams.get("shotId");
 
     if (!taskId && !shotId) {
-      return NextResponse.json({ error: "Missing taskId or shotId" }, { status: 400 });
+      return NextResponse.json({ error: "Invalid request" }, { status: 400 });
     }
 
     const supabase = await createServerSupabaseClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!user) return NextResponse.json({ error: "Authorization required" }, { status: 401 });
 
     if (shotId) {
       const { data: shot } = await supabase

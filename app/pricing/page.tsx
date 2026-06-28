@@ -11,15 +11,15 @@ const PLANS = [
   {
     name: "Starter",
     price: "¥149",
-    period: "/mo",
+    period: "/月",
     credits: "20,000",
-    discount: "25% off standard rate",
+    discount: "75折 标准价",
     icon: Zap,
     color: "text-brand-cyan",
     bg: "bg-brand-cyan/10",
     border: "border-brand-cyan/20",
     features: [
-      "~2 集 720p 短剧生成",
+      "约 2 集 720p 短剧生成",
       "角色参考图锚定 (r2v)",
       "4 套出海模板",
       "TikTok 9:16 / YT 16:9",
@@ -31,16 +31,16 @@ const PLANS = [
   {
     name: "Pro",
     price: "¥499",
-    period: "/mo",
+    period: "/月",
     credits: "80,000",
-    discount: "38% off standard rate",
+    discount: "62折 标准价",
     icon: Star,
     color: "text-brand-gold",
     bg: "bg-brand-gold/10",
     border: "border-brand-gold/30",
     popular: true,
     features: [
-      "~8 集 720p 短剧生成",
+      "约 8 集 720p 短剧生成",
       "角色参考图锚定 (r2v)",
       "4 套出海模板 + 自定义",
       "TikTok/YT 双格式",
@@ -54,15 +54,15 @@ const PLANS = [
   {
     name: "Studio",
     price: "¥1,499",
-    period: "/mo",
+    period: "/月",
     credits: "300,000",
-    discount: "50% off standard rate",
+    discount: "5折 标准价",
     icon: Crown,
     color: "text-brand-gold",
     bg: "bg-brand-gold/10",
     border: "border-brand-gold/30",
     features: [
-      "~30 集 720p 短剧生成",
+      "约 30 集 720p 短剧生成",
       "全部 Pro 功能",
       "1080p 优先输出",
       "批量生成",
@@ -77,7 +77,7 @@ const PLANS = [
 
 const BUNDLES = [
   {
-    name: "Small Pack",
+    name: "小包",
     price: "¥500",
     credits: "45,000",
     desc: "适合小规模测试",
@@ -85,7 +85,7 @@ const BUNDLES = [
     bundleId: "small",
   },
   {
-    name: "Medium Pack",
+    name: "中包",
     price: "¥2,000",
     credits: "200,000",
     desc: "适合连续生产",
@@ -93,7 +93,7 @@ const BUNDLES = [
     bundleId: "medium",
   },
   {
-    name: "Large Pack",
+    name: "大包",
     price: "¥5,000",
     credits: "600,000",
     desc: "适合工作室批量",
@@ -119,10 +119,10 @@ export default function PricingPage() {
       if (data.url) {
         window.location.href = data.url;
       } else {
-        alert(data.error || "Checkout failed");
+        alert(data.error || "结算失败");
       }
     } catch {
-      alert("Request failed");
+      alert("请求失败，请重试");
     } finally {
       setCheckoutLoading(null);
     }
@@ -141,7 +141,7 @@ export default function PricingPage() {
             href="/login"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            Sign In
+            登录
           </Link>
         </div>
       </header>
@@ -150,21 +150,20 @@ export default function PricingPage() {
         {/* Hero */}
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold text-foreground">
-            Choose Your{" "}
-            <span className="text-brand-gold">Plan</span>
+            选择<span className="text-brand-gold">方案</span>
           </h1>
           <p className="text-muted-foreground max-w-xl mx-auto">
             Credits 积分制，按用量计费。套餐锁定折扣，资源包按需购买，超额自动续费。
           </p>
           <p className="text-sm text-muted-foreground/60">
-            ¥1 = 100 Credits · 1 集 720p ≈ 10,000 Credits
+            1 集 720p 短片 约消耗 10,000 Credits
           </p>
         </div>
 
-        {/* Subscription Plans */}
+        {/* 订阅套餐 */}
         <section>
           <h2 className="text-2xl font-semibold text-foreground text-center mb-8">
-            Subscription Plans
+            订阅套餐
           </h2>
           <div className="grid gap-6 md:grid-cols-3">
             {PLANS.map((plan) => (
@@ -174,7 +173,7 @@ export default function PricingPage() {
               >
                 {plan.popular && (
                   <Badge className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-brand-gold text-background">
-                    Most Popular
+                    最受欢迎
                   </Badge>
                 )}
                 <CardHeader className="text-center pb-4">
@@ -210,8 +209,8 @@ export default function PricingPage() {
                     onClick={() => handleCheckout("subscription", plan.planId)}
                   >
                     {checkoutLoading === plan.planId
-                      ? "Loading..."
-                      : "Subscribe"}
+                      ? "处理中..."
+                      : "订阅"}
                   </Button>
                 </CardContent>
               </Card>
@@ -219,10 +218,10 @@ export default function PricingPage() {
           </div>
         </section>
 
-        {/* Credit Bundles */}
+        {/* 充值包 */}
         <section>
           <h2 className="text-2xl font-semibold text-foreground text-center mb-8">
-            Credit Bundles
+            充值包
           </h2>
           <p className="text-center text-sm text-muted-foreground -mt-4 mb-8">
             预付费，无月费，用完结。适合按需采购的工作室。
@@ -251,8 +250,8 @@ export default function PricingPage() {
                     onClick={() => handleCheckout("bundle", bundle.bundleId)}
                   >
                     {checkoutLoading === bundle.bundleId
-                      ? "Loading..."
-                      : "Purchase"}
+                      ? "处理中..."
+                      : "购买"}
                   </Button>
                 </CardContent>
               </Card>

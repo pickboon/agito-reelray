@@ -18,6 +18,17 @@ export async function POST(req: NextRequest) {
   if (!stripeKey) throw new Error("Missing env: STRIPE_SECRET_KEY");
   const stripe = new Stripe(stripeKey, { apiVersion: "2026-06-24.dahlia" as any });
 
+  // P3-5: 可选 IP 白名单检查
+  const allowedIps = process.env.STRIPE_WEBHOOK_IPS;
+  if (allowedIps) {
+    const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? req.headers.get("x-real-ip") ?? "unknown";
+    const ipList = allowedIps.split(",").map((ip) => ip.trim());
+    if (!ipList.includes(clientIp)) {
+      console.warn(`[webhook] IP ${clientIp} 不在白名单中，拒绝`);
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+  }
+
   const sig = req.headers.get("stripe-signature");
   if (!sig || !process.env.STRIPE_WEBHOOK_SECRET) {
     return NextResponse.json({ error: "Missing signature" }, { status: 400 });

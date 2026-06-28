@@ -5,18 +5,18 @@ export async function GET(req: NextRequest) {
   try {
     const supabase = await createServerSupabaseClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!user) return NextResponse.json({ error: "Authorization required" }, { status: 401 });
 
     const urlParam = req.nextUrl.searchParams.get("url");
     if (!urlParam) {
-      return NextResponse.json({ error: "Missing url parameter" }, { status: 400 });
+      return NextResponse.json({ error: "Invalid request" }, { status: 400 });
     }
 
     // 仅允许合法 R2 URL，防止 SSRF
     const r2PublicUrl = process.env.R2_PUBLIC_URL ?? "";
     if (!r2PublicUrl || !urlParam.startsWith(r2PublicUrl)) {
       return NextResponse.json(
-        { error: "Invalid URL: must start with R2_PUBLIC_URL" },
+        { error: "Invalid request" },
         { status: 400 }
       );
     }
@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
     const response = await fetch(urlParam, { signal: AbortSignal.timeout(15000) });
     if (!response.ok) {
       return NextResponse.json(
-        { error: `Failed to fetch: ${response.status}` },
+        { error: "Download failed" },
         { status: 502 }
       );
     }

@@ -25,11 +25,18 @@ export interface ModerationResult {
 // ── 百度 access_token 缓存 ──
 let cachedToken: string | null = null;
 let tokenExpiresAt: number = 0;
+let baiduWarned = false;
 
 async function getBaiduToken(): Promise<string | null> {
   const apiKey = process.env.BAIDU_API_KEY;
   const secretKey = process.env.BAIDU_SECRET_KEY;
-  if (!apiKey || !secretKey) return null;
+  if (!apiKey || !secretKey) {
+    if (!baiduWarned) {
+      console.warn("[moderation] 百度 API 未配置，仅本地防线生效");
+      baiduWarned = true;
+    }
+    return null;
+  }
 
   if (cachedToken && Date.now() < tokenExpiresAt) return cachedToken;
 
@@ -92,7 +99,8 @@ async function remoteModerate(text: string): Promise<ModerationResult | null> {
       reason: labels.join("; ") || data.conclusion || "内容未通过安全审核",
       label: `baidu_${data.conclusionType === 3 ? "suspicious" : "reject"}`,
     };
-  } catch {
+  } catch (error) {
+    console.warn("[moderation] 远程审核异常，放行:", error);
     return null;
   }
 }

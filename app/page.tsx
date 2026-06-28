@@ -4,7 +4,6 @@ import {
   Sparkles,
   Upload,
   Lock,
-  Play,
   Check,
   ArrowRight,
 } from "lucide-react";
@@ -51,6 +50,7 @@ export default function Home() {
         {/* ── 屏 1: HERO ── */}
         <section
           id="hero"
+          role="presentation"
           className="min-h-[85vh] flex flex-col items-center justify-center px-6 text-center relative overflow-hidden bg-[radial-gradient(circle,var(--color-muted)_1px,transparent_1px)]"
           style={{ backgroundSize: "32px 32px" }}
         >
@@ -91,7 +91,7 @@ export default function Home() {
         <section id="problem" className="py-24 px-6">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-4">
-              角色“换脸”，是 AI 短剧最大的硬伤。
+              角色{"“"}换脸{"”"}，是 AI 短剧最大的硬伤。
             </h2>
             <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
               没有角色锁定，AI 短剧跨集一致性跌破 40%。
@@ -222,9 +222,9 @@ export default function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
-                { label: "复仇", color: "bg-destructive/20 text-destructive" },
-                { label: "甜宠", color: "bg-brand-cyan/10 text-brand-cyan" },
-                { label: "悬疑", color: "bg-brand-cyan/10 text-brand-cyan" },
+                { label: "复仇", video: "/demos/revenge_gala.mp4" },
+                { label: "甜宠", video: "/demos/ceo_office.mp4" },
+                { label: "悬疑", video: "/demos/revenge_gala.mp4" },
               ].map((item) => (
                 <div
                   key={item.label}
@@ -232,30 +232,31 @@ export default function Home() {
                 >
                   <div className="p-4">
                     <span
-                      className={`inline-block text-xs font-medium px-3 py-1 rounded-full ${item.color}`}
+                      className="inline-block text-xs font-medium px-3 py-1 rounded-full bg-brand-cyan/10 text-brand-cyan"
                     >
                       {item.label}
                     </span>
                   </div>
 
                   <div className="px-4">
-                    <div className="aspect-video bg-black rounded-lg flex items-center justify-center relative">
-                      <button type="button" aria-label="播放演示视频" className="h-12 w-12 rounded-full bg-brand-gold/80 flex items-center justify-center hover:bg-brand-gold transition-colors">
-                        <Play className="h-5 w-5 text-background ml-0.5" />
-                      </button>
-                    </div>
+                    <video
+                      className="aspect-video w-full rounded-lg bg-black"
+                      controls
+                      preload="metadata"
+                      playsInline
+                      aria-label={`${item.label} 类型演示视频`}
+                    >
+                      <source src={item.video} type="video/mp4" />
+                      您的浏览器不支持视频播放。
+                    </video>
                   </div>
 
                   <p className="text-xs text-muted-foreground p-4 text-center">
-                    演示视频制作中，敬请期待
+                    ReelRay 生成 · 角色全程一致
                   </p>
                 </div>
               ))}
             </div>
-
-            <p className="text-center text-sm text-muted-foreground mt-8">
-              前后对比工具即将上线——真实演示片段正在制作中。
-            </p>
           </div>
         </section>
 

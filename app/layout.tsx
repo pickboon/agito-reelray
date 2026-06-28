@@ -34,6 +34,18 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://reelray.ai",
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+    },
+  },
+  other: {
+    robots: "noai, noimageai",
+  },
 };
 
 export default function RootLayout({
@@ -43,6 +55,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN" className={`${jetbrainsMono.variable} dark scroll-smooth`}>
+      <head>
+        <meta name="robots" content="noai, noimageai" />
+      </head>
       <body className="min-h-screen bg-background font-sans antialiased">
         <TooltipProvider>{children}</TooltipProvider>
       </body>

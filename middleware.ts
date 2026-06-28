@@ -1,8 +1,23 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { generateCsrfToken } from "@/lib/csrf";
+
+const CSRF_COOKIE_NAME = "__csrf_token";
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
+
+  // ── CSRF: 为每个请求注入 double-submit cookie ──
+  if (!request.cookies.get(CSRF_COOKIE_NAME)?.value) {
+    const token = generateCsrfToken();
+    supabaseResponse.cookies.set(CSRF_COOKIE_NAME, token, {
+      httpOnly: false, // 前端 JS 需读取并设置到请求头
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24, // 1 天
+    });
+  }
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;

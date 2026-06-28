@@ -48,6 +48,21 @@ export default function MobileNav() {
             >
               登录
             </Link>
+            <hr className="border-border my-1" />
+            <Link
+              href="/terms"
+              className="text-xs text-muted-foreground/70 hover:text-foreground py-1.5"
+              onClick={() => setIsOpen(false)}
+            >
+              Terms of Service
+            </Link>
+            <Link
+              href="/privacy"
+              className="text-xs text-muted-foreground/70 hover:text-foreground py-1.5"
+              onClick={() => setIsOpen(false)}
+            >
+              Privacy Policy
+            </Link>
           </div>
         </div>
       )}

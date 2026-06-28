@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import { Film, Clapperboard, Wallet, TrendingUp, ArrowRight } from "lucide-react";
+import { Film, Clapperboard, Wallet, TrendingUp, ArrowRight, Sparkles } from "lucide-react";
 
 interface DashboardStats {
   projectCount: number;
@@ -101,6 +101,8 @@ export default function DashboardPage() {
     );
   }
 
+  const planDisplay = (stats?.plan ?? "free").charAt(0).toUpperCase() + (stats?.plan ?? "free").slice(1);
+
   const statCards = [
     {
       label: "项目数",
@@ -122,11 +124,70 @@ export default function DashboardPage() {
     },
     {
       label: "套餐",
-      value: (stats?.plan ?? "free").toUpperCase(),
+      value: planDisplay,
       icon: TrendingUp,
       color: "text-brand-cyan",
     },
   ];
+
+  // P2-2: projectCount === 0 时显示欢迎引导
+  if (stats && stats.projectCount === 0) {
+    return (
+      <div className="space-y-8">
+        <div>
+          <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
+          <p className="text-sm text-muted-foreground mt-1">项目概览与快捷操作</p>
+        </div>
+
+        {/* 欢迎引导卡片 */}
+        <Card className="border-brand-gold/30 bg-brand-gold/5">
+          <CardContent className="flex flex-col items-center justify-center py-12 px-6">
+            <div className="h-14 w-14 rounded-full bg-brand-gold/10 flex items-center justify-center mb-4">
+              <Sparkles className="h-6 w-6 text-brand-gold" />
+            </div>
+            <h2 className="text-lg font-semibold text-foreground mb-2">
+              欢迎使用 ReelRay！
+            </h2>
+            <p className="text-sm text-muted-foreground text-center max-w-sm mb-6">
+              创建你的第一个项目，上传角色照片，开始生成一致性短剧视频。
+            </p>
+            <Link
+              href="/dashboard/projects"
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-md btn-primary text-sm font-medium"
+            >
+              创建第一个项目
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </CardContent>
+        </Card>
+
+        {/* 快捷引导 */}
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Card>
+            <CardContent className="py-6 text-center">
+              <Film className="h-5 w-5 text-brand-gold mx-auto mb-2" />
+              <p className="text-sm font-medium">步骤 1</p>
+              <p className="text-xs text-muted-foreground mt-1">创建项目并选择模板</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="py-6 text-center">
+              <Clapperboard className="h-5 w-5 text-brand-cyan mx-auto mb-2" />
+              <p className="text-sm font-medium">步骤 2</p>
+              <p className="text-xs text-muted-foreground mt-1">上传角色参考照片</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="py-6 text-center">
+              <Sparkles className="h-5 w-5 text-brand-gold mx-auto mb-2" />
+              <p className="text-sm font-medium">步骤 3</p>
+              <p className="text-xs text-muted-foreground mt-1">生成一致性视频片段</p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">

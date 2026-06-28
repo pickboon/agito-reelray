@@ -73,6 +73,64 @@
   --sidebar-ring: #FACC15;
 }
 
+/* Light theme variables (P2-3) */
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #fafafa;
+    --foreground: #18181b;
+    --card: #ffffff;
+    --card-foreground: #18181b;
+    --popover: #ffffff;
+    --popover-foreground: #18181b;
+    --primary: #ca8a04;
+    --primary-foreground: #ffffff;
+    --secondary: #f4f4f5;
+    --secondary-foreground: #18181b;
+    --muted: #f4f4f5;
+    --muted-foreground: #71717a;
+    --accent: #0891b2;
+    --accent-foreground: #ffffff;
+    --destructive: #dc2626;
+    --border: #e4e4e7;
+    --input: #f4f4f5;
+    --ring: #ca8a04;
+    --sidebar: #f9fafb;
+    --sidebar-foreground: #18181b;
+    --sidebar-accent: #f4f4f5;
+    --sidebar-accent-foreground: #ca8a04;
+    --sidebar-border: #e4e4e7;
+    --sidebar-ring: #ca8a04;
+  }
+}
+
+/* .dark class always uses dark theme regardless of system preference */
+.dark {
+  --background: #0a0a1a;
+  --foreground: #e4e4e7;
+  --card: #111127;
+  --card-foreground: #e4e4e7;
+  --popover: #111127;
+  --popover-foreground: #e4e4e7;
+  --primary: #FACC15;
+  --primary-foreground: #0a0a1a;
+  --secondary: #1a1a3e;
+  --secondary-foreground: #e4e4e7;
+  --muted: #1a1a3e;
+  --muted-foreground: #71717a;
+  --accent: #00F0FF;
+  --accent-foreground: #0a0a1a;
+  --destructive: #ef4444;
+  --border: #27273a;
+  --input: #1a1a3e;
+  --ring: #FACC15;
+  --sidebar: #0d0d20;
+  --sidebar-foreground: #e4e4e7;
+  --sidebar-accent: #1a1a3e;
+  --sidebar-accent-foreground: #FACC15;
+  --sidebar-border: #27273a;
+  --sidebar-ring: #FACC15;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -91,14 +149,14 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0a1a;
+  background: var(--background);
 }
 ::-webkit-scrollbar-thumb {
-  background: #27273a;
+  background: var(--border);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f5a;
+  background: var(--muted-foreground);
 }
 
 /* ========== Cyber HUD Keyframes ========== */
