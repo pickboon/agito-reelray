@@ -1,0 +1,49 @@
+{
+  "id": "thriller",
+  "name": "Thriller",
+  "genre": "thriller",
+  "description": "Crime, horror, and twist-ending stories with dark atmosphere and tension",
+  "target_markets": ["North America", "Latin America"],
+  "character_blueprints": [
+    {
+      "role": "protagonist",
+      "name": "Det. Cross",
+      "description": "Weathered detective, tired eyes, five o'clock shadow, rumpled trench coat.",
+      "prompt_template": "Middle-aged detective, tired determined eyes, stubble, rumpled dark trench coat, serious expression"
+    },
+    {
+      "role": "suspect",
+      "name": "Vera",
+      "description": "Enigmatic woman, dark hair, unreadable expression, elegant but unsettling.",
+      "prompt_template": "Mysterious woman in her 30s, dark hair, elegant dark clothing, unreadable expression, slightly unsettling"
+    },
+    {
+      "role": "victim",
+      "name": "Tom",
+      "description": "Nervous young man, fidgety, ordinary appearance, constantly looking over shoulder.",
+      "prompt_template": "Anxious young man in his late 20s, nervous expression, ordinary casual clothing, looking around nervously"
+    }
+  ],
+  "scene_library": [
+    { "name": "Dark Alley", "prompt": "Narrow dark alley at night, wet ground reflecting dim street lights, fog, ominous shadows, gritty urban" },
+    { "name": "Abandoned Factory", "prompt": "Abandoned industrial factory interior, broken windows, dust particles in light beams, decaying machinery" },
+    { "name": "Police Station", "prompt": "Busy police station interior, fluorescent lighting, cluttered desks, interrogation room visible, tense atmosphere" },
+    { "name": "Dim Apartment", "prompt": "Dimly lit apartment room, single desk lamp, shadows on walls, cluttered evidence board, noir atmosphere" }
+  ],
+  "color_grade": {
+    "name": "Noir Dark",
+    "description": "Low saturation dark tones with heavy shadows",
+    "temperature": "neutral-cool",
+    "contrast": "very-high",
+    "saturation": "low"
+  },
+  "shot_rhythm": {
+    "pacing": "varied",
+    "avg_shot_duration": 5,
+    "style_notes": "Jump cuts for shock, POV shots for tension, voyeuristic angles, slow reveals"
+  },
+  "prompt_templates": {
+    "en": "Cinematic thriller shot, {character} in {scene}, {action}, dark moody lighting, desaturated tones, high contrast shadows, noir atmosphere, 4K quality",
+    "zh": "惊悚电影镜头，{character}在{scene}中，{action}，暗调光影，低饱和色调，高对比阴影，黑色电影氛围，4K画质"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "id": "romance",
+  "name": "Romance",
+  "genre": "romance",
+  "description": "Contract marriage / love-after-marriage stories with warm emotional tones",
+  "target_markets": ["Global"],
+  "character_blueprints": [
+    {
+      "role": "protagonist",
+      "name": "Maya",
+      "description": "Warm and expressive young woman, natural beauty, casual chic style, bright smile.",
+      "prompt_template": "Young woman in her mid-20s, warm natural beauty, casual chic clothing, bright expressive eyes, gentle smile"
+    },
+    {
+      "role": "love_interest",
+      "name": "Ethan",
+      "description": "Quietly handsome man, reserved demeanor, soft features, well-groomed.",
+      "prompt_template": "Handsome man in his late 20s, reserved expression, soft features, clean-cut appearance, warm sweater"
+    }
+  ],
+  "scene_library": [
+    { "name": "Cozy Cafe", "prompt": "Warm cozy cafe interior, wooden tables, soft natural light through windows, plants, intimate atmosphere" },
+    { "name": "Modern Apartment", "prompt": "Modern apartment living room, soft warm lighting, comfortable sofa, bookshelves, homey feeling" },
+    { "name": "Seaside", "prompt": "Beautiful seaside at golden hour, gentle waves, warm sunset colors, romantic atmosphere, soft breeze" },
+    { "name": "Flower Garden", "prompt": "Lush flower garden in bloom, dappled sunlight, colorful flowers, dreamy soft focus background" }
+  ],
+  "color_grade": {
+    "name": "Warm Glow",
+    "description": "Warm tones with soft light and gentle contrast",
+    "temperature": "warm",
+    "contrast": "low",
+    "saturation": "medium-high"
+  },
+  "shot_rhythm": {
+    "pacing": "medium",
+    "avg_shot_duration": 6,
+    "style_notes": "Slow pans for emotional moments, close-ups for reactions, golden hour lighting for key scenes"
+  },
+  "prompt_templates": {
+    "en": "Cinematic shot, {character} in {scene}, {action}, warm golden hour lighting, soft bokeh, gentle color grading, romantic atmosphere, 4K quality",
+    "zh": "电影质感镜头，{character}在{scene}中，{action}，温暖黄金时刻光线，柔和虚化，温柔调色，浪漫氛围，4K画质"
+  }
+}

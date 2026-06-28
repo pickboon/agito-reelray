@@ -1,0 +1,49 @@
+{
+  "id": "fantasy",
+  "name": "Fantasy",
+  "genre": "fantasy",
+  "description": "Isekai, cultivation, and mythical world stories with epic visual scale",
+  "target_markets": ["Southeast Asia", "Latin America"],
+  "character_blueprints": [
+    {
+      "role": "protagonist",
+      "name": "Kai",
+      "description": "Young warrior with determined eyes, flowing robes mixed with armor, mystical markings.",
+      "prompt_template": "Young warrior with flowing dark robes and light armor, determined gaze, mystical glowing markings on hands"
+    },
+    {
+      "role": "mentor",
+      "name": "Elder Yun",
+      "description": "Wise elderly figure, long white beard, flowing traditional robes, serene expression.",
+      "prompt_template": "Wise elderly man with long white beard, flowing traditional white robes, serene knowing expression, holding a staff"
+    },
+    {
+      "role": "villain",
+      "name": "Dark Lord Zar",
+      "description": "Imposing dark figure, black ornate armor, glowing red eyes, intimidating presence.",
+      "prompt_template": "Imposing dark warrior in ornate black armor, glowing red eyes, dark aura, intimidating towering presence"
+    }
+  ],
+  "scene_library": [
+    { "name": "Crystal Palace", "prompt": "Magnificent crystal palace interior, glowing crystals, ethereal light, grand throne room, fantasy architecture" },
+    { "name": "Enchanted Forest", "prompt": "Mystical enchanted forest, bioluminescent plants, floating particles, magical atmosphere, ancient trees" },
+    { "name": "Battlefield", "prompt": "Epic fantasy battlefield, magical energy clashes, dramatic sky, scattered warriors, cinematic scale" },
+    { "name": "Mountain Peak Temple", "prompt": "Ancient temple on mountain peak above clouds, sunrise, mystical fog, sacred atmosphere, epic vista" }
+  ],
+  "color_grade": {
+    "name": "Epic Fantasy",
+    "description": "High saturation with magical glow effects",
+    "temperature": "varied",
+    "contrast": "high",
+    "saturation": "high"
+  },
+  "shot_rhythm": {
+    "pacing": "epic",
+    "avg_shot_duration": 7,
+    "style_notes": "Wide establishing shots for scale, slow motion for power moments, sweeping camera movements"
+  },
+  "prompt_templates": {
+    "en": "Epic cinematic shot, {character} in {scene}, {action}, magical lighting effects, high saturation, fantasy atmosphere, volumetric light, 4K quality",
+    "zh": "史诗电影镜头，{character}在{scene}中，{action}，魔法光效，高饱和度，奇幻氛围，体积光，4K画质"
+  }
+}

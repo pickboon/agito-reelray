@@ -1,10 +1,47 @@
-.env
-.DS_Store
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
 
-# Phase 0 视频/图片大文件（仅保留 CSV 和测试脚本）
+# Next.js
+.next/
+out/
+.vercel/
+
+# Build
+dist/
+build/
+
+# Env
+.env
+.env*.local
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Phase 0 大文件
 phase0/videos/**/*.mp4
 phase0/videos/**/*.png
 phase0/videos/**/*.jpg
 phase0/videos/**/*.html
 phase0/videos/**/frames/
 phase0/test_output*.mp4
+
+# Components JSON (shadcn)
+# components.json is tracked

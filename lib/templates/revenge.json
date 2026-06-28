@@ -1,0 +1,49 @@
+{
+  "id": "revenge",
+  "name": "Revenge",
+  "genre": "revenge",
+  "description": "CEO/Elite/Rebirth drama - power struggles, betrayal, and triumphant comebacks",
+  "target_markets": ["North America", "Southeast Asia"],
+  "character_blueprints": [
+    {
+      "role": "protagonist",
+      "name": "Lena",
+      "description": "Sharp-eyed CEO in her late 20s. Tall, confident posture. Designer suit, minimal jewelry. Cold expression with piercing gaze.",
+      "prompt_template": "A young CEO woman, late 20s, sharp features, wearing a tailored black suit, confident and commanding presence"
+    },
+    {
+      "role": "antagonist",
+      "name": "Mr. Li",
+      "description": "Middle-aged businessman, calculating eyes, expensive watch. Always smiling but eyes betray malice.",
+      "prompt_template": "Middle-aged businessman in his 50s, wearing an expensive dark suit, calculating smile, luxury watch visible"
+    },
+    {
+      "role": "rival",
+      "name": "Alex",
+      "description": "Young ambitious executive, charming exterior, competitive nature. Modern business casual.",
+      "prompt_template": "Young professional man in his late 20s, charming appearance, modern business casual, competitive gaze"
+    }
+  ],
+  "scene_library": [
+    { "name": "Luxury Penthouse", "prompt": "Modern luxury penthouse interior, floor-to-ceiling windows, city skyline at night, minimalist furniture, cold blue lighting" },
+    { "name": "Corporate Office", "prompt": "Sleek corporate executive office, glass walls, modern desk, dramatic side lighting, power atmosphere" },
+    { "name": "Banquet Hall", "prompt": "Elegant banquet hall, crystal chandeliers, round tables with white linens, warm golden lighting" },
+    { "name": "Underground Parking", "prompt": "Dark underground parking garage, concrete pillars, harsh fluorescent lights, dramatic shadows" }
+  ],
+  "color_grade": {
+    "name": "Cold Power",
+    "description": "High contrast cold tones with gold accents",
+    "temperature": "cool",
+    "contrast": "high",
+    "saturation": "medium"
+  },
+  "shot_rhythm": {
+    "pacing": "fast",
+    "avg_shot_duration": 4,
+    "style_notes": "Quick cuts during confrontations, slow zooms for reveals, Dutch angles for tension"
+  },
+  "prompt_templates": {
+    "en": "Cinematic shot, {character} in {scene}, {action}, dramatic lighting, cold color grading, high contrast, shallow depth of field, 4K quality",
+    "zh": "电影质感镜头，{character}在{scene}中，{action}，戏剧性光影，冷色调，高对比度，浅景深，4K画质"
+  }
+}
