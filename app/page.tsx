@@ -96,15 +96,13 @@ export default function Home() {
         >
           <div className="relative z-10 max-w-4xl">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-              Your Characters.
+              你的角色。
               <br />
-              <span className="text-brand-gold">Consistent.</span> Every
-              Episode.
+              <span className="text-brand-gold">始终如一。</span>每一集
             </h1>
 
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
-              AI-powered character consistency engine for short drama creators
-              going global.
+              面向出海短剧创作者的 AI 角色一致性引擎。
             </p>
 
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
@@ -124,7 +122,7 @@ export default function Home() {
             </div>
 
             <p className="mt-16 text-xs text-muted-foreground/60">
-              Powered by HappyHorse 1.1 · 96.9% Generation Success Rate
+              基于 HappyHorse 1.1 · 生成成功率 96.9%
             </p>
           </div>
         </section>
@@ -133,26 +131,25 @@ export default function Home() {
         <section id="problem" className="min-h-screen py-24 px-6">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-4">
-              Your AI Characters Keep Changing Faces.
+              角色&ldquo;换脸&rdquo;，是 AI 短剧最大的硬伤。
             </h2>
             <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
-              Without character locking, AI short drama consistency drops below
-              40%.
+              没有角色锁定，AI 短剧跨集一致性跌破 40%。
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
                 {
-                  title: "Episode 1 vs Episode 3",
-                  desc: "Same character, two episodes apart — facial features drift beyond recognition.",
+                  title: "第 1 集 vs 第 3 集",
+                  desc: "同一角色，仅隔两集——面部特征偏移至无法辨认。",
                 },
                 {
-                  title: "Lighting Change",
-                  desc: "Different scene lighting shifts skin tone and facial structure entirely.",
+                  title: "光照变化",
+                  desc: "不同场景光照彻底改变肤色与面部结构。",
                 },
                 {
-                  title: "Angle Variation",
-                  desc: "A new camera angle makes your lead character nearly unrecognizable.",
+                  title: "角度切换",
+                  desc: "一个新机位，主角形象面目全非。",
                 },
               ].map((item) => (
                 <div
@@ -211,26 +208,26 @@ export default function Home() {
                 {
                   icon: Upload,
                   step: "01",
-                  title: "Upload Reference Photos",
-                  desc: "Provide a few clear photos of your character from different angles.",
+                  title: "上传参考照片",
+                  desc: "提供数张角色清晰照片，涵盖不同角度。",
                 },
                 {
                   icon: Sparkles,
                   step: "02",
-                  title: "AI Generates Character Anchor",
-                  desc: "Our model builds a stable identity anchor from your references.",
+                  title: "AI 生成角色锚点",
+                  desc: "模型基于参考构建稳定的身份锚点。",
                 },
                 {
                   icon: Lock,
                   step: "03",
-                  title: "Every Shot Locks to Anchor",
-                  desc: "Each generated frame is constrained to match the anchor identity.",
+                  title: "逐帧锁定锚点",
+                  desc: "每一帧画面均受锚点身份约束。",
                 },
                 {
                   icon: Film,
                   step: "04",
-                  title: "Export for TikTok / YouTube",
-                  desc: "Download platform-ready clips with consistent characters throughout.",
+                  title: "导出至 TikTok / YouTube",
+                  desc: "下载角色全程一致的成片，直接发布。",
                 },
               ].map((item, i) => (
                 <div key={item.step} className="flex items-start gap-4">
@@ -239,7 +236,7 @@ export default function Home() {
                       <item.icon className="h-5 w-5 text-brand-gold" />
                     </div>
                     <p className="text-brand-gold font-mono text-sm mb-1">
-                      Step {item.step}
+                      步骤 {item.step}
                     </p>
                     <h3 className="font-semibold mb-2">{item.title}</h3>
                     <p className="text-sm text-muted-foreground">{item.desc}</p>
@@ -265,9 +262,9 @@ export default function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
-                { label: "Revenge", color: "bg-red-500/20 text-red-400" },
-                { label: "Romance", color: "bg-pink-500/20 text-pink-400" },
-                { label: "Thriller", color: "bg-blue-500/20 text-blue-400" },
+                { label: "复仇", color: "bg-red-500/20 text-red-400" },
+                { label: "甜宠", color: "bg-pink-500/20 text-pink-400" },
+                { label: "悬疑", color: "bg-blue-500/20 text-blue-400" },
               ].map((item) => (
                 <div
                   key={item.label}
@@ -297,8 +294,7 @@ export default function Home() {
             </div>
 
             <p className="text-center text-sm text-muted-foreground mt-8">
-              Before vs After comparison tool coming soon — real demo clips are
-              in production.
+              前后对比工具即将上线——真实演示片段正在制作中。
             </p>
           </div>
         </section>
@@ -307,10 +303,10 @@ export default function Home() {
         <section id="pricing" className="py-24 px-6 bg-secondary/30">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-4">
-              Start with a ¥500 Resource Pack. Or ¥149/Month.
+              ¥500 资源包起步，或 ¥149/月订阅
             </h2>
             <p className="text-center text-muted-foreground mb-16">
-              Choose a plan that fits your production pace.
+              选择匹配你产能的方案。
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -318,43 +314,43 @@ export default function Home() {
                 {
                   name: "Starter",
                   price: "¥149",
-                  credits: "20,000 Credits",
-                  episodes: "~2 episodes",
+                  credits: "20,000 额度",
+                  episodes: "约 2 集",
                   popular: false,
                   features: [
-                    "Character anchor locking",
-                    "720p export",
-                    "Email support",
-                    "TikTok-ready output",
+                    "角色锚点锁定",
+                    "720p 导出",
+                    "邮件支持",
+                    "TikTok 格式输出",
                   ],
                 },
                 {
                   name: "Pro",
                   price: "¥499",
-                  credits: "80,000 Credits",
-                  episodes: "~8 episodes",
+                  credits: "80,000 额度",
+                  episodes: "约 8 集",
                   popular: true,
                   features: [
-                    "Everything in Starter",
-                    "1080p export",
-                    "Priority rendering",
-                    "Custom character presets",
-                    "YouTube Shorts support",
+                    "包含 Starter 全部功能",
+                    "1080p 导出",
+                    "优先渲染",
+                    "自定义角色预设",
+                    "YouTube Shorts 支持",
                   ],
                 },
                 {
                   name: "Studio",
                   price: "¥1,499",
-                  credits: "300,000 Credits",
-                  episodes: "~30 episodes",
+                  credits: "300,000 额度",
+                  episodes: "约 30 集",
                   popular: false,
                   features: [
-                    "Everything in Pro",
-                    "4K export",
-                    "Dedicated render queue",
-                    "Team collaboration",
-                    "API access",
-                    "Priority support",
+                    "包含 Pro 全部功能",
+                    "4K 导出",
+                    "专属渲染队列",
+                    "团队协作",
+                    "API 访问",
+                    "优先支持",
                   ],
                 },
               ].map((plan) => (
@@ -375,7 +371,7 @@ export default function Home() {
                   <h3 className="font-semibold text-lg">{plan.name}</h3>
                   <div className="mt-4 mb-1">
                     <span className="text-3xl font-bold">{plan.price}</span>
-                    <span className="text-muted-foreground text-sm">/mo</span>
+                    <span className="text-muted-foreground text-sm">/月</span>
                   </div>
                   <p className="text-brand-cyan text-sm font-medium">
                     {plan.credits}
@@ -420,7 +416,7 @@ export default function Home() {
                 <ArrowRight className="h-5 w-5" />
               </Link>
               <p className="mt-4 text-sm text-muted-foreground">
-                Resource packs also available on-demand —{" "}
+                资源包亦可按需购买——{" "}
                 <Link
                   href="/pricing"
                   className="text-brand-gold hover:underline"

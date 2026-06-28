@@ -12,6 +12,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3",
     "@aws-sdk/s3-request-presigner": "^3",
+    "@base-ui/react": "^1.6.0",
     "@radix-ui/react-avatar": "*",
     "@radix-ui/react-dialog": "*",
     "@radix-ui/react-dropdown-menu": "*",
