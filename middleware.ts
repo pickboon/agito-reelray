@@ -6,8 +6,11 @@ export async function middleware(request: NextRequest) {
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!supabaseUrl) throw new Error("Missing env: NEXT_PUBLIC_SUPABASE_URL");
-  if (!supabaseKey) throw new Error("Missing env: NEXT_PUBLIC_SUPABASE_ANON_KEY");
+
+  if (!supabaseUrl || !supabaseKey) {
+    console.warn("[middleware] Supabase env missing, skipping auth check");
+    return supabaseResponse;
+  }
 
   const supabase = createServerClient(
     supabaseUrl,

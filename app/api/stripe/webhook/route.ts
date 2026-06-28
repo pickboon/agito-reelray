@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const stripeKey = process.env.STRIPE_SECRET_KEY;
-if (!stripeKey) throw new Error("Missing env: STRIPE_SECRET_KEY");
-
-const stripe = new Stripe(stripeKey, {
-  apiVersion: "2026-06-24.dahlia" as any,
-});
-
 // 订阅套餐 + 充值包的 credits 映射
 const CREDITS_MAP: Record<string, number> = {
   // 订阅套餐 (metadata.plan)
@@ -21,6 +14,10 @@ const CREDITS_MAP: Record<string, number> = {
 };
 
 export async function POST(req: NextRequest) {
+  const stripeKey = process.env.STRIPE_SECRET_KEY;
+  if (!stripeKey) throw new Error("Missing env: STRIPE_SECRET_KEY");
+  const stripe = new Stripe(stripeKey, { apiVersion: "2026-06-24.dahlia" as any });
+
   const sig = req.headers.get("stripe-signature");
   if (!sig || !process.env.STRIPE_WEBHOOK_SECRET) {
     return NextResponse.json({ error: "Missing signature" }, { status: 400 });
@@ -155,17 +152,19 @@ async function upsertSubscription(
 
   const { data: existing } = await supabase
     .from("subscriptions")
-    .select("id")
+    .select("id, credits_remaining")
     .eq("user_id", userId)
     .eq("status", "active")
     .single();
 
   if (existing) {
+    // 已有记录：累加 credits，不覆盖
+    const newBalance = (existing.credits_remaining ?? 0) + monthlyCredits;
     await supabase
       .from("subscriptions")
       .update({
         plan,
-        credits_remaining: monthlyCredits,
+        credits_remaining: newBalance,
         stripe_subscription_id: stripeSubId,
         updated_at: new Date().toISOString(),
       })
@@ -206,7 +205,7 @@ async function renewSubscriptionCredits(stripeSubId: string) {
 
   const { data: sub } = await supabase
     .from("subscriptions")
-    .select("id, user_id, plan")
+    .select("id, user_id, plan, credits_remaining")
     .eq("stripe_subscription_id", stripeSubId)
     .single();
 
@@ -214,10 +213,12 @@ async function renewSubscriptionCredits(stripeSubId: string) {
 
   const credits = CREDITS_MAP[sub.plan] || 0;
   if (credits > 0) {
+    // 累加 credits 而非覆盖
+    const newBalance = (sub.credits_remaining ?? 0) + credits;
     await supabase
       .from("subscriptions")
       .update({
-        credits_remaining: credits,
+        credits_remaining: newBalance,
         updated_at: new Date().toISOString(),
       })
       .eq("id", sub.id);

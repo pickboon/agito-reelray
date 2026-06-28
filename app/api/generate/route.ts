@@ -5,10 +5,15 @@ import type { GenerateParams } from "@/lib/adapters";
 import { checkConsistency } from "@/lib/engine/consistency";
 import { mergeAnchors } from "@/lib/engine/multi-character";
 import { moderateText } from "@/lib/moderation";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 // POST /api/generate — 提交生成任务
 export async function POST(request: NextRequest) {
   try {
+    const clientIp = request.headers.get("x-forwarded-for") ?? "unknown";
+    if (!checkRateLimit(`generate:${clientIp}`, 10, 60000)) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
     const supabase = await createServerSupabaseClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -20,8 +25,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    // ── 内容安全审核（Prompt + 角色描述） ──
-    const modResult = await moderateText(prompt);
+    // ── 内容安全审核（Prompt + 关联数据） ──
+    let textToModerate = prompt;
+    const { data: shotForMod } = await supabase
+      .from("shots")
+      .select("id, projects(title)")
+      .eq("id", shot_id)
+      .single();
+    const projectTitle = Array.isArray(shotForMod?.projects) ? (shotForMod.projects[0] as { title?: string } | undefined)?.title : (shotForMod?.projects as { title?: string } | undefined)?.title;
+    if (projectTitle) textToModerate += " " + projectTitle;
+    const modResult = await moderateText(textToModerate);
     if (!modResult.pass) {
       return NextResponse.json(
         { error: "内容未通过安全审核", detail: modResult.reason, label: modResult.label },
@@ -183,6 +196,8 @@ export async function GET(request: NextRequest) {
     }
 
     const supabase = await createServerSupabaseClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     if (shotId) {
       const { data: shot } = await supabase

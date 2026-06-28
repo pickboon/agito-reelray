@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Film, LogIn } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import Link from "next/link";
 
 function LoginForm() {
   const searchParams = useSearchParams();
@@ -49,7 +50,11 @@ function LoginForm() {
             Continue with GitHub
           </Button>
           <p className="text-center text-xs text-muted-foreground">
-            By signing in, you agree to our Terms of Service.
+            By signing in, you agree to our{" "}
+            <Link href="/terms" className="underline hover:text-foreground">
+              Terms of Service
+            </Link>
+            .
           </p>
         </CardContent>
       </Card>

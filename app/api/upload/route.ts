@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { putR2Object, generateR2Key } from "@/lib/r2";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
   try {
+    const clientIp = req.headers.get("x-forwarded-for") ?? "unknown";
+    if (!checkRateLimit(`upload:${clientIp}`, 20, 60000)) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
+
     const supabase = await createServerSupabaseClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

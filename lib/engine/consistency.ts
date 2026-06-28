@@ -17,6 +17,7 @@ export async function checkConsistency(
   anchorImageUrl: string,
   generatedVideoUrl: string
 ): Promise<ConsistencyResult> {
+  console.warn("[consistency] Using rule-based placeholder — real visual comparison not yet implemented");
   if (!anchorImageUrl || !generatedVideoUrl) {
     return {
       faceSimilarity: 0,
