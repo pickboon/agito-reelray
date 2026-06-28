@@ -15,7 +15,7 @@ export default function Home() {
     <>
       {/* ── NAV (sticky, blur) ── */}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-        <nav className="flex items-center justify-between max-w-7xl mx-auto px-6 h-16">
+        <nav aria-label="主导航" className="flex items-center justify-between max-w-7xl mx-auto px-6 h-16">
           <Link href="/" className="text-xl font-bold">
             <span className="text-brand-gold">Reel</span>Ray
           </Link>
@@ -51,12 +51,8 @@ export default function Home() {
         {/* ── 屏 1: HERO ── */}
         <section
           id="hero"
-          className="min-h-screen flex flex-col items-center justify-center px-6 text-center relative overflow-hidden"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)",
-            backgroundSize: "32px 32px",
-          }}
+          className="min-h-[85vh] flex flex-col items-center justify-center px-6 text-center relative overflow-hidden bg-[radial-gradient(circle,var(--color-muted)_1px,transparent_1px)]"
+          style={{ backgroundSize: "32px 32px" }}
         >
           <div className="relative z-10 max-w-4xl">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
@@ -72,17 +68,17 @@ export default function Home() {
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-md bg-brand-gold text-background font-semibold hover:bg-brand-gold/90 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-md btn-primary"
               >
                 免费开始
                 <ArrowRight className="h-4 w-4" />
               </Link>
-              <a
+              <Link
                 href="#demo"
                 className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-md border border-brand-gold text-brand-gold font-semibold hover:bg-brand-gold/10 transition-colors"
               >
                 观看演示
-              </a>
+              </Link>
             </div>
 
             <p className="mt-16 text-xs text-muted-foreground/80">
@@ -92,10 +88,10 @@ export default function Home() {
         </section>
 
         {/* ── 屏 2: THE PROBLEM ── */}
-        <section id="problem" className="min-h-screen py-24 px-6">
+        <section id="problem" className="py-24 px-6">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-4">
-              角色&ldquo;换脸&rdquo;，是 AI 短剧最大的硬伤。
+              角色“换脸”，是 AI 短剧最大的硬伤。
             </h2>
             <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
               没有角色锁定，AI 短剧跨集一致性跌破 40%。
@@ -127,19 +123,19 @@ export default function Home() {
 
                   <div className="grid grid-cols-2 gap-3">
                     {/* Without */}
-                    <div className="text-center">
-                      <span className="text-xs text-red-400 font-medium">
+                    <div aria-label="未使用 ReelRay 的效果" className="text-center">
+                      <span className="text-xs text-destructive font-medium">
                         Without ReelRay
                       </span>
-                      <div className="mt-2 h-24 rounded-md bg-red-500/10 border border-red-500/30 flex flex-col items-center justify-center">
-                        <div className="h-8 w-8 rounded-full bg-red-400/40 mb-1" />
-                        <span className="text-[10px] text-red-400/80">
+                      <div className="mt-2 h-24 rounded-md bg-destructive/10 border border-destructive/30 flex flex-col items-center justify-center">
+                        <div className="h-8 w-8 rounded-full bg-destructive/40 mb-1" />
+                        <span className="text-[10px] text-destructive/80">
                           Face drift
                         </span>
                       </div>
                     </div>
                     {/* With */}
-                    <div className="text-center">
+                    <div aria-label="使用 ReelRay 的效果" className="text-center">
                       <span className="text-xs text-green-400 font-medium">
                         With ReelRay
                       </span>
@@ -226,9 +222,9 @@ export default function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
-                { label: "复仇", color: "bg-red-500/20 text-red-400" },
-                { label: "甜宠", color: "bg-pink-500/20 text-pink-400" },
-                { label: "悬疑", color: "bg-blue-500/20 text-blue-400" },
+                { label: "复仇", color: "bg-destructive/20 text-destructive" },
+                { label: "甜宠", color: "bg-brand-cyan/10 text-brand-cyan" },
+                { label: "悬疑", color: "bg-brand-cyan/10 text-brand-cyan" },
               ].map((item) => (
                 <div
                   key={item.label}
@@ -360,7 +356,7 @@ export default function Home() {
                     href="/login"
                     className={`w-full text-center py-3 rounded-md font-medium transition-colors ${
                       plan.popular
-                        ? "bg-brand-gold text-background hover:bg-brand-gold/90"
+                        ? "btn-primary"
                         : "border border-border text-foreground hover:bg-secondary"
                     }`}
                   >
@@ -374,7 +370,7 @@ export default function Home() {
             <div className="text-center mt-16">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-md bg-brand-gold text-background font-semibold text-lg hover:bg-brand-gold/90 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-md btn-primary text-lg"
               >
                 免费开始
                 <ArrowRight className="h-5 w-5" />
@@ -421,6 +417,25 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "ReelRay",
+            "applicationCategory": "MultimediaApplication",
+            "operatingSystem": "Web",
+            "description": "面向出海短剧创作者的 AI 角色一致性引擎。一次上传角色，每集保持一致。",
+            "offers": [
+              { "@type": "Offer", "name": "Starter", "price": "149", "priceCurrency": "CNY" },
+              { "@type": "Offer", "name": "Pro", "price": "499", "priceCurrency": "CNY" },
+              { "@type": "Offer", "name": "Studio", "price": "1499", "priceCurrency": "CNY" },
+            ],
+          }),
+        }}
+      />
     </>
   );
 }

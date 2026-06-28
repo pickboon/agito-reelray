@@ -154,6 +154,12 @@
 
 /* ========== Cyber HUD Utility Classes ========== */
 
+@layer utilities {
+  .btn-primary {
+    @apply bg-brand-gold text-background font-semibold hover:bg-brand-gold/90 transition-colors;
+  }
+}
+
 .animate-scanline {
   animation: scanline 10s linear infinite;
 }
