@@ -7,9 +7,8 @@ import {
   Play,
   Check,
   ArrowRight,
-  Menu,
-  X,
 } from "lucide-react";
+import MobileNav from "@/components/MobileNav";
 
 export default function Home() {
   return (
@@ -44,43 +43,8 @@ export default function Home() {
           </div>
 
           {/* Mobile hamburger */}
-          <label
-            htmlFor="mobile-nav-toggle"
-            className="md:hidden cursor-pointer p-2 text-muted-foreground hover:text-foreground"
-          >
-            <Menu className="h-5 w-5 block peer-checked:hidden" />
-            <X className="h-5 w-5 hidden peer-checked:block" />
-          </label>
-          <input
-            type="checkbox"
-            id="mobile-nav-toggle"
-            className="sr-only peer"
-          />
+          <MobileNav />
         </nav>
-
-        {/* Mobile dropdown */}
-        <div className="hidden peer-checked:block md:hidden absolute top-16 left-0 right-0 bg-background/95 backdrop-blur-md border-b border-border z-40">
-          <div className="flex flex-col p-4 gap-3">
-            <Link
-              href="/dashboard/templates"
-              className="text-sm text-muted-foreground hover:text-foreground py-2"
-            >
-              Templates
-            </Link>
-            <Link
-              href="/pricing"
-              className="text-sm text-muted-foreground hover:text-foreground py-2"
-            >
-              Pricing
-            </Link>
-            <Link
-              href="/login"
-              className="text-sm font-medium px-4 py-2 rounded-md bg-brand-gold text-background text-center hover:bg-brand-gold/90 transition-colors"
-            >
-              Sign In
-            </Link>
-          </div>
-        </div>
       </header>
 
       <main>
