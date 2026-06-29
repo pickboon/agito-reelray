@@ -19,6 +19,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Plus, Users, Film, ArrowLeft, Anchor, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface Project {
   id: string;
@@ -119,7 +120,7 @@ export default function ProjectDetailPage({
 
     if (err) {
       console.error("[Create Character]", err);
-      alert(`创建角色失败: ${err.message}`);
+      toast.error(`创建角色失败: ${err.message}`);
     } else {
       // 直接追加到本地列表，避免 fetchData 触发 loading skeleton 导致对话框卸载
       setCharacters((prev) => [
@@ -159,7 +160,7 @@ export default function ProjectDetailPage({
 
     if (err) {
       console.error("[Create Episode]", err);
-      alert(`创建集失败: ${err.message}`);
+      toast.error(`创建集失败: ${err.message}`);
     } else {
       setEpisodes((prev) => [
         ...prev,
@@ -187,11 +188,11 @@ export default function ProjectDetailPage({
       });
       const json = await res.json();
       if (!res.ok) {
-        alert(json.error || "锚点图生成失败");
+        toast.error(json.error || "锚点图生成失败");
       }
       await fetchData();
     } catch {
-      alert("请求失败，请重试");
+      toast.error("请求失败，请重试");
     } finally {
       setAnchorLoading((prev) => ({ ...prev, [characterId]: false }));
     }

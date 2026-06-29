@@ -6,6 +6,8 @@ import {
   Lock,
   Check,
   ArrowRight,
+  Wand2,
+  Clapperboard,
 } from "lucide-react";
 import MobileNav from "@/components/MobileNav";
 
@@ -87,6 +89,64 @@ export default function Home() {
           </div>
         </section>
 
+
+        {/* ── 创作入口 ── */}
+        <section id="create" className="py-20 px-6">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-2xl font-bold text-center mb-3">开始创作</h2>
+            <p className="text-center text-muted-foreground mb-12">选择你的创作方式</p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* AI 短剧 */}
+              <Link
+                href="/dashboard/projects"
+                className="group relative rounded-xl border border-border bg-card p-8 transition-all hover:border-brand-gold/40 hover:shadow-lg hover:shadow-brand-gold/5"
+              >
+                <div className="flex items-start gap-5">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-brand-gold/10 transition-colors group-hover:bg-brand-gold/20">
+                    <Clapperboard className="h-7 w-7 text-brand-gold" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold mb-2">AI 短剧</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      基于剧本自动拆解镜头，角色全程保持一致。适合 TikTok / YouTube 短剧出海。
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground">剧本拆解</span>
+                      <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground">角色锚点</span>
+                      <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground">多集管理</span>
+                    </div>
+                  </div>
+                </div>
+                <ArrowRight className="absolute top-8 right-8 h-5 w-5 text-muted-foreground/40 transition-transform group-hover:translate-x-1 group-hover:text-brand-gold" />
+              </Link>
+
+              {/* 视频生成 */}
+              <Link
+                href="/dashboard/generate"
+                className="group relative rounded-xl border border-border bg-card p-8 transition-all hover:border-brand-cyan/40 hover:shadow-lg hover:shadow-brand-cyan/5"
+              >
+                <div className="flex items-start gap-5">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-brand-cyan/10 transition-colors group-hover:bg-brand-cyan/20">
+                    <Wand2 className="h-7 w-7 text-brand-cyan" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold mb-2">视频生成</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      输入提示词即时生成 AI 视频。支持文生视频、图生视频，多模型可选。
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground">文生视频</span>
+                      <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground">图生视频</span>
+                      <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground">HappyHorse</span>
+                    </div>
+                  </div>
+                </div>
+                <ArrowRight className="absolute top-8 right-8 h-5 w-5 text-muted-foreground/40 transition-transform group-hover:translate-x-1 group-hover:text-brand-cyan" />
+              </Link>
+            </div>
+          </div>
+        </section>
         {/* ── 屏 2: THE PROBLEM ── */}
         <section id="problem" className="py-24 px-6">
           <div className="max-w-6xl mx-auto">

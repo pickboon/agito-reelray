@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
         // Update task with new status
         const updateData: Record<string, any> = {
           status: result.status,
-          elapsed_seconds: result.elapsed_seconds,
+          elapsed_seconds: result.elapsedSeconds,
           updated_at: new Date().toISOString(),
         };
 

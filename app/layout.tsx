@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -59,7 +60,16 @@ export default function RootLayout({
         <meta name="robots" content="noai, noimageai" />
       </head>
       <body className="min-h-screen bg-background font-sans antialiased">
-        <TooltipProvider>{children}</TooltipProvider>
+        <TooltipProvider>
+          {children}
+        </TooltipProvider>
+        <Toaster
+          position="top-center"
+          theme="dark"
+          toastOptions={{
+            style: { background: "#1f1f23", border: "1px solid #333" },
+          }}
+        />
       </body>
     </html>
   );

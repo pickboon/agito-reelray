@@ -29,7 +29,6 @@ export function PropertiesPanel() {
     selectedClipIds,
     updateClip,
     deleteClips,
-    subtitles,
     updateSubtitle,
     deleteSubtitle,
     addSubtitle,
@@ -42,7 +41,7 @@ export function PropertiesPanel() {
   const multiSelect = selectedClips.length > 1;
 
   // 获取当前位置的字幕
-  const activeSub = subtitles.find(
+  const activeSub = timeline.subtitles.find(
     (s) => playhead >= s.startTime && playhead < s.startTime + s.duration
   );
 
