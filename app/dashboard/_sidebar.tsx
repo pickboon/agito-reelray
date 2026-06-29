@@ -8,11 +8,15 @@ import {
   CreditCard,
   Settings,
   Clapperboard,
+  Wand2,
+  FolderOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/dashboard/generate", label: "创作", icon: Wand2 },
+  { href: "/dashboard/assets", label: "资产", icon: FolderOpen },
   { href: "/dashboard/projects", label: "Projects", icon: Film },
   { href: "/pricing", label: "Pricing", icon: CreditCard },
 ];

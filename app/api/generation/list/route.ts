@@ -1,0 +1,51 @@
+import { NextRequest, NextResponse } from "next/server";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
+
+export async function GET(request: NextRequest) {
+  try {
+    const supabase = await createServerSupabaseClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const limit = parseInt(searchParams.get("limit") ?? "20");
+    const offset = parseInt(searchParams.get("offset") ?? "0");
+    const status = searchParams.get("status");
+
+    let query = supabase
+      .from("generation_tasks")
+      .select("*", { count: "exact" })
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .range(offset, offset + limit - 1);
+
+    if (status) {
+      query = query.eq("status", status);
+    }
+
+    const { data: tasks, error, count } = await query;
+
+    if (error) {
+      console.error("Failed to list tasks:", error);
+      return NextResponse.json(
+        { error: "Failed to fetch tasks" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({
+      tasks,
+      total: count,
+      limit,
+      offset,
+    });
+  } catch (error) {
+    console.error("List tasks error:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}

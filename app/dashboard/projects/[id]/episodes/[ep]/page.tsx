@@ -348,10 +348,12 @@ export default function EpisodeDetailPage({
           <Play className="h-4 w-4" />
           Generate All Pending
         </Button>
-        <Button disabled size="sm" variant="outline" className="gap-1.5">
-          <Download className="h-4 w-4" />
-          Export Episode
-        </Button>
+        <Link href={`/dashboard/editor/${ep}`}>
+          <Button size="sm" variant="outline" className="gap-1.5">
+            <Clapperboard className="h-4 w-4" />
+            打开编辑器
+          </Button>
+        </Link>
       </div>
     </div>
   );

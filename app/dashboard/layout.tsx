@@ -1,14 +1,10 @@
 import { Sidebar } from "./_sidebar";
+import { DashboardContent } from "./_dashboard-content";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="flex h-screen bg-background">
-      <Sidebar />
-      <main className="flex-1 overflow-auto p-6">{children}</main>
-    </div>
-  );
+  return <DashboardContent>{children}</DashboardContent>;
 }

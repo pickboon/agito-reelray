@@ -3,10 +3,21 @@
 import { useEffect, useState, use, useCallback } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Plus, Users, Film, ArrowLeft, Anchor, Loader2 } from "lucide-react";
 
 interface Project {
@@ -21,7 +32,6 @@ interface Project {
 interface Character {
   id: string;
   name: string;
-  role?: string;
   description: string;
   reference_image_url: string | null;
   anchor_image_url?: string | null;
@@ -56,6 +66,18 @@ export default function ProjectDetailPage({
   const [error, setError] = useState<string | null>(null);
   const [anchorLoading, setAnchorLoading] = useState<Record<string, boolean>>({});
 
+  // Character dialog
+  const [charDialogOpen, setCharDialogOpen] = useState(false);
+  const [charCreating, setCharCreating] = useState(false);
+  const [charName, setCharName] = useState("");
+  const [charDescription, setCharDescription] = useState("");
+  const [charImageUrl, setCharImageUrl] = useState("");
+
+  // Episode dialog
+  const [epDialogOpen, setEpDialogOpen] = useState(false);
+  const [epCreating, setEpCreating] = useState(false);
+  const [epTitle, setEpTitle] = useState("");
+
   const fetchData = useCallback(async () => {
     const supabase = createClient();
     const [projectRes, charsRes, epsRes] = await Promise.all([
@@ -84,6 +106,77 @@ export default function ProjectDetailPage({
     fetchData();
   }, [fetchData]);
 
+  const handleCreateCharacter = async () => {
+    if (!charName.trim()) return;
+    setCharCreating(true);
+    const supabase = createClient();
+    const { error: err } = await supabase.from("characters").insert({
+      project_id: id,
+      name: charName.trim(),
+      description: charDescription.trim(),
+      reference_image_url: charImageUrl.trim() || null,
+    });
+
+    if (err) {
+      console.error("[Create Character]", err);
+      alert(`创建角色失败: ${err.message}`);
+    } else {
+      // 直接追加到本地列表，避免 fetchData 触发 loading skeleton 导致对话框卸载
+      setCharacters((prev) => [
+        ...prev,
+        {
+          id: crypto.randomUUID(),
+          name: charName.trim(),
+          description: charDescription.trim(),
+          reference_image_url: charImageUrl.trim() || null,
+          anchor_image_url: null,
+          anchor_status: "pending",
+        },
+      ]);
+      setCharDialogOpen(false);
+      setCharName("");
+      setCharDescription("");
+      setCharImageUrl("");
+    }
+    setCharCreating(false);
+  };
+
+  const handleCreateEpisode = async () => {
+    if (!epTitle.trim()) return;
+    setEpCreating(true);
+    const supabase = createClient();
+
+    // 自动计算下一集编号
+    const nextNumber = episodes.length > 0
+      ? Math.max(...episodes.map((e) => e.episode_number)) + 1
+      : 1;
+
+    const { error: err } = await supabase.from("episodes").insert({
+      project_id: id,
+      episode_number: nextNumber,
+      title: epTitle.trim(),
+    });
+
+    if (err) {
+      console.error("[Create Episode]", err);
+      alert(`创建集失败: ${err.message}`);
+    } else {
+      setEpisodes((prev) => [
+        ...prev,
+        {
+          id: crypto.randomUUID(),
+          title: epTitle.trim(),
+          episode_number: nextNumber,
+          status: "draft",
+          created_at: new Date().toISOString(),
+        },
+      ]);
+      setEpDialogOpen(false);
+      setEpTitle("");
+    }
+    setEpCreating(false);
+  };
+
   const handleGenerateAnchor = async (characterId: string) => {
     setAnchorLoading((prev) => ({ ...prev, [characterId]: true }));
     try {
@@ -96,7 +189,6 @@ export default function ProjectDetailPage({
       if (!res.ok) {
         alert(json.error || "锚点图生成失败");
       }
-      // 刷新数据
       await fetchData();
     } catch {
       alert("请求失败，请重试");
@@ -154,14 +246,14 @@ export default function ProjectDetailPage({
         )}
       </div>
 
-      {/* 角色区域 */}
+      {/* Characters */}
       <section>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
             <Users className="h-4 w-4 text-brand-cyan" />
             Characters
           </h2>
-          <Button size="sm" variant="outline" className="gap-1.5">
+          <Button size="sm" variant="outline" className="gap-1.5" onClick={() => setCharDialogOpen(true)}>
             <Plus className="h-3.5 w-3.5" />
             Add Character
           </Button>
@@ -171,6 +263,10 @@ export default function ProjectDetailPage({
             <CardContent className="flex flex-col items-center justify-center py-10">
               <Users className="h-8 w-8 text-muted-foreground/30 mb-2" />
               <p className="text-sm text-muted-foreground">暂无角色</p>
+              <Button size="sm" variant="outline" className="gap-1.5 mt-3" onClick={() => setCharDialogOpen(true)}>
+                <Plus className="h-3.5 w-3.5" />
+                Add Character
+              </Button>
             </CardContent>
           </Card>
         ) : (
@@ -195,14 +291,12 @@ export default function ProjectDetailPage({
                           {statusInfo.label}
                         </Badge>
                       </div>
-                      <p className="text-xs text-muted-foreground">{char.role}</p>
                       {char.description && (
                         <p className="text-xs text-muted-foreground/70 mt-1 line-clamp-2">
                           {char.description}
                         </p>
                       )}
 
-                      {/* 锚点图缩略图 */}
                       {char.anchor_image_url && (
                         <div className="mt-2">
                           <video
@@ -214,7 +308,6 @@ export default function ProjectDetailPage({
                         </div>
                       )}
 
-                      {/* 生成锚点按钮 */}
                       <div className="mt-2">
                         <Button
                           size="sm"
@@ -240,14 +333,14 @@ export default function ProjectDetailPage({
         )}
       </section>
 
-      {/* 集列表区域 */}
+      {/* Episodes */}
       <section>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
             <Film className="h-4 w-4 text-brand-gold" />
             Episodes
           </h2>
-          <Button size="sm" variant="outline" className="gap-1.5">
+          <Button size="sm" variant="outline" className="gap-1.5" onClick={() => setEpDialogOpen(true)}>
             <Plus className="h-3.5 w-3.5" />
             New Episode
           </Button>
@@ -257,6 +350,10 @@ export default function ProjectDetailPage({
             <CardContent className="flex flex-col items-center justify-center py-10">
               <Film className="h-8 w-8 text-muted-foreground/30 mb-2" />
               <p className="text-sm text-muted-foreground">暂无集</p>
+              <Button size="sm" variant="outline" className="gap-1.5 mt-3" onClick={() => setEpDialogOpen(true)}>
+                <Plus className="h-3.5 w-3.5" />
+                New Episode
+              </Button>
             </CardContent>
           </Card>
         ) : (
@@ -295,6 +392,113 @@ export default function ProjectDetailPage({
           </div>
         )}
       </section>
+
+      {/* Add Character Dialog */}
+      <Dialog open={charDialogOpen} onOpenChange={setCharDialogOpen}>
+        <DialogContent className="sm:max-w-[480px]">
+          <DialogHeader>
+            <DialogTitle>添加角色</DialogTitle>
+            <DialogDescription>
+              为项目添加一个新角色，上传参考图后可生成锚点。
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="char-name">角色名称</Label>
+              <Input
+                id="char-name"
+                placeholder="例如：林小雨"
+                value={charName}
+                onChange={(e) => setCharName(e.target.value)}
+                disabled={charCreating}
+              />
+            </div>
+            <div className="space-y-2">
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="char-desc">角色描述</Label>
+              <Textarea
+                id="char-desc"
+                placeholder="外貌、性格、服装等描述..."
+                value={charDescription}
+                onChange={(e) => setCharDescription(e.target.value)}
+                disabled={charCreating}
+                rows={3}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="char-img">参考图片 URL（可选）</Label>
+              <Input
+                id="char-img"
+                placeholder="https://..."
+                value={charImageUrl}
+                onChange={(e) => setCharImageUrl(e.target.value)}
+                disabled={charCreating}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCharDialogOpen(false)} disabled={charCreating}>
+              取消
+            </Button>
+            <Button onClick={handleCreateCharacter} disabled={charCreating || !charName.trim()}>
+              {charCreating ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  创建中...
+                </>
+              ) : (
+                <>
+                  <Plus className="h-4 w-4 mr-2" />
+                  添加角色
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* New Episode Dialog */}
+      <Dialog open={epDialogOpen} onOpenChange={setEpDialogOpen}>
+        <DialogContent className="sm:max-w-[400px]">
+          <DialogHeader>
+            <DialogTitle>新建集</DialogTitle>
+            <DialogDescription>
+              添加新一集，集数自动递增（下一集为第 {episodes.length + 1} 集）。
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="ep-title">集标题</Label>
+              <Input
+                id="ep-title"
+                placeholder={`例如：第 ${episodes.length + 1} 集 - 初遇`}
+                value={epTitle}
+                onChange={(e) => setEpTitle(e.target.value)}
+                disabled={epCreating}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEpDialogOpen(false)} disabled={epCreating}>
+              取消
+            </Button>
+            <Button onClick={handleCreateEpisode} disabled={epCreating || !epTitle.trim()}>
+              {epCreating ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  创建中...
+                </>
+              ) : (
+                <>
+                  <Plus className="h-4 w-4 mr-2" />
+                  新建集
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

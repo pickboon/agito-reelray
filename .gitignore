@@ -45,3 +45,7 @@ phase0/test_output*.mp4
 
 # Components JSON (shadcn)
 # components.json is tracked
+
+# pnpm
+.pnpm-store/
+pnpm-lock.yaml

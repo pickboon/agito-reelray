@@ -1,4 +1,4 @@
-export type { IVideoModelAdapter, ModelCapabilities, GenerateParams, SubmitResult, PollResult, CostEstimate, TaskStatus } from "./types";
+export type { IVideoModelAdapter, ModelCapabilities, GenerateParams, SubmitResult, PollResult, CostEstimate, TaskStatus, AspectRatio } from "./types";
 export { HappyHorseAdapter } from "./happyhorse";
 
 import type { IVideoModelAdapter } from "./types";

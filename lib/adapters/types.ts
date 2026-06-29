@@ -12,7 +12,7 @@ export interface GenerateParams {
   prompt: string;
   mode: "t2v" | "r2v";
   referenceImageUrl?: string;
-  aspectRatio: "9:16" | "16:9" | "1:1";
+  aspectRatio: AspectRatio;
   duration: number;
   seed?: number;
 }
@@ -37,6 +37,8 @@ export interface CostEstimate {
   credits: number;
   durationSeconds: number;
 }
+
+export type AspectRatio = "9:16" | "16:9" | "1:1";
 
 export interface IVideoModelAdapter {
   readonly modelId: string;
