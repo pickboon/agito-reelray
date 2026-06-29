@@ -35,6 +35,7 @@
   --color-brand-gold-dim: #ca9e0e;
   --color-brand-cyan-dim: #00b8c4;
 
+  --font-jetbrains: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
   --font-sans: var(--font-jetbrains);
   --font-mono: var(--font-jetbrains);
 

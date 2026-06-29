@@ -1,14 +1,9 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "sonner";
 import "./globals.css";
 
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains",
-  subsets: ["latin"],
-  display: "swap",
-});
+// Font handled via CSS in globals.css (no network dependency on Google Fonts)
 
 export const metadata: Metadata = {
   title: "ReelRay — AI 短剧角色一致性引擎",
@@ -53,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" className={`${jetbrainsMono.variable} dark scroll-smooth`}>
+    <html lang="zh-CN" className="dark scroll-smooth">
 
       <body className="min-h-screen bg-background font-sans antialiased">
         <TooltipProvider>
