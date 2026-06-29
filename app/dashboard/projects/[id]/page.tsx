@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { Plus, Users, Film, ArrowLeft, Anchor, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { apiFetch } from "@/lib/api-fetch";
 
 interface Project {
   id: string;
@@ -181,7 +182,7 @@ export default function ProjectDetailPage({
   const handleGenerateAnchor = async (characterId: string) => {
     setAnchorLoading((prev) => ({ ...prev, [characterId]: true }));
     try {
-      const res = await fetch("/api/engine/generate-anchor", {
+      const res = await apiFetch("/api/engine/generate-anchor", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ characterId }),

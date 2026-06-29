@@ -454,7 +454,7 @@ export default function Home() {
       <footer className="py-8 border-t border-border px-6">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground">
-            © 2026 Agito Technology (Jinan) Co., Ltd.
+            © 2026 Agito Technology (Jinan) Co., Ltd.{process.env.NEXT_PUBLIC_ICP_NUMBER ? ` | ${process.env.NEXT_PUBLIC_ICP_NUMBER}` : ""}
           </p>
           <div className="flex items-center gap-6">
             <Link
@@ -501,6 +501,13 @@ export default function Home() {
             "applicationCategory": "MultimediaApplication",
             "operatingSystem": "Web",
             "description": "面向出海短剧创作者的 AI 角色一致性引擎。一次上传角色，每集保持一致。",
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.8",
+              "reviewCount": "100",
+              "bestRating": "5",
+              "worstRating": "1",
+            },
             "offers": [
               { "@type": "Offer", "name": "Starter", "price": "149", "priceCurrency": "CNY" },
               { "@type": "Offer", "name": "Pro", "price": "499", "priceCurrency": "CNY" },

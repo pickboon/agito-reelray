@@ -3,10 +3,20 @@
  * POST /api/editor/save
  */
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { validateCsrf } from "@/lib/csrf";
+import { checkRateLimit } from "@/lib/rate-limit";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  if (!validateCsrf(request)) {
+    return NextResponse.json({ error: "CSRF validation failed" }, { status: 403 });
+  }
+
+  const clientIp = request.headers.get("x-forwarded-for") ?? "unknown";
+  if (!(await checkRateLimit(`editor-save:${clientIp}`, 60, 60000))) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
   const supabase = await createServerSupabaseClient();
   const {
     data: { user },

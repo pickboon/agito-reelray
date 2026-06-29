@@ -1,19 +1,37 @@
 // ============================================================
-// 内容审核 — Next.js Edge Runtime 兼容
-// 双防线：① 本地关键词 + RegEx（快速拦截）→ ② 百度文本内容审核 API
+// 内容审核 — 双防线：① 本地关键词 + RegEx → ② 百度文本内容审核 API
 // 环境变量：BAIDU_API_KEY / BAIDU_SECRET_KEY（可选，不配则仅本地防线）
 // ============================================================
 
 const BLOCKED_PATTERNS: { pattern: RegExp; label: string }[] = [
-  { pattern: /诈骗|洗钱|赌博|博彩|毒品|枪支/gi, label: "违法犯罪" },
-  { pattern: /裸聊|色情|性爱|情色/gi, label: "色情内容" },
-  { pattern: /广告推广|加微信|加V信|加qq/gi, label: "广告推广" },
-  { pattern: /<script[\s>]/gi, label: "XSS注入" },
-  { pattern: /javascript\s*:/gi, label: "XSS注入" },
-  { pattern: /on(error|load|click|mouse)\s*=/gi, label: "XSS注入" },
-  { pattern: /eval\s*\(/gi, label: "危险代码" },
-  { pattern: /document\.cookie/gi, label: "数据窃取" },
-  { pattern: /fetch\s*\(\s*['"]https?:\/\/(?!.*(?:supabase|agitoai))/gi, label: "外连请求" },
+  // ── 违法犯罪 ──
+  { pattern: /诈骗|洗钱|赌博|博彩|毒品|枪支|管制刀具|爆炸物|假币|走私|制毒|贩毒|冰毒|大麻|海洛因/gi, label: "违法犯罪" },
+  { pattern: /办证|办假证|发票代开|套现|地下钱庄|非法集资/gi, label: "违法犯罪" },
+
+  // ── 色情低俗 ──
+  { pattern: /裸聊|色情|性爱|情色|约炮|援交|调教|sm|卖淫|嫖娼|色情直播|成人视频/gi, label: "色情低俗" },
+  { pattern: /一夜情|同城约|特殊服务|上门服务.*按摩|小姐.*服务/gi, label: "色情低俗" },
+
+  // ── 暴力恐怖 ──
+  { pattern: /恐怖袭击|炸弹制作|自杀式袭击|圣战|斩首|人体炸弹|基地组织|isis|塔利班/gi, label: "暴力恐怖" },
+
+  // ── 未成年人保护 ──
+  { pattern: /恋童|儿童色情|幼女|童模.*裸|未成年.*色情/gi, label: "未成年人保护" },
+
+  // ── 人身攻击/歧视 ──
+  { pattern: /种族歧视|黑鬼|支那|东亚病夫|残废|弱智.*去死/gi, label: "人身攻击" },
+
+  // ── 广告推广 ──
+  { pattern: /加微信|加V信|加qq|加QQ|刷单|兼职日结|免费领|日赚\d+|网赚|代理加盟/gi, label: "广告推广" },
+  { pattern: /贷款.*秒批|信用卡套现|花呗套现|网贷.*无门槛/gi, label: "广告推广" },
+
+  // ── Prompt 注入攻击 ──
+  { pattern: /ignore\s+(all\s+)?previous\s+instructions/gi, label: "Prompt注入" },
+  { pattern: /disregard\s+(all\s+)?prior/gi, label: "Prompt注入" },
+  { pattern: /you\s+are\s+now\s+(a|an)\s+/gi, label: "Prompt注入" },
+  { pattern: /system\s*prompt/gi, label: "Prompt注入" },
+  { pattern: /forget\s+(everything|all)\s+(you|that)/gi, label: "Prompt注入" },
+  { pattern: /reveal\s+your\s+(system|initial)\s+(prompt|instructions)/gi, label: "Prompt注入" },
 ];
 
 export interface ModerationResult {
@@ -100,7 +118,7 @@ async function remoteModerate(text: string): Promise<ModerationResult | null> {
       label: `baidu_${data.conclusionType === 3 ? "suspicious" : "reject"}`,
     };
   } catch (error) {
-    console.warn("[moderation] 远程审核异常，放行:", error);
+    console.warn("[moderation] 远程审核异常，放行:", error instanceof Error ? error.message : "unknown");
     return null;
   }
 }
@@ -127,7 +145,6 @@ export async function moderateText(text: string): Promise<ModerationResult> {
     const remoteResult = await remoteModerate(text);
     if (remoteResult && !remoteResult.pass) return remoteResult;
   } catch {
-    // 远程审核异常时放行
     console.warn("[moderation] 远程审核服务不可用，放行");
   }
 

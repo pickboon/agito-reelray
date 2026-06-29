@@ -19,7 +19,8 @@ export function generateCsrfToken(): string {
 
 /**
  * 验证请求中的 CSRF token 是否与 cookie 一致
- * 仅对非 GET/HEAD/OPTIONS 请求验证
+ * S-03 修复：移除"无 cookie 放行"逻辑，严格验证
+ * middleware 已确保所有页面加载时注入 CSRF cookie
  */
 export function validateCsrf(request: NextRequest): boolean {
   const method = request.method.toUpperCase();
@@ -29,17 +30,19 @@ export function validateCsrf(request: NextRequest): boolean {
 
   const cookieToken = request.cookies.get(CSRF_COOKIE_NAME)?.value;
   if (!cookieToken) {
-    // 没有 cookie 时放行（首次请求/SSR 场景）
-    return true;
+    // S-03: 无 cookie 时拒绝（首次请求应先加载页面获取 cookie）
+    return false;
   }
 
   const headerToken = request.headers.get(CSRF_HEADER_NAME);
+  if (!headerToken) {
+    return false;
+  }
+
   return cookieToken === headerToken;
 }
 
 // ── 客户端辅助：从 cookie 读取 CSRF token ──
-// 供前端 fetch 请求设置 x-csrf-token header
-// SSR 环境下 document 不存在，返回空字符串
 export function getCsrfHeader(): string {
   if (typeof document === "undefined") return "";
   const match = document.cookie.match(/__csrf_token=([^;]+)/);

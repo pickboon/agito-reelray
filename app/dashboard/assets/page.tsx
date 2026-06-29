@@ -24,6 +24,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
+import { apiFetch } from "@/lib/api-fetch";
 
 interface Asset {
   id: string;
@@ -102,7 +103,7 @@ export default function AssetsPage() {
       formData.append("file", file);
       formData.append("type", "asset");
 
-      const res = await fetch("/api/upload", {
+      const res = await apiFetch("/api/upload", {
         method: "POST",
         body: formData,
       });
@@ -137,15 +138,35 @@ export default function AssetsPage() {
   // P1-6: 资产删除
   async function handleDelete(asset: Asset) {
     if (asset.source === "ai_generated") {
-      // 删除生成任务
+      // 删除生成任务（含 FK 检查）
       try {
-        const res = await fetch(`/api/generation/delete?task_id=${asset.id}`, {
+        const res = await apiFetch(`/api/generation/delete?task_id=${asset.id}`, {
           method: "DELETE",
         });
-        if (!res.ok) {
+
+        if (res.status === 409) {
+          // FK 冲突：视频已发布到社区
+          const data = await res.json();
+          const postTitle = data.community_post?.title ?? "未命名";
+          const confirmed = window.confirm(
+            `此视频已发布到社区（"${postTitle}"），删除任务将同时删除社区帖子。确定要删除吗？`
+          );
+          if (!confirmed) return;
+
+          // 二次确认删除
+          const confirmRes = await apiFetch(
+            `/api/generation/delete?task_id=${asset.id}&confirm=true`,
+            { method: "DELETE" }
+          );
+          if (!confirmRes.ok) {
+            toast.error("删除失败");
+            return;
+          }
+        } else if (!res.ok) {
           toast.error("删除失败");
           return;
         }
+
         setAssets((prev) => prev.filter((a) => a.id !== asset.id));
         toast.success("已删除");
       } catch {

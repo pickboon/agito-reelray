@@ -15,6 +15,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   Wand2,
   Play,
   Download,
@@ -38,6 +46,7 @@ import {
   ASPECT_RATIOS,
   LENS_OPTIONS,
 } from "@/lib/models";
+import { apiFetch } from "@/lib/api-fetch";
 
 interface GenerationTask {
   id: string;
@@ -116,12 +125,21 @@ export default function GeneratePage() {
   const [mode, setMode] = useState<"t2v" | "r2v">("t2v");
 
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [publishDialogOpen, setPublishDialogOpen] = useState(false);
+  const [publishTitle, setPublishTitle] = useState("");
+  const [publishDescription, setPublishDescription] = useState("");
+  const [publishing, setPublishing] = useState(false);
+  const [templateDialogOpen, setTemplateDialogOpen] = useState(false);
+  const [templateName, setTemplateName] = useState("");
+  const [templateDescription, setTemplateDescription] = useState("");
+  const [savingTemplate, setSavingTemplate] = useState(false);
   const pollErrorCountRef = useRef<Record<string, number>>({});
 
   const fetchTasks = useCallback(async (pageNum = 0) => {
     try {
       const offset = pageNum * PAGE_SIZE;
-      const res = await fetch(`/api/generation/list?limit=${PAGE_SIZE}&offset=${offset}`);
+      const res = await apiFetch(`/api/generation/list?limit=${PAGE_SIZE}&offset=${offset}`);
       const data = await res.json();
       if (data.tasks) {
         setTasks(data.tasks);
@@ -137,10 +155,20 @@ export default function GeneratePage() {
     }
   }, [selectedTask]);
 
+
+  // P1-3: 自动播放 — 视频完成后自动播放
+  useEffect(() => {
+    if (selectedTask?.status === "completed" && selectedTask.video_url && videoRef.current) {
+      videoRef.current.play().catch(() => {
+        // Autoplay blocked by browser, ignore
+      });
+    }
+  }, [selectedTask?.status, selectedTask?.video_url]);
+
   // P2-8: 轮询健壮性 — 处理 API 失败，连续失败 3 次后标记异常
   const pollTask = useCallback(async (taskId: string) => {
     try {
-      const res = await fetch(`/api/generation/status?task_id=${taskId}`);
+      const res = await apiFetch(`/api/generation/status?task_id=${taskId}`);
       if (!res.ok) {
         pollErrorCountRef.current[taskId] = (pollErrorCountRef.current[taskId] ?? 0) + 1;
         if (pollErrorCountRef.current[taskId] >= 5) {
@@ -209,7 +237,7 @@ export default function GeneratePage() {
 
     setGenerating(true);
     try {
-      const res = await fetch("/api/generation/create", {
+      const res = await apiFetch("/api/generation/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -240,16 +268,36 @@ export default function GeneratePage() {
     }
   }
 
-  // P1-4: 生成任务删除
+  // P1-4: 生成任务删除（含 FK 检查）
   async function handleDeleteTask(taskId: string) {
     try {
-      const res = await fetch(`/api/generation/delete?task_id=${taskId}`, {
+      const res = await apiFetch(`/api/generation/delete?task_id=${taskId}`, {
         method: "DELETE",
       });
-      if (!res.ok) {
+
+      if (res.status === 409) {
+        // FK 冲突：视频已发布到社区
+        const data = await res.json();
+        const postTitle = data.community_post?.title ?? "未命名";
+        const confirmed = window.confirm(
+          `此视频已发布到社区（"${postTitle}"），删除任务将同时删除社区帖子。确定要删除吗？`
+        );
+        if (!confirmed) return;
+
+        // 二次确认删除
+        const confirmRes = await apiFetch(
+          `/api/generation/delete?task_id=${taskId}&confirm=true`,
+          { method: "DELETE" }
+        );
+        if (!confirmRes.ok) {
+          toast.error("删除失败");
+          return;
+        }
+      } else if (!res.ok) {
         toast.error("删除失败");
         return;
       }
+
       setTasks((prev) => prev.filter((t) => t.id !== taskId));
       setTotalTasks((prev) => prev - 1);
       if (selectedTask?.id === taskId) {
@@ -262,11 +310,102 @@ export default function GeneratePage() {
   }
 
   async function handleDownload() {
-    if (!selectedTask?.video_url) return;
-    const a = document.createElement("a");
-    a.href = selectedTask.video_url;
-    a.download = `video-${selectedTask.id}.mp4`;
-    a.click();
+    if (!selectedTask?.id) return;
+
+    try {
+      const res = await apiFetch(`/api/generation/download?task_id=${selectedTask.id}`);
+      if (!res.ok) {
+        const data = await res.json();
+        toast.error(data.error || "获取下载链接失败");
+        return;
+      }
+
+      const { download_url } = await res.json();
+      const a = document.createElement("a");
+      a.href = download_url;
+      a.download = `video-${selectedTask.id}.mp4`;
+      a.click();
+      toast.success("开始下载");
+    } catch {
+      toast.error("下载失败，请重试");
+    }
+  }
+
+
+
+  async function handleSaveTemplate() {
+    if (!templateName.trim() || !prompt.trim()) {
+      toast.error("请输入模板名称和提示词");
+      return;
+    }
+
+    setSavingTemplate(true);
+    try {
+      const res = await apiFetch("/api/templates/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: templateName.trim(),
+          description: templateDescription.trim() || undefined,
+          prompt: prompt.trim(),
+          model_id: selectedModel?.id ?? "happyhorse-1.1-t2v",
+          mode: mode,
+          aspect_ratio: aspectRatio,
+          duration: duration,
+          seed: seed || undefined,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        toast.error(data.error || "保存失败");
+        return;
+      }
+
+      toast.success("模板保存成功！");
+      setTemplateDialogOpen(false);
+      setTemplateName("");
+      setTemplateDescription("");
+    } catch {
+      toast.error("网络错误");
+    } finally {
+      setSavingTemplate(false);
+    }
+  }
+
+  async function handlePublish() {
+    if (!selectedTask?.id || !publishTitle.trim()) {
+      toast.error("请输入作品标题");
+      return;
+    }
+
+    setPublishing(true);
+    try {
+      const res = await apiFetch("/api/community/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          task_id: selectedTask.id,
+          title: publishTitle.trim(),
+          description: publishDescription.trim() || undefined,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        toast.error(data.error || "发布失败");
+        return;
+      }
+
+      toast.success("发布成功！");
+      setPublishDialogOpen(false);
+      setPublishTitle("");
+      setPublishDescription("");
+    } catch {
+      toast.error("网络错误");
+    } finally {
+      setPublishing(false);
+    }
   }
 
   function formatTime(dateStr: string) {
@@ -297,6 +436,13 @@ export default function GeneratePage() {
           <Badge variant="destructive" className="gap-1">
             <XCircle className="h-3 w-3" />
             失败
+          </Badge>
+        );
+      case "needs_review":
+        return (
+          <Badge variant="outline" className="border-yellow-500 text-yellow-600 gap-1">
+            <AlertTriangle className="h-3 w-3" />
+            需人工审核
           </Badge>
         );
       default:
@@ -488,6 +634,16 @@ export default function GeneratePage() {
               </>
             )}
           </Button>
+
+          <Button
+            variant="outline"
+            className="w-full mt-2"
+            onClick={() => setTemplateDialogOpen(true)}
+            disabled={!prompt.trim()}
+          >
+            <Sparkles className="h-4 w-4 mr-2" />
+            保存为模板
+          </Button>
         </CardContent>
       </Card>
 
@@ -596,8 +752,11 @@ export default function GeneratePage() {
               <div className="aspect-video bg-muted rounded flex items-center justify-center">
                 {selectedTask.video_url ? (
                   <video
+                    ref={videoRef}
                     src={selectedTask.video_url}
                     controls
+                    muted
+                    playsInline
                     className="w-full h-full rounded"
                   />
                 ) : selectedTask.status === "running" ? (
@@ -670,10 +829,20 @@ export default function GeneratePage() {
               {/* 操作按钮 */}
               <div className="flex gap-2 pt-2">
                 {selectedTask.status === "completed" && (
-                  <Button className="flex-1" onClick={handleDownload}>
-                    <Download className="h-4 w-4 mr-2" />
-                    下载
-                  </Button>
+                  <>
+                    <Button className="flex-1" onClick={handleDownload}>
+                      <Download className="h-4 w-4 mr-2" />
+                      下载
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      onClick={() => setPublishDialogOpen(true)}
+                    >
+                      <Share2 className="h-4 w-4 mr-2" />
+                      发布到社区
+                    </Button>
+                  </>
                 )}
                 <Button
                   variant="outline"
@@ -707,6 +876,114 @@ export default function GeneratePage() {
           )}
         </CardContent>
       </Card>
+
+      {/* 发布到社区对话框 */}
+      <Dialog open={publishDialogOpen} onOpenChange={setPublishDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>发布到社区</DialogTitle>
+            <DialogDescription>
+              分享你的作品到社区，让更多人看到
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">作品标题</label>
+              <input
+                type="text"
+                placeholder="给你的作品起个名字..."
+                value={publishTitle}
+                onChange={(e) => setPublishTitle(e.target.value)}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">作品描述（可选）</label>
+              <textarea
+                placeholder="分享创作思路或故事..."
+                value={publishDescription}
+                onChange={(e) => setPublishDescription(e.target.value)}
+                rows={3}
+                className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPublishDialogOpen(false)}>
+              取消
+            </Button>
+            <Button onClick={handlePublish} disabled={publishing || !publishTitle.trim()}>
+              {publishing ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  发布中...
+                </>
+              ) : (
+                "发布"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* 保存模板对话框 */}
+      <Dialog open={templateDialogOpen} onOpenChange={setTemplateDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>保存为模板</DialogTitle>
+            <DialogDescription>
+              将当前参数保存为模板，方便下次快速使用
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">模板名称</label>
+              <input
+                type="text"
+                placeholder="例如：电影级人像特写"
+                value={templateName}
+                onChange={(e) => setTemplateName(e.target.value)}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">模板描述（可选）</label>
+              <textarea
+                placeholder="描述这个模板的用途或特点..."
+                value={templateDescription}
+                onChange={(e) => setTemplateDescription(e.target.value)}
+                rows={3}
+                className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              />
+            </div>
+            <div className="rounded-md bg-muted p-3 text-xs text-muted-foreground">
+              <p className="font-medium mb-1">将保存以下参数：</p>
+              <ul className="space-y-0.5">
+                <li>• 提示词：{prompt.slice(0, 50)}{prompt.length > 50 ? "..." : ""}</li>
+                <li>• 模型：{selectedModel?.name}</li>
+                <li>• 比例：{aspectRatio}</li>
+                <li>• 时长：{duration}秒</li>
+                {seed && <li>• 种子：{seed}</li>}
+              </ul>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setTemplateDialogOpen(false)}>
+              取消
+            </Button>
+            <Button onClick={handleSaveTemplate} disabled={savingTemplate || !templateName.trim()}>
+              {savingTemplate ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  保存中...
+                </>
+              ) : (
+                "保存"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -1,3 +1,6 @@
+// @deprecated — 请使用 /api/generation/download
+// F-07: 此端点保留以兼容旧客户端，新代码应使用 /api/generation/download
+
 import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 

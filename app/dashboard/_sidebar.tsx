@@ -61,7 +61,7 @@ export function Sidebar() {
       </nav>
       <div className="border-t border-sidebar-border p-3">
         <Link
-          href="/dashboard"
+          href="/dashboard/settings"
           className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 transition-colors"
         >
           <Settings className="h-4 w-4" />

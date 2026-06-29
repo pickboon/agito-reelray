@@ -105,6 +105,7 @@ const BUNDLES = [
 
 export default function PricingPage() {
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
+  const [episodesCount, setEpisodesCount] = useState<number>(10);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
   const handleCheckout = async (type: "subscription" | "bundle", id: string) => {
@@ -271,6 +272,61 @@ export default function PricingPage() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </section>
+
+
+        {/* C-08: Credits 计算器 */}
+        <section className="border-t border-border pt-12">
+          <h2 className="text-2xl font-semibold text-foreground text-center mb-2">
+            Credits 预估计算器
+          </h2>
+          <p className="text-center text-sm text-muted-foreground mb-8">
+            基于 720p、每镜头 5 秒、约 10 镜头/集估算
+          </p>
+          <div className="max-w-md mx-auto space-y-4">
+            <div className="flex items-center gap-4">
+              <label className="text-sm text-foreground whitespace-nowrap">计划集数</label>
+              <input
+                type="range"
+                min={1}
+                max={100}
+                value={episodesCount}
+                onChange={(e) => setEpisodesCount(parseInt(e.target.value))}
+                className="flex-1 accent-brand-gold"
+              />
+              <span className="text-lg font-bold text-foreground w-12 text-right">
+                {episodesCount}
+              </span>
+            </div>
+            <div className="bg-card border border-border rounded-lg p-4 space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">预估 Credits</span>
+                <span className="font-semibold text-foreground">
+                  {(episodesCount * 10000).toLocaleString()}
+                </span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">推荐套餐</span>
+                <span className="font-semibold text-brand-gold">
+                  {episodesCount <= 4
+                    ? "Starter (149)"
+                    : episodesCount <= 16
+                    ? "Pro (499)"
+                    : "Studio (1,499)"}
+                </span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">预估费用</span>
+                <span className="font-semibold text-foreground">
+                  {episodesCount <= 4
+                    ? "149"
+                    : episodesCount <= 16
+                    ? "499"
+                    : "1,499"}
+                </span>
+              </div>
+            </div>
           </div>
         </section>
 

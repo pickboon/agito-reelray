@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, Play, Video, Hash, Clock, Image, CheckCircle, Loader2 } from "lucide-react";
+import { apiFetch } from "@/lib/api-fetch";
 
 interface Shot {
   id: string;
@@ -89,7 +90,7 @@ export default function ShotDetailPage({
     if (!prompt.trim()) return;
     setGenerating(true);
     try {
-      const res = await fetch("/api/generate", {
+      const res = await apiFetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -115,7 +116,7 @@ export default function ShotDetailPage({
   const handleCheckConsistency = async () => {
     setCheckingConsistency(true);
     try {
-      const res = await fetch("/api/engine/check-consistency", {
+      const res = await apiFetch("/api/engine/check-consistency", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ shotId: data?.id }),

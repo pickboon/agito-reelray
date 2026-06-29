@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   getAllTemplates,
   getTemplatesByCategory,
@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Dialog,
   DialogContent,
@@ -18,7 +19,9 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Film, Camera, Coins, Users, TrendingUp, Clapperboard } from "lucide-react";
+import { Film, Camera, Coins, Users, TrendingUp, Clapperboard, Trash2, Share2, Sparkles } from "lucide-react";
+import { toast } from "sonner";
+import { apiFetch } from "@/lib/api-fetch";
 
 const CATEGORIES = [
   { key: "all", label: "全部" },
@@ -46,20 +49,129 @@ function formatPrice(cents: number): string {
   return `¥${(cents / 100).toFixed(0)}`;
 }
 
+interface UserTemplate {
+  id: string;
+  name: string;
+  description?: string;
+  prompt: string;
+  model_id: string;
+  mode: string;
+  aspect_ratio: string;
+  duration: number;
+  seed?: number;
+  is_public: boolean;
+  use_count: number;
+  created_at: string;
+}
+
+interface MarketTemplate {
+  id: string;
+  name: string;
+  description?: string;
+  prompt: string;
+  model_id: string;
+  mode: string;
+  aspect_ratio: string;
+  duration: number;
+  seed?: number;
+  use_count: number;
+  created_at: string;
+  profiles: {
+    username?: string;
+    avatar_url?: string;
+  };
+}
+
 export default function TemplatesPage() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [selectedTemplate, setSelectedTemplate] = useState<StoreTemplate | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const templates =
+  const [userTemplates, setUserTemplates] = useState<UserTemplate[]>([]);
+  const [marketTemplates, setMarketTemplates] = useState<MarketTemplate[]>([]);
+  const [loadingUser, setLoadingUser] = useState(true);
+  const [loadingMarket, setLoadingMarket] = useState(true);
+
+  const storeTemplates =
     activeCategory === "all"
       ? getAllTemplates()
       : getTemplatesByCategory(activeCategory);
+
+  const fetchUserTemplates = useCallback(async () => {
+    try {
+      const res = await apiFetch("/api/templates/user");
+      const data = await res.json();
+      setUserTemplates(data.templates ?? []);
+    } catch (error) {
+      console.error("Failed to fetch user templates:", error);
+    } finally {
+      setLoadingUser(false);
+    }
+  }, []);
+
+  const fetchMarketTemplates = useCallback(async () => {
+    try {
+      const res = await apiFetch("/api/templates/market?limit=10");
+      const data = await res.json();
+      setMarketTemplates(data.templates ?? []);
+    } catch (error) {
+      console.error("Failed to fetch market templates:", error);
+    } finally {
+      setLoadingMarket(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchUserTemplates();
+    fetchMarketTemplates();
+  }, [fetchUserTemplates, fetchMarketTemplates]);
 
   function openDetail(t: StoreTemplate) {
     setSelectedTemplate(t);
     setDialogOpen(true);
   }
+
+  const handleDeleteTemplate = async (templateId: string) => {
+    if (!confirm("确定删除此模板？")) return;
+
+    try {
+      const res = await apiFetch(`/api/templates/user?id=${templateId}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        toast.error("删除失败");
+        return;
+      }
+
+      setUserTemplates((prev) => prev.filter((t) => t.id !== templateId));
+      toast.success("模板已删除");
+    } catch {
+      toast.error("网络错误");
+    }
+  };
+
+  const handlePublishTemplate = async (templateId: string) => {
+    try {
+      const res = await apiFetch("/api/templates/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ template_id: templateId, is_public: true }),
+      });
+
+      if (!res.ok) {
+        toast.error("发布失败");
+        return;
+      }
+
+      setUserTemplates((prev) =>
+        prev.map((t) => (t.id === templateId ? { ...t, is_public: true } : t))
+      );
+      toast.success("已发布到模板市场");
+    } catch {
+      toast.error("网络错误");
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -68,284 +180,265 @@ export default function TemplatesPage() {
         <div>
           <h1 className="text-2xl font-semibold text-foreground">模板商店</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            精选短剧模板，一键导入开始创作
+            管理你的模板，发现社区精选模板
           </p>
         </div>
         <Badge variant="outline" className="text-brand-cyan border-brand-cyan/30">
-          {getAllTemplates().length} 套模板
+          {getAllTemplates().length} 套官方模板
         </Badge>
       </div>
 
-      {/* 分类筛选 */}
-      <div className="flex items-center gap-1.5 flex-wrap">
-        {CATEGORIES.map((cat) => (
-          <Button
-            key={cat.key}
-            variant={activeCategory === cat.key ? "default" : "outline"}
-            size="sm"
-            onClick={() => setActiveCategory(cat.key)}
-            className={
-              activeCategory === cat.key
-                ? "bg-brand-gold text-primary-foreground hover:bg-brand-gold/80"
-                : ""
-            }
-          >
-            {cat.label}
-          </Button>
-        ))}
-      </div>
+      {/* 我的模板 */}
+      <section>
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <Sparkles className="h-4 w-4 text-brand-gold" />
+          我的模板 ({userTemplates.length})
+        </h2>
 
-      {/* 模板卡片网格 */}
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-        {templates.map((t) => (
-          <Card
-            key={t.id}
-            className="cursor-pointer hover:ring-brand-gold/40 transition-all duration-200"
-            onClick={() => openDetail(t)}
-          >
-            <CardContent className="flex gap-4">
-              {/* 封面 emoji */}
-              <div className="flex-shrink-0 w-16 h-16 rounded-lg bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center text-3xl">
-                {t.cover_emoji}
-              </div>
+        {loadingUser ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[1, 2, 3].map((i) => (
+              <Skeleton key={i} className="h-40" />
+            ))}
+          </div>
+        ) : userTemplates.length === 0 ? (
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-12">
+              <Sparkles className="h-10 w-10 text-muted-foreground/30 mb-3" />
+              <p className="text-sm text-muted-foreground">
+                还没有保存的模板，在生成页面点击"保存为模板"开始收藏
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {userTemplates.map((template) => (
+              <Card
+                key={template.id}
+                className={`hover:border-brand-gold/30 transition-colors ${
+                  template.is_public ? "border-brand-gold/20" : ""
+                }`}
+              >
+                <CardContent className="p-4 space-y-3">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-sm line-clamp-1">
+                        {template.name}
+                      </h3>
+                      {template.description && (
+                        <p className="text-xs text-muted-foreground line-clamp-2 mt-1">
+                          {template.description}
+                        </p>
+                      )}
+                    </div>
+                    {template.is_public && (
+                      <Badge variant="outline" className="text-xs ml-2 shrink-0">
+                        公开
+                      </Badge>
+                    )}
+                  </div>
 
-              <div className="flex-1 min-w-0 space-y-2">
-                {/* 名称 + 价格 */}
-                <div className="flex items-start justify-between gap-2">
-                  <h3 className="font-semibold text-foreground truncate">
-                    {t.name}
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <Badge variant="secondary">{template.aspect_ratio}</Badge>
+                    <span>{template.duration}s</span>
+                    <span>•</span>
+                    <span>使用 {template.use_count} 次</span>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-2">
+                    {!template.is_public && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1"
+                        onClick={() => handlePublishTemplate(template.id)}
+                      >
+                        <Share2 className="h-3.5 w-3.5 mr-1" />
+                        发布
+                      </Button>
+                    )}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 text-destructive hover:text-destructive"
+                      onClick={() => handleDeleteTemplate(template.id)}
+                    >
+                      <Trash2 className="h-3.5 w-3.5 mr-1" />
+                      删除
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <Separator />
+
+      {/* 模板市场 */}
+      <section>
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <TrendingUp className="h-4 w-4 text-brand-cyan" />
+          模板市场 ({marketTemplates.length})
+        </h2>
+
+        {loadingMarket ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[1, 2, 3].map((i) => (
+              <Skeleton key={i} className="h-40" />
+            ))}
+          </div>
+        ) : marketTemplates.length === 0 ? (
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-12">
+              <TrendingUp className="h-10 w-10 text-muted-foreground/30 mb-3" />
+              <p className="text-sm text-muted-foreground">
+                模板市场暂无作品，发布你的模板成为第一批创作者
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {marketTemplates.map((template) => (
+              <Card
+                key={template.id}
+                className="hover:border-brand-cyan/30 transition-colors"
+              >
+                <CardContent className="p-4 space-y-3">
+                  <div>
+                    <h3 className="font-medium text-sm line-clamp-1">
+                      {template.name}
+                    </h3>
+                    {template.description && (
+                      <p className="text-xs text-muted-foreground line-clamp-2 mt-1">
+                        {template.description}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <Badge variant="secondary">{template.aspect_ratio}</Badge>
+                    <span>{template.duration}s</span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs text-muted-foreground pt-2">
+                    <span>by {template.profiles.username ?? "匿名用户"}</span>
+                    <span>使用 {template.use_count} 次</span>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <Separator />
+
+      {/* 官方模板商店 */}
+      <section>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold flex items-center gap-2">
+            <Film className="h-4 w-4 text-brand-gold" />
+            官方精选模板
+          </h2>
+        </div>
+
+        {/* 分类筛选 */}
+        <div className="flex items-center gap-1.5 flex-wrap mb-4">
+          {CATEGORIES.map((cat) => (
+            <Button
+              key={cat.key}
+              variant={activeCategory === cat.key ? "default" : "outline"}
+              size="sm"
+              className="h-7 text-xs"
+              onClick={() => setActiveCategory(cat.key)}
+            >
+              {cat.label}
+            </Button>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {storeTemplates.map((template) => (
+            <Card
+              key={template.id}
+              className="cursor-pointer hover:border-brand-gold/30 transition-colors"
+              onClick={() => openDetail(template)}
+            >
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-start justify-between">
+                  <h3 className="font-medium text-sm line-clamp-2">
+                    {template.name}
                   </h3>
-                  <span className="text-brand-gold font-bold text-base flex-shrink-0">
-                    {formatPrice(t.price_cents)}
-                  </span>
+                  <Badge variant="secondary" className="text-xs ml-2 shrink-0">
+                    {formatPrice(template.price_cents)}
+                  </Badge>
                 </div>
 
-                {/* 标签 */}
-                <div className="flex flex-wrap gap-1">
-                  {t.tags.slice(0, 4).map((tag) => (
-                    <Badge key={tag} variant="secondary" className="text-[10px]">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-
-                {/* 描述截断 */}
-                <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-                  {t.description}
+                <p className="text-xs text-muted-foreground line-clamp-2">
+                  {template.description}
                 </p>
 
-                {/* 统计行 */}
-                <div className="flex items-center gap-3 text-xs text-muted-foreground pt-1">
-                  <span className="flex items-center gap-1">
-                    <Film className="h-3 w-3" />
-                    {t.total_scenes} 场景
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Camera className="h-3 w-3" />
-                    {t.total_shots} 镜头
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Coins className="h-3 w-3" />
-                    {t.estimated_credits.toLocaleString()} Credits
-                  </span>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Badge variant="outline">{template.category}</Badge>
+                  <span>{template.total_scenes} 集</span>
                 </div>
-              </div>
-            </CardContent>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
 
-            {/* 底部购买按钮 */}
-            <div className="px-4 pb-4 pt-1">
-              <Button disabled size="sm" className="w-full">
-                即将上线
-              </Button>
-            </div>
-          </Card>
-        ))}
-      </div>
-
-      {/* 模板详情 Dialog */}
+      {/* 详情对话框 */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="sm:max-w-lg max-h-[85vh] flex flex-col gap-0 p-0">
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{selectedTemplate?.name}</DialogTitle>
+            <DialogDescription>
+              {selectedTemplate?.description}
+            </DialogDescription>
+          </DialogHeader>
           {selectedTemplate && (
-            <>
-              <DialogHeader className="p-4 pb-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-lg bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center text-2xl flex-shrink-0">
-                    {selectedTemplate.cover_emoji}
-                  </div>
-                  <div className="min-w-0">
-                    <DialogTitle className="text-lg">
-                      {selectedTemplate.name}
-                    </DialogTitle>
-                    <DialogDescription className="text-xs mt-0.5">
-                      {selectedTemplate.tags.join(" · ")}
-                    </DialogDescription>
-                  </div>
-                  <span className="ml-auto text-brand-gold font-bold text-lg flex-shrink-0">
-                    {formatPrice(selectedTemplate.price_cents)}
-                  </span>
-                </div>
-              </DialogHeader>
-
-              <Separator />
-
-              <ScrollArea className="flex-1 max-h-[60vh] px-4 pb-4">
-                <div className="space-y-5">
-                  {/* 描述 */}
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {selectedTemplate.description}
-                  </p>
-
-                  {/* 统计概览 */}
-                  <div className="grid grid-cols-3 gap-3">
-                    <StatBox
-                      icon={<Film className="h-4 w-4 text-brand-gold" />}
-                      label="场景"
-                      value={`${selectedTemplate.total_scenes}`}
-                    />
-                    <StatBox
-                      icon={<Camera className="h-4 w-4 text-brand-cyan" />}
-                      label="镜头"
-                      value={`${selectedTemplate.total_shots}`}
-                    />
-                    <StatBox
-                      icon={<Coins className="h-4 w-4 text-brand-gold" />}
-                      label="预估 Credits"
-                      value={`${(selectedTemplate.estimated_credits / 1000).toFixed(0)}K`}
-                    />
-                  </div>
-
-                  <Separator />
-
-                  {/* 场景列表 */}
-                  <div>
-                    <h4 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-1.5">
-                      <Clapperboard className="h-4 w-4 text-brand-cyan" />
-                      场景列表
-                    </h4>
-                    <div className="space-y-2">
-                      {selectedTemplate.scenes.map((scene) => (
-                        <div
-                          key={scene.scene_number}
-                          className="rounded-lg border border-border bg-secondary/30 p-3"
-                        >
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-sm font-medium text-foreground">
-                              <span className="text-brand-gold mr-1.5">
-                                {String(scene.scene_number).padStart(2, "0")}
-                              </span>
-                              {scene.title}
-                            </span>
-                            <Badge variant="outline" className="text-[10px]">
-                              {scene.shots.length} 镜头
-                            </Badge>
-                          </div>
-                          <p className="text-xs text-muted-foreground leading-relaxed">
-                            {scene.description}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <Separator />
-
-                  {/* 角色列表 */}
-                  <div>
-                    <h4 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-1.5">
-                      <Users className="h-4 w-4 text-brand-cyan" />
-                      角色设定
-                    </h4>
-                    <div className="grid grid-cols-2 gap-2">
-                      {selectedTemplate.characters.map((char) => (
-                        <div
-                          key={char.name}
-                          className="rounded-lg border border-border bg-secondary/30 p-3"
-                        >
-                          <div className="flex items-center gap-2 mb-1.5">
-                            <div className="w-8 h-8 rounded-full bg-muted border border-border flex items-center justify-center text-xs text-muted-foreground">
-                              {char.name.charAt(0)}
-                            </div>
-                            <div className="min-w-0">
-                              <p className="text-sm font-medium text-foreground truncate">
-                                {char.name}
-                              </p>
-                              <p
-                                className={`text-[10px] font-medium ${ROLE_COLORS[char.role] ?? "text-muted-foreground"}`}
-                              >
-                                {ROLE_LABELS[char.role] ?? char.role}
-                              </p>
-                            </div>
-                          </div>
-                          <p className="text-[11px] text-muted-foreground leading-relaxed line-clamp-2">
-                            {char.traits}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <Separator />
-
-                  {/* 情绪曲线 */}
-                  <div>
-                    <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-1.5">
-                      <TrendingUp className="h-4 w-4 text-brand-cyan" />
-                      情绪曲线
-                    </h4>
-                    <div className="flex items-end gap-2 h-24 px-1">
-                      {selectedTemplate.emotion_graph.map((val, i) => (
-                        <div
-                          key={i}
-                          className="flex-1 flex flex-col items-center gap-1"
-                        >
-                          <div
-                            className="w-full rounded-t-sm transition-all duration-300"
-                            style={{
-                              height: `${(val / 5) * 100}%`,
-                              background: `linear-gradient(to top, #00F0FF, #FACC15)`,
-                              opacity: 0.7 + (val / 5) * 0.3,
-                            }}
-                          />
-                          <span className="text-[9px] text-muted-foreground">
-                            S{i + 1}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </ScrollArea>
-
-              <Separator />
-
-              {/* 底部操作 */}
-              <div className="p-4 pt-3">
-                <Button disabled className="w-full bg-brand-gold text-primary-foreground">
-                  导入此模板 — 即将上线
-                </Button>
+            <div className="space-y-4 py-4">
+              <div className="flex items-center gap-3">
+                <Badge>{selectedTemplate.category}</Badge>
+                <Badge variant="outline">{selectedTemplate.total_scenes} 场景</Badge>
+                <Badge variant="secondary">
+                  {formatPrice(selectedTemplate.price_cents)}
+                </Badge>
               </div>
-            </>
+
+              <div>
+                <h4 className="text-sm font-medium mb-2">角色设定</h4>
+                <div className="space-y-2">
+                  {selectedTemplate.characters.map((char) => (
+                    <div
+                      key={char.name}
+                      className="flex items-center gap-2 text-sm"
+                    >
+                      <span className={`font-medium ${ROLE_COLORS[char.role] ?? ""}`}>
+                        {ROLE_LABELS[char.role] ?? char.role}
+                      </span>
+                      <span className="text-muted-foreground">—</span>
+                      <span>{char.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-medium mb-2">场景提示</h4>
+                <ScrollArea className="h-32 rounded border border-border p-3">
+                  <pre className="text-xs text-muted-foreground whitespace-pre-wrap">
+                    {selectedTemplate.scenes?.map(s => s.description).join('\n\n') ?? "无场景描述"}
+                  </pre>
+                </ScrollArea>
+              </div>
+            </div>
           )}
         </DialogContent>
       </Dialog>
-    </div>
-  );
-}
-
-function StatBox({
-  icon,
-  label,
-  value,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="rounded-lg border border-border bg-secondary/30 p-2.5 flex flex-col items-center gap-0.5">
-      {icon}
-      <span className="text-base font-semibold text-foreground">{value}</span>
-      <span className="text-[10px] text-muted-foreground">{label}</span>
     </div>
   );
 }

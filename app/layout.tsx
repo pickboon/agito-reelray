@@ -44,9 +44,7 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
     },
   },
-  other: {
-    robots: "noai, noimageai",
-  },
+
 };
 
 export default function RootLayout({
@@ -56,9 +54,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN" className={`${jetbrainsMono.variable} dark scroll-smooth`}>
-      <head>
-        <meta name="robots" content="noai, noimageai" />
-      </head>
+
       <body className="min-h-screen bg-background font-sans antialiased">
         <TooltipProvider>
           {children}

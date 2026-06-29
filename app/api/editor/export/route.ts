@@ -6,8 +6,10 @@
  * 后续可迁移到独立任务队列
  */
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { validateCsrf } from "@/lib/csrf";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { spawn } from "child_process";
 import { writeFile, unlink, mkdir } from "fs/promises";
 import { join } from "path";
@@ -127,7 +129,26 @@ function buildFFmpegCommand(
   return { args, tempFiles };
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  if (!validateCsrf(request)) {
+    return NextResponse.json({ error: "CSRF validation failed" }, { status: 403 });
+  }
+
+  // F-06: FFmpeg 可用性检测
+  try {
+    const { execSync } = await import("child_process");
+    execSync("which ffmpeg", { stdio: "ignore" });
+  } catch {
+    return NextResponse.json(
+      { error: "视频导出功能在当前部署环境不可用，请在本地开发环境使用" },
+      { status: 503 }
+    );
+  }
+
+  const clientIp = request.headers.get("x-forwarded-for") ?? "unknown";
+  if (!(await checkRateLimit(`editor-export:${clientIp}`, 10, 60000))) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
   const supabase = await createServerSupabaseClient();
   const {
     data: { user },

@@ -2,12 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getAdapter } from "@/lib/adapters";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { validateCsrf } from "@/lib/csrf";
 import type { GenerateParams, AspectRatio } from "@/lib/adapters/types";
 
 export async function POST(request: NextRequest) {
   try {
+    if (!validateCsrf(request)) {
+      return NextResponse.json({ error: "CSRF validation failed" }, { status: 403 });
+    }
+
     const clientIp = request.headers.get("x-forwarded-for") ?? "unknown";
-    if (!checkRateLimit(`generate:${clientIp}`, 20, 60000)) {
+    if (!(await checkRateLimit(`generate:${clientIp}`, 20, 60000))) {
       return NextResponse.json({ error: "Too many requests" }, { status: 429 });
     }
 
