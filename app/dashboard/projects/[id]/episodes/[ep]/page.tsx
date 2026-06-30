@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, use, useCallback } from "react";
+import { useEffect, useState, use, useCallback, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
@@ -95,10 +96,31 @@ const STATUS_OPTIONS = [
   { value: "needs_review", label: "待审核" },
 ];
 
+// P2-3: 包装组件，处理 ?shot= 参数自动打开 ShotDrawer
+function EpPageWrapper({ params }: { params: Promise<{ id: string; ep: string }> }) {
+  const searchParams = useSearchParams();
+  const shotFromUrl = searchParams.get("shot");
+  return <EpisodePageContent params={params} initialShotId={shotFromUrl} />;
+}
+
 export default function EpisodeDetailPage({
   params,
 }: {
   params: Promise<{ id: string; ep: string }>;
+}) {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center py-16"><Loader2 className="h-6 w-6 animate-spin text-brand-cyan" /></div>}>
+      <EpPageWrapper params={params} />
+    </Suspense>
+  );
+}
+
+function EpisodePageContent({
+  params,
+  initialShotId,
+}: {
+  params: Promise<{ id: string; ep: string }>;
+  initialShotId: string | null;
 }) {
   const { id, ep } = use(params);
   const [episode, setEpisode] = useState<Episode | null>(null);
@@ -122,6 +144,13 @@ export default function EpisodeDetailPage({
   const [batchMode, setBatchMode] = useState(false);
   const [selectedShots, setSelectedShots] = useState<Set<string>>(new Set());
   const [drawerShotId, setDrawerShotId] = useState<string | null>(null);
+
+  // P2-3: 从 URL ?shot= 参数自动打开 ShotDrawer
+  useEffect(() => {
+    if (initialShotId && !loading) {
+      setDrawerShotId(initialShotId);
+    }
+  }, [initialShotId, loading]);
 
   // 批量生成状态
   const [batchGenerating, setBatchGenerating] = useState(false);
