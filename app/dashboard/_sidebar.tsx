@@ -5,15 +5,12 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Film,
-  CreditCard,
   Settings,
   Clapperboard,
   Wand2,
   Sparkles,
   Clock,
   FolderOpen,
-  LayoutTemplate,
-  Users,
 } from "lucide-react";
 import { GlobalStatusBar } from "@/components/layout/GlobalStatusBar";
 import { cn } from "@/lib/utils";
@@ -25,9 +22,6 @@ const navItems = [
   { href: "/dashboard/queue", label: "队列", icon: Clock },
   { href: "/dashboard/assets", label: "资产", icon: FolderOpen },
   { href: "/dashboard/projects", label: "Projects", icon: Film },
-  { href: "/templates", label: "模板", icon: LayoutTemplate },
-  { href: "/community", label: "社区", icon: Users },
-  { href: "/pricing", label: "Pricing", icon: CreditCard },
 ];
 
 export function Sidebar() {
