@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trash2, AlertTriangle } from "lucide-react";
+import { Trash2, AlertTriangle, LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { apiFetch } from "@/lib/api-fetch";
 import { createClient } from "@/lib/supabase/client";
@@ -13,6 +13,7 @@ export default function SettingsPage() {
   const router = useRouter();
   const [deleting, setDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
 
   const handleDeleteAccount = async () => {
     setDeleting(true);
@@ -34,6 +35,36 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-foreground">账户设置</h1>
+
+      {/* 账户操作 */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">账户操作</CardTitle>
+          <CardDescription>管理登录状态</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button
+            variant="outline"
+            onClick={async () => {
+              setLoggingOut(true);
+              try {
+                const supabase = createClient();
+                await supabase.auth.signOut();
+                toast.success("已登出");
+                router.push("/");
+              } catch {
+                toast.error("登出失败");
+              } finally {
+                setLoggingOut(false);
+              }
+            }}
+            disabled={loggingOut}
+          >
+            <LogOut className="mr-2 h-4 w-4" />
+            {loggingOut ? "登出中..." : "登出"}
+          </Button>
+        </CardContent>
+      </Card>
 
       <Card className="border-destructive/30">
         <CardHeader>
