@@ -30,10 +30,10 @@ export default function MobileNav() {
             <Link href="/dashboard" className="text-sm text-muted-foreground hover:text-foreground py-2" onClick={() => setIsOpen(false)}>
               工作台
             </Link>
-            <Link href="/dashboard/templates" className="text-sm text-muted-foreground hover:text-foreground py-2" onClick={() => setIsOpen(false)}>
+            <Link href="/templates" className="text-sm text-muted-foreground hover:text-foreground py-2" onClick={() => setIsOpen(false)}>
               模板库
             </Link>
-            <Link href="/dashboard/community" className="text-sm text-muted-foreground hover:text-foreground py-2" onClick={() => setIsOpen(false)}>
+            <Link href="/community" className="text-sm text-muted-foreground hover:text-foreground py-2" onClick={() => setIsOpen(false)}>
               极光社区
             </Link>
             <Link href="/pricing" className="text-sm text-muted-foreground hover:text-foreground py-2" onClick={() => setIsOpen(false)}>

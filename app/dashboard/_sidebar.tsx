@@ -20,8 +20,8 @@ const navItems = [
   { href: "/dashboard/generate", label: "创作", icon: Wand2 },
   { href: "/dashboard/assets", label: "资产", icon: FolderOpen },
   { href: "/dashboard/projects", label: "Projects", icon: Film },
-  { href: "/dashboard/templates", label: "模板", icon: LayoutTemplate },
-  { href: "/dashboard/community", label: "社区", icon: Users },
+  { href: "/templates", label: "模板", icon: LayoutTemplate },
+  { href: "/community", label: "社区", icon: Users },
   { href: "/pricing", label: "Pricing", icon: CreditCard },
 ];
 
