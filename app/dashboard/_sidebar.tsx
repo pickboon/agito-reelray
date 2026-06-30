@@ -13,6 +13,7 @@ import {
   LayoutTemplate,
   Users,
 } from "lucide-react";
+import { GlobalStatusBar } from "@/components/layout/GlobalStatusBar";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -68,6 +69,9 @@ export function Sidebar() {
           Settings
         </Link>
       </div>
+
+      {/* C5 全局状态栏 */}
+      <GlobalStatusBar />
     </aside>
   );
 }
