@@ -32,9 +32,9 @@ export function Sidebar() {
     <aside className="hidden w-56 shrink-0 flex-col border-r border-sidebar-border bg-sidebar md:flex">
       <div className="flex h-14 items-center gap-2 px-4 border-b border-sidebar-border">
         <Clapperboard className="h-5 w-5 text-brand-gold" />
-        <span className="text-sm font-semibold text-sidebar-foreground tracking-wide">
+        <Link href="/" className="text-sm font-semibold text-sidebar-foreground tracking-wide hover:text-brand-gold transition-colors">
           ReelRay
-        </span>
+        </Link>
       </div>
       <nav className="flex-1 px-3 py-4 space-y-1">
         {navItems.map((item) => {
