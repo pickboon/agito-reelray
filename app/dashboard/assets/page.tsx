@@ -14,6 +14,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
   Download,
   Trash2,
   Upload,
@@ -22,6 +32,7 @@ import {
   Clock,
   Filter,
   Loader2,
+  ImagePlus,
 } from "lucide-react";
 import { toast } from "sonner";
 import { apiFetch } from "@/lib/api-fetch";
@@ -47,6 +58,83 @@ export default function AssetsPage() {
   const [sourceFilter, setSourceFilter] = useState<"all" | "ai_generated" | "uploaded">("all");
   const [typeFilter, setTypeFilter] = useState<"all" | "video" | "image">("all");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // P2-2: 用于项目对话框
+  const [useInProjectOpen, setUseInProjectOpen] = useState(false);
+  const [useInAsset, setUseInAsset] = useState<Asset | null>(null);
+  const [useInProjects, setUseInProjects] = useState<Array<{ id: string; title: string }>>([]);
+  const [useInEpisodes, setUseInEpisodes] = useState<Array<{ id: string; title: string }>>([]);
+  const [useInProject, setUseInProject] = useState("");
+  const [useInEpisode, setUseInEpisode] = useState("");
+  const [useInPrompt, setUseInPrompt] = useState("");
+  const [useInSubmitting, setUseInSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!useInProjectOpen) return;
+    async function loadProjects() {
+      const s = createClient();
+      const { data } = await s.from("projects").select("id, title").order("updated_at", { ascending: false });
+      if (data) setUseInProjects(data as Array<{ id: string; title: string }>);
+    }
+    loadProjects();
+  }, [useInProjectOpen]);
+
+  useEffect(() => {
+    if (!useInProject) {
+      setUseInEpisodes([]);
+      setUseInEpisode("");
+      return;
+    }
+    async function loadEpisodes() {
+      const s = createClient();
+      const { data } = await s
+        .from("episodes")
+        .select("id, title")
+        .eq("project_id", useInProject)
+        .order("episode_number", { ascending: true });
+      if (data) setUseInEpisodes(data as Array<{ id: string; title: string }>);
+    }
+    loadEpisodes();
+  }, [useInProject]);
+
+  function openUseInProject(asset: Asset) {
+    setUseInAsset(asset);
+    setUseInProjectOpen(true);
+    setUseInProject("");
+    setUseInEpisode("");
+    setUseInPrompt("");
+  }
+
+  async function handleUseInProject() {
+    if (!useInAsset || !useInEpisode || !useInPrompt.trim()) return;
+    setUseInSubmitting(true);
+    try {
+      const res = await apiFetch("/api/generation/create", {
+        method: "POST",
+        json: {
+          model_id: "happyhorse-1.1",
+          prompt: useInPrompt.trim(),
+          mode: "r2v",
+          reference_image_url: useInAsset.url,
+          aspect_ratio: "9:16",
+          duration: 5,
+          project_id: useInProject,
+          episode_id: useInEpisode,
+        },
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        toast.error(data.error || "提交失败");
+        return;
+      }
+      toast.success("已提交到项目渲染队列");
+      setUseInProjectOpen(false);
+    } catch {
+      toast.error("网络错误");
+    } finally {
+      setUseInSubmitting(false);
+    }
+  }
 
   useEffect(() => {
     fetchAssets();
@@ -318,13 +406,22 @@ export default function AssetsPage() {
 
                 {/* 悬停操作 */}
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                  <Button size="sm" variant="secondary" onClick={() => handleDownload(asset)}>
+                  <Button size="sm" variant="secondary" onClick={() => handleDownload(asset)} title="下载">
                     <Download className="h-4 w-4" />
                   </Button>
                   <Button
                     size="sm"
                     variant="secondary"
+                    onClick={() => openUseInProject(asset)}
+                    title="用于项目"
+                  >
+                    <ImagePlus className="h-4 w-4 text-brand-cyan" />
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="secondary"
                     onClick={() => handleDelete(asset)}
+                    title="删除"
                   >
                     <Trash2 className="h-4 w-4 text-destructive" />
                   </Button>
@@ -363,6 +460,73 @@ export default function AssetsPage() {
           ))}
         </div>
       )}
+      {/* P2-2: 用于项目对话框 */}
+      <Dialog open={useInProjectOpen} onOpenChange={setUseInProjectOpen}>
+        <DialogContent className="sm:max-w-[440px]">
+          <DialogHeader>
+            <DialogTitle>将资产用于项目</DialogTitle>
+            <DialogDescription>
+              选择目标项目和集，以该资产为参考图创建渲染任务。
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="space-y-2">
+              <Label>选择项目</Label>
+              <Select value={useInProject} onValueChange={(v) => { setUseInProject(v ?? ""); setUseInEpisode(""); }}>
+                <SelectTrigger>
+                  <SelectValue placeholder="选择项目" />
+                </SelectTrigger>
+                <SelectContent>
+                  {useInProjects.map((p) => (
+                    <SelectItem key={p.id} value={p.id}>{p.title}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>选择集</Label>
+              <Select value={useInEpisode} onValueChange={(v) => setUseInEpisode(v ?? "")} disabled={!useInProject}>
+                <SelectTrigger>
+                  <SelectValue placeholder="选择集" />
+                </SelectTrigger>
+                <SelectContent>
+                  {useInEpisodes.map((e) => (
+                    <SelectItem key={e.id} value={e.id}>{e.title}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="usein-prompt">提示词</Label>
+              <Input
+                id="usein-prompt"
+                placeholder="描述生成视频的画面内容..."
+                value={useInPrompt}
+                onChange={(e) => setUseInPrompt(e.target.value)}
+                disabled={useInSubmitting}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setUseInProjectOpen(false)} disabled={useInSubmitting}>
+              取消
+            </Button>
+            <Button
+              onClick={handleUseInProject}
+              disabled={useInSubmitting || !useInEpisode || !useInPrompt.trim()}
+            >
+              {useInSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  提交中...
+                </>
+              ) : (
+                "提交渲染"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
