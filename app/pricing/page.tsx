@@ -3,15 +3,32 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, Zap, Star, Sparkles, Coins, Crown } from "lucide-react";
+import {
+  Check,
+  Zap,
+  Star,
+  Sparkles,
+  Coins,
+  Crown,
+} from "lucide-react";
 import { getCsrfHeader } from "@/lib/csrf";
+
+/* ── 常量 ──────────────────────────────────────────────── */
 
 const PLANS = [
   {
     name: "Starter",
+    emoji: "🟢",
     price: "¥149",
+    priceNum: 149,
     period: "/月",
     credits: "20,000",
     discount: "75折 标准价",
@@ -31,7 +48,9 @@ const PLANS = [
   },
   {
     name: "Pro",
+    emoji: "🟣",
     price: "¥499",
+    priceNum: 499,
     period: "/月",
     credits: "80,000",
     discount: "62折 标准价",
@@ -54,7 +73,9 @@ const PLANS = [
   },
   {
     name: "Studio",
+    emoji: "🔵",
     price: "¥1,499",
+    priceNum: 1499,
     period: "/月",
     credits: "300,000",
     discount: "5折 标准价",
@@ -103,12 +124,20 @@ const BUNDLES = [
   },
 ];
 
+/* ── 页面 ──────────────────────────────────────────────── */
+
 export default function PricingPage() {
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
   const [episodesCount, setEpisodesCount] = useState<number>(10);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">(
+    "monthly",
+  );
 
-  const handleCheckout = async (type: "subscription" | "bundle", id: string) => {
+  const handleCheckout = async (
+    type: "subscription" | "bundle",
+    id: string,
+  ) => {
     setCheckoutLoading(id);
     setCheckoutError(null);
     try {
@@ -119,7 +148,7 @@ export default function PricingPage() {
           "x-csrf-token": getCsrfHeader(),
         },
         body: JSON.stringify(
-          type === "subscription" ? { type, plan: id } : { type, bundle: id }
+          type === "subscription" ? { type, plan: id } : { type, bundle: id },
         ),
       });
       const data = await res.json();
@@ -142,7 +171,10 @@ export default function PricingPage() {
       {/* Header */}
       <header className="border-b border-border">
         <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-lg font-semibold text-brand-gold flex items-center gap-2">
+          <Link
+            href="/"
+            className="text-lg font-semibold text-brand-gold flex items-center gap-2"
+          >
             <Sparkles className="h-5 w-5" />
             ReelRay
           </Link>
@@ -157,9 +189,12 @@ export default function PricingPage() {
 
       <main className="mx-auto max-w-7xl px-6 py-16 space-y-16">
         {/* Hero */}
-        <div className="text-center space-y-4">
+        <div className="text-center space-y-3">
+          <p className="text-xs tracking-[0.3em] text-brand-cyan/70 italic">
+            POWER UP YOUR UNIVERSE
+          </p>
           <h1 className="text-4xl font-bold text-foreground">
-            选择<span className="text-brand-gold">方案</span>
+            注入能量，<span className="text-brand-gold">解锁你的宇宙</span>
           </h1>
           <p className="text-muted-foreground max-w-xl mx-auto">
             Credits 积分制，按用量计费。套餐锁定折扣，资源包按需购买，超额自动续费。
@@ -167,6 +202,37 @@ export default function PricingPage() {
           <p className="text-sm text-muted-foreground/60">
             1 集 720p 短片 约消耗 10,000 Credits
           </p>
+        </div>
+
+        {/* 月度 / 年度 切换 */}
+        <div className="flex justify-center">
+          <div className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] p-1">
+            <button
+              type="button"
+              onClick={() => setBillingCycle("monthly")}
+              className={`rounded-full px-5 py-1.5 text-sm font-medium transition-all ${
+                billingCycle === "monthly"
+                  ? "bg-brand-cyan text-background"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              月度订阅
+            </button>
+            <button
+              type="button"
+              onClick={() => setBillingCycle("yearly")}
+              className={`rounded-full px-5 py-1.5 text-sm font-medium transition-all flex items-center gap-1.5 ${
+                billingCycle === "yearly"
+                  ? "bg-brand-cyan text-background"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              年度订阅
+              <span className="rounded-full bg-brand-green/20 px-1.5 py-0.5 text-[10px] font-semibold text-brand-green">
+                省20%
+              </span>
+            </button>
+          </div>
         </div>
 
         {/* 错误提示 */}
@@ -178,64 +244,88 @@ export default function PricingPage() {
 
         {/* 订阅套餐 */}
         <section>
-          <h2 className="text-2xl font-semibold text-foreground text-center mb-8">
-            订阅套餐
-          </h2>
           <div className="grid gap-6 md:grid-cols-3">
-            {PLANS.map((plan) => (
-              <Card
-                key={plan.planId}
-                className={`relative ${plan.border} ${plan.popular ? "ring-1 ring-brand-gold/50" : ""}`}
-              >
-                {plan.popular && (
-                  <Badge className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-brand-gold text-background">
-                    最受欢迎
-                  </Badge>
-                )}
-                <CardHeader className="text-center pb-4">
-                  <div
-                    className={`mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full ${plan.bg}`}
-                  >
-                    <plan.icon className={`h-6 w-6 ${plan.color}`} />
-                  </div>
-                  <CardTitle className="text-lg">{plan.name}</CardTitle>
-                  <div className="mt-2">
-                    <span className="text-3xl font-bold text-foreground">
-                      {plan.price}
-                    </span>
-                    <span className="text-muted-foreground">{plan.period}</span>
-                  </div>
-                  <CardDescription className="mt-1">
-                    {plan.credits} Credits · {plan.discount}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <ul className="space-y-2 text-sm">
-                    {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-cyan" />
-                        <span className="text-muted-foreground">{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Button
-                    className="w-full gap-1.5"
-                    variant={plan.popular ? "default" : "outline"}
-                    disabled={checkoutLoading === plan.planId}
-                    onClick={() => handleCheckout("subscription", plan.planId)}
-                  >
-                    {checkoutLoading === plan.planId
-                      ? "处理中..."
-                      : "订阅"}
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+            {PLANS.map((plan) => {
+              const yearlyMonthly = Math.round(plan.priceNum * 0.8);
+              const yearlyTotal = yearlyMonthly * 12;
+
+              return (
+                <Card
+                  key={plan.planId}
+                  className={`relative bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:bg-white/[0.06] hover:border-brand-gold/30 hover:shadow-[0_0_40px_-8px_rgba(250,204,21,0.15)] transition-all duration-300 ${
+                    plan.popular
+                      ? "ring-1 ring-brand-gold/40"
+                      : ""
+                  }`}
+                >
+                  {plan.popular && (
+                    <Badge className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-brand-gold text-background shadow-[0_0_12px_rgba(250,204,21,0.3)]">
+                      🔥 最受欢迎
+                    </Badge>
+                  )}
+                  <CardHeader className="text-center pb-4">
+                    <span className="text-3xl mb-2 block">{plan.emoji}</span>
+                    <CardTitle className="font-heading text-xl uppercase tracking-wider">
+                      {plan.name}
+                    </CardTitle>
+                    <div className="mt-3">
+                      {billingCycle === "monthly" ? (
+                        <>
+                          <span className="text-4xl font-bold text-foreground">
+                            {plan.price}
+                          </span>
+                          <span className="text-muted-foreground">
+                            {plan.period}
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="text-4xl font-bold text-foreground">
+                            ¥{yearlyMonthly}
+                          </span>
+                          <span className="text-muted-foreground">
+                            {plan.period}
+                          </span>
+                          <p className="mt-1 text-xs text-muted-foreground/60">
+                            ×12 = ¥{yearlyTotal.toLocaleString()}/年
+                          </p>
+                        </>
+                      )}
+                    </div>
+                    <CardDescription className="mt-1">
+                      {plan.credits} Credits · {plan.discount}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <ul className="space-y-2 text-sm">
+                      {plan.features.map((f) => (
+                        <li key={f} className="flex items-start gap-2">
+                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-cyan" />
+                          <span className="text-muted-foreground">{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Button
+                      className="w-full gap-1.5"
+                      variant={plan.popular ? "default" : "outline"}
+                      disabled={checkoutLoading === plan.planId}
+                      onClick={() =>
+                        handleCheckout("subscription", plan.planId)
+                      }
+                    >
+                      {checkoutLoading === plan.planId
+                        ? "处理中..."
+                        : "订阅"}
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </section>
 
         {/* 充值包 */}
-        <section>
+        <section className="mt-8">
           <h2 className="text-2xl font-semibold text-foreground text-center mb-8">
             充值包
           </h2>
@@ -263,7 +353,9 @@ export default function PricingPage() {
                     className="w-full"
                     variant="outline"
                     disabled={checkoutLoading === bundle.bundleId}
-                    onClick={() => handleCheckout("bundle", bundle.bundleId)}
+                    onClick={() =>
+                      handleCheckout("bundle", bundle.bundleId)
+                    }
                   >
                     {checkoutLoading === bundle.bundleId
                       ? "处理中..."
@@ -275,7 +367,6 @@ export default function PricingPage() {
           </div>
         </section>
 
-
         {/* C-08: Credits 计算器 */}
         <section className="border-t border-border pt-12">
           <h2 className="text-2xl font-semibold text-foreground text-center mb-2">
@@ -286,7 +377,9 @@ export default function PricingPage() {
           </p>
           <div className="max-w-md mx-auto space-y-4">
             <div className="flex items-center gap-4">
-              <label className="text-sm text-foreground whitespace-nowrap">计划集数</label>
+              <label className="text-sm text-foreground whitespace-nowrap">
+                计划集数
+              </label>
               <input
                 type="range"
                 min={1}
@@ -312,8 +405,8 @@ export default function PricingPage() {
                   {episodesCount <= 4
                     ? "Starter (149)"
                     : episodesCount <= 16
-                    ? "Pro (499)"
-                    : "Studio (1,499)"}
+                      ? "Pro (499)"
+                      : "Studio (1,499)"}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
@@ -322,8 +415,8 @@ export default function PricingPage() {
                   {episodesCount <= 4
                     ? "149"
                     : episodesCount <= 16
-                    ? "499"
-                    : "1,499"}
+                      ? "499"
+                      : "1,499"}
                 </span>
               </div>
             </div>
