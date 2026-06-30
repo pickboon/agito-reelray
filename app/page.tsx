@@ -53,7 +53,7 @@ export default function Home() {
         <section
           id="hero"
           role="presentation"
-          className="min-h-[85vh] flex flex-col items-center justify-center px-6 text-center relative overflow-hidden bg-[radial-gradient(circle,var(--color-muted)_1px,transparent_1px)]"
+          className="min-h-[85vh] flex flex-col items-center justify-center px-6 text-center relative overflow-hidden bg-[radial-gradient(circle,var(--color-brand-cyan)_1px,transparent_1px)]"
           style={{ backgroundSize: "32px 32px" }}
         >
           <div className="relative z-10 max-w-4xl">
@@ -70,20 +70,20 @@ export default function Home() {
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-md bg-brand-cyan text-background font-semibold hover:bg-brand-cyan/90 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-md bg-brand-cyan text-background font-semibold hover:bg-brand-cyan/90 hover:shadow-[0_0_20px_rgba(102,252,241,0.25)] transition-all"
               >
                 免费开始
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="#demo"
-                className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-md border border-brand-cyan text-brand-cyan font-semibold hover:bg-brand-cyan/10 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-md border border-brand-cyan text-brand-cyan font-semibold hover:bg-brand-cyan/10 hover:shadow-[0_0_15px_rgba(102,252,241,0.15)] transition-all"
               >
                 观看演示
               </Link>
             </div>
 
-            <p className="mt-16 text-xs text-muted-foreground/60">
+            <p className="mt-16 text-xs text-brand-cyan/80">
               HappyHorse · Seedance · Kling 多模型驱动 · 生成成功率 96.9%
             </p>
           </div>
@@ -296,7 +296,7 @@ export default function Home() {
               ] as const).map((tpl) => (
                 <div
                   key={tpl.genre}
-                  className="bg-card border border-border rounded-lg p-4 hover:border-brand-purple/30 transition-colors"
+                  className="bg-card border border-border rounded-lg p-4 hover:border-brand-cyan/30 transition-colors"
                 >
                   <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full ${tpl.badgeClass} mb-3`}>
                     {tpl.badge}
@@ -311,7 +311,7 @@ export default function Home() {
             <div className="text-center">
               <Link
                 href="/dashboard/templates"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md border border-brand-cyan text-brand-cyan font-semibold hover:bg-brand-cyan/10 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md border border-brand-cyan text-brand-cyan font-semibold hover:bg-brand-cyan/10 hover:shadow-[0_0_12px_rgba(102,252,241,0.15)] transition-all"
               >
                 查看全部模板
                 <ArrowRight className="h-4 w-4" />
@@ -335,14 +335,14 @@ export default function Home() {
               {([
                 {
                   badge: "推荐",
-                  badgeClass: "bg-brand-purple/10 text-brand-purple",
+                  badgeClass: "bg-brand-cyan/10 text-brand-cyan",
                   title: "多镜头叙事专家",
                   name: "Seedance 2.0",
                   desc: "字节跳动出品，92% 角色保留率，原生多镜头连贯生成，适合长叙事。",
                 },
                 {
                   badge: "4K",
-                  badgeClass: "bg-brand-cyan/10 text-brand-cyan",
+                  badgeClass: "bg-brand-purple/10 text-brand-purple",
                   title: "4K 品质天花板",
                   name: "Kling 3.0",
                   desc: "快手出品，电影级画质直出，ARR $5 亿验证，适合追求极致品质。",
@@ -399,7 +399,7 @@ export default function Home() {
                 >
                   <div className="p-4">
                     <span
-                      className="inline-block text-xs font-medium px-3 py-1 rounded-full bg-brand-cyan/10 text-brand-cyan"
+                      className="inline-block text-xs font-medium px-3 py-1 rounded-full bg-brand-green/10 text-brand-green"
                     >
                       {item.label}
                     </span>
@@ -492,7 +492,7 @@ export default function Home() {
                     badge: "bg-brand-cyan",
                     credits: "text-brand-cyan",
                     check: "text-brand-cyan",
-                    btn: "bg-brand-cyan text-background font-semibold hover:bg-brand-cyan/90",
+                    btn: "bg-brand-cyan text-background font-semibold hover:bg-brand-cyan/90 hover:shadow-[0_0_18px_rgba(102,252,241,0.25)] transition-all",
                   },
                   purple: {
                     border: "border-brand-purple",
@@ -500,7 +500,7 @@ export default function Home() {
                     badge: "bg-brand-purple",
                     credits: "text-brand-purple",
                     check: "text-brand-purple",
-                    btn: "bg-brand-purple text-background font-semibold hover:bg-brand-purple/90",
+                    btn: "bg-brand-purple text-background font-semibold hover:bg-brand-purple/90 hover:shadow-[0_0_18px_rgba(179,0,255,0.25)] transition-all",
                   },
                   gold: {
                     border: "border-brand-gold",
@@ -508,7 +508,7 @@ export default function Home() {
                     badge: "bg-brand-gold",
                     credits: "text-brand-gold",
                     check: "text-brand-gold",
-                    btn: "bg-brand-gold text-background font-semibold hover:bg-brand-gold/90",
+                    btn: "bg-brand-gold text-background font-semibold hover:bg-brand-gold/90 hover:shadow-[0_0_18px_rgba(212,168,67,0.25)] transition-all",
                   },
                 } as const;
                 const t = themeMap[plan.theme as keyof typeof themeMap];
@@ -570,7 +570,7 @@ export default function Home() {
             <div className="text-center mt-16">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-md bg-brand-cyan text-background font-semibold hover:bg-brand-cyan/90 transition-colors text-lg"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-md bg-brand-cyan text-background font-semibold hover:bg-brand-cyan/90 hover:shadow-[0_0_24px_rgba(102,252,241,0.3)] transition-all text-lg"
               >
                 免费开始
                 <ArrowRight className="h-5 w-5" />
