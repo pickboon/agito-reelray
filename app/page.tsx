@@ -15,7 +15,7 @@ export default function Home() {
         <section className="relative min-h-screen flex flex-col items-center justify-center px-6 text-center overflow-hidden">
           {/* 全屏赛博朋克背景视频 */}
           <video
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover hero-bg-video-parallax"
             autoPlay
             muted
             loop
