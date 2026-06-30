@@ -17,7 +17,8 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Film, Trash2, Share2, Search, Play, X } from "lucide-react";
+import { Film, Trash2, Share2, Search, Play, X, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { apiFetch } from "@/lib/api-fetch";
 
@@ -125,6 +126,9 @@ export default function TemplatesPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTemplate, setSelectedTemplate] = useState<StoreTemplate | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [usingTemplate, setUsingTemplate] = useState(false);
+
+  const router = useRouter();
 
   const [userTemplates, setUserTemplates] = useState<UserTemplate[]>([]);
   const [marketTemplates, setMarketTemplates] = useState<MarketTemplate[]>([]);
@@ -235,6 +239,31 @@ export default function TemplatesPage() {
     fetchUserTemplates();
     fetchMarketTemplates();
   }, [fetchUserTemplates, fetchMarketTemplates]);
+
+  const handleUseTemplate = async () => {
+    if (!selectedTemplate) return;
+    setUsingTemplate(true);
+    try {
+      const res = await apiFetch("/api/templates/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ preset: selectedTemplate.id }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        toast.error(data.error || "创建项目失败");
+        return;
+      }
+      const data = await res.json();
+      toast.success("项目已创建，正在跳转...");
+      setDialogOpen(false);
+      router.push(`/dashboard/projects/${data.project_id}/episodes/${data.episode_id}`);
+    } catch {
+      toast.error("网络错误，请重试");
+    } finally {
+      setUsingTemplate(false);
+    }
+  };
 
   function openDetail(t: StoreTemplate) {
     setSelectedTemplate(t);
@@ -427,6 +456,18 @@ export default function TemplatesPage() {
                     {selectedTemplate.scenes?.map(s => s.description).join('\n\n') ?? "无场景描述"}
                   </pre>
                 </ScrollArea>
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <Button variant="outline" onClick={() => setDialogOpen(false)}>取消</Button>
+                <Button onClick={handleUseTemplate} disabled={usingTemplate}>
+                  {usingTemplate ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      创建中...
+                    </>
+                  ) : "使用此模板"}
+                </Button>
               </div>
             </div>
           )}
