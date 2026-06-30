@@ -273,7 +273,105 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── 屏 4: SEE IT IN ACTION ── */}
+        {/* ── 屏 4: 模板市场预览 ── */}
+        <section id="templates" className="py-24 px-6">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl font-bold text-center mb-4">
+              精品模板，一键套用
+            </h2>
+            <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
+              8 套专业模板覆盖复仇、甜宠、悬疑、仙侠、穿越、总裁、战神、重生，选中模板即生成全剧分镜。
+            </p>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+              {([
+                { name: "复仇女王归来", genre: "revenge", shots: 15, desc: "经典复仇短剧模板", badge: "复仇", badgeClass: "bg-red-500/10 text-red-400" },
+                { name: "霸道总裁爱上我", genre: "romance", shots: 12, desc: "甜宠爱情短剧模板", badge: "甜宠", badgeClass: "bg-pink-500/10 text-pink-400" },
+                { name: "密室逃脱", genre: "thriller", shots: 10, desc: "悬疑惊悚短剧模板", badge: "悬疑", badgeClass: "bg-gray-500/10 text-gray-400" },
+                { name: "修仙之路", genre: "fantasy", shots: 14, desc: "仙侠玄幻短剧模板", badge: "仙侠", badgeClass: "bg-purple-500/10 text-purple-400" },
+                { name: "异世界穿越", genre: "crossworld", shots: 13, desc: "穿越异世界短剧模板", badge: "穿越", badgeClass: "bg-brand-cyan/10 text-brand-cyan" },
+                { name: "总裁的契约新娘", genre: "ceo", shots: 11, desc: "总裁契约短剧模板", badge: "总裁", badgeClass: "bg-brand-gold/10 text-brand-gold" },
+                { name: "战神归来", genre: "warlord", shots: 16, desc: "战神回归短剧模板", badge: "战神", badgeClass: "bg-orange-500/10 text-orange-400" },
+                { name: "重生之商业帝国", genre: "comeback", shots: 12, desc: "重生逆袭短剧模板", badge: "重生", badgeClass: "bg-green-500/10 text-green-400" },
+              ] as const).map((tpl) => (
+                <div
+                  key={tpl.genre}
+                  className="bg-card border border-border rounded-lg p-4 hover:border-brand-gold/30 transition-colors"
+                >
+                  <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full ${tpl.badgeClass} mb-3`}>
+                    {tpl.badge}
+                  </span>
+                  <h3 className="font-semibold mb-1 text-sm">{tpl.name}</h3>
+                  <p className="text-xs text-muted-foreground mb-2">{tpl.desc}</p>
+                  <span className="text-xs text-muted-foreground">{tpl.shots} 个镜头</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="text-center">
+              <Link
+                href="/dashboard/templates"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md border border-brand-gold text-brand-gold font-semibold hover:bg-brand-gold/10 transition-colors"
+              >
+                查看全部模板
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </section>
+
+
+        {/* ── 屏 5: 多模型驱动 ── */}
+        <section id="models" className="py-24 px-6 bg-secondary/30">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl font-bold text-center mb-4">
+              全球顶级模型驱动
+            </h2>
+            <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
+              不绑定单一 API。按场景选择最佳模型，统一 Credits 消费。
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {([
+                {
+                  badge: "推荐",
+                  badgeClass: "bg-brand-gold/10 text-brand-gold",
+                  title: "多镜头叙事专家",
+                  name: "Seedance 2.0",
+                  desc: "字节跳动出品，92% 角色保留率，原生多镜头连贯生成，适合长叙事。",
+                },
+                {
+                  badge: "4K",
+                  badgeClass: "bg-brand-cyan/10 text-brand-cyan",
+                  title: "4K 品质天花板",
+                  name: "Kling 3.0",
+                  desc: "快手出品，电影级画质直出，ARR $5 亿验证，适合追求极致品质。",
+                },
+                {
+                  badge: "稳定",
+                  badgeClass: "bg-brand-gold/10 text-brand-gold",
+                  title: "高真实感引擎",
+                  name: "HappyHorse 1.1",
+                  desc: "96.9% 生成成功率，t2v 与 r2v 双模式，实测稳定可靠。",
+                },
+              ] as const).map((model) => (
+                <div
+                  key={model.name}
+                  className="bg-card border border-border rounded-lg p-6 hover:border-brand-gold/20 transition-colors"
+                >
+                  <span className={`inline-block text-xs font-medium px-2.5 py-1 rounded-full ${model.badgeClass} mb-4`}>
+                    {model.badge}
+                  </span>
+                  <h3 className="font-semibold text-lg mb-1">{model.name}</h3>
+                  <p className="text-sm text-brand-gold/80 mb-2">{model.title}</p>
+                  <p className="text-sm text-muted-foreground">{model.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── 屏 6: 样片展示 ── */}
         <section id="demo" className="py-24 px-6">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-16">
@@ -320,7 +418,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── 屏 5: PRICING + CTA ── */}
+        {/* ── 屏 7: PRICING + CTA ── */}
         <section id="pricing" className="py-24 px-6 bg-secondary/30">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-4">
