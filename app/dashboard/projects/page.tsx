@@ -154,7 +154,7 @@ export default function ProjectsPage() {
               key={project.id}
               href={`/dashboard/projects/${project.id}`}
             >
-              <Card className="h-full hover:border-brand-gold/30 transition-colors cursor-pointer">
+              <Card className="h-full card-hover-lift hover:border-brand-purple/30 transition-colors cursor-pointer">
                 <CardContent className="space-y-3 py-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-2">

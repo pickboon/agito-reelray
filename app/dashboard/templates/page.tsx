@@ -215,7 +215,7 @@ export default function TemplatesPage() {
             {userTemplates.map((template) => (
               <Card
                 key={template.id}
-                className={`hover:border-brand-gold/30 transition-colors ${
+                className={`card-hover-lift hover:border-brand-purple/30 transition-colors ${
                   template.is_public ? "border-brand-gold/20" : ""
                 }`}
               >
@@ -303,7 +303,7 @@ export default function TemplatesPage() {
             {marketTemplates.map((template) => (
               <Card
                 key={template.id}
-                className="hover:border-brand-cyan/30 transition-colors"
+                className="card-hover-lift hover:border-brand-cyan/30 transition-colors"
               >
                 <CardContent className="p-4 space-y-3">
                   <div>
@@ -363,7 +363,7 @@ export default function TemplatesPage() {
           {storeTemplates.map((template) => (
             <Card
               key={template.id}
-              className="cursor-pointer hover:border-brand-gold/30 transition-colors"
+              className="cursor-pointer card-hover-lift hover:border-brand-purple/30 transition-colors"
               onClick={() => openDetail(template)}
             >
               <CardContent className="p-4 space-y-3">

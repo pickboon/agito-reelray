@@ -228,7 +228,7 @@ export function Toolbar() {
         </Button>
         <Button
           size="sm"
-          className="h-8 gap-1.5 text-xs bg-brand-gold text-background hover:bg-brand-gold/90"
+          className={`h-8 gap-1.5 text-xs ${exporting ? 'editor-export-progress text-background' : 'bg-brand-gold text-background hover:bg-brand-gold/90'}`}
           disabled={exporting || timeline.clips.length === 0}
           onClick={handleExport}
         >

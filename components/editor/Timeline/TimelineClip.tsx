@@ -138,8 +138,8 @@ export function TimelineClip({ clip, zoom, trackLocked }: TimelineClipProps) {
       ref={clipRef}
       className={`absolute top-1 bottom-1 rounded-md overflow-hidden select-none group ${
         isSelected
-          ? "ring-1 ring-brand-gold shadow-[0_0_8px_rgba(250,204,21,0.3)]"
-          : "hover:ring-1 hover:ring-brand-gold/40"
+          ? "ring-1 ring-brand-purple shadow-[0_0_8px_rgba(179,0,255,0.3)]"
+          : "hover:ring-1 hover:ring-brand-purple/40"
       } ${trackLocked ? "opacity-60" : ""}`}
       style={{
         left,

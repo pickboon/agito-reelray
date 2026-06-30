@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,6 +28,31 @@ const statusMap: Record<string, string> = {
   generating: "生成中",
   completed: "已完成",
 };
+
+/** 数字跳动动画 — 从 0 缓动到 target */
+function CountUp({ target, duration = 800, formatter }: { target: number; duration?: number; formatter?: (n: number) => string }) {
+  const [display, setDisplay] = useState(0);
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    let start = 0;
+    const startTime = performance.now();
+    const animate = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplay(Math.round(eased * target));
+      if (progress < 1) {
+        rafRef.current = requestAnimationFrame(animate);
+      }
+    };
+    rafRef.current = requestAnimationFrame(animate);
+    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+  }, [target, duration]);
+
+  return <>{formatter ? formatter(display) : display.toLocaleString()}</>;
+}
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -114,29 +139,32 @@ export default function DashboardPage() {
   const statCards = [
     {
       label: "项目数",
-      value: stats?.projectCount ?? 0,
+      number: stats?.projectCount ?? 0,
       icon: Film,
       color: "text-brand-gold",
+      format: undefined as ((n: number) => string) | undefined,
     },
     {
       label: "集数",
-      value: stats?.episodeCount ?? 0,
+      number: stats?.episodeCount ?? 0,
       icon: Clapperboard,
       color: "text-brand-cyan",
+      format: undefined as ((n: number) => string) | undefined,
     },
     {
       label: "Credits",
-      value: (stats?.creditsRemaining ?? 0).toLocaleString(),
+      number: stats?.creditsRemaining ?? 0,
       icon: Wallet,
       color: "text-brand-gold",
+      format: (n: number) => n.toLocaleString(),
     },
     {
       label: "套餐",
-      value: planDisplay,
+      text: planDisplay,
       icon: TrendingUp,
       color: "text-brand-cyan",
     },
-  ];
+  ] as const;
 
   // P2-2: projectCount === 0 时显示欢迎引导
   if (stats && stats.projectCount === 0) {
@@ -214,7 +242,13 @@ export default function DashboardPage() {
               <card.icon className={`h-4 w-4 ${card.color}`} />
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-foreground">{card.value}</p>
+              <p className="text-2xl font-bold text-foreground">
+                {'number' in card ? (
+                  <CountUp target={card.number} formatter={card.format} />
+                ) : (
+                  card.text
+                )}
+              </p>
             </CardContent>
           </Card>
         ))}
