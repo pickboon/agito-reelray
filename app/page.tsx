@@ -1,14 +1,5 @@
 import Link from "next/link";
-import {
-  Film,
-  Sparkles,
-  Upload,
-  Lock,
-  Check,
-  ArrowRight,
-  Wand2,
-  Clapperboard,
-} from "lucide-react";
+import { Zap, Globe, Brain, Film, User } from "lucide-react";
 import MobileNav from "@/components/MobileNav";
 
 export default function Home() {
@@ -22,569 +13,181 @@ export default function Home() {
           </Link>
 
           {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-8">
-            <Link
-              href="/dashboard/templates"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
+          <div className="hidden md:flex items-center gap-6">
+            <Link href="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              工作台
+            </Link>
+            <Link href="/dashboard/templates" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               模板库
             </Link>
-            <Link
-              href="/pricing"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
+            <Link href="/dashboard/community" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              极光社区
+            </Link>
+            <Link href="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               定价
             </Link>
-            <Link
-              href="/login"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              登录
+            <div className="h-4 w-px bg-border" />
+            <button className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded border border-border hover:border-brand-cyan/30">
+              EN / 中
+            </button>
+            <span className="text-xs text-brand-cyan px-3 py-1 rounded-full border border-brand-cyan/20 bg-brand-cyan/5">
+              🎁 1,500 积分
+            </span>
+            <Link href="/dashboard/settings" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <div className="h-7 w-7 rounded-full bg-muted flex items-center justify-center">
+                <User className="h-4 w-4" />
+              </div>
             </Link>
           </div>
 
-          {/* Mobile hamburger */}
           <MobileNav />
         </nav>
       </header>
 
       <main>
-        {/* ── 屏 1: HERO ── */}
-        <section
-          id="hero"
-          role="presentation"
-          className="min-h-[85vh] flex flex-col items-center justify-center px-6 text-center relative overflow-hidden bg-[radial-gradient(circle,var(--color-brand-cyan)_1px,transparent_1px)]"
-          style={{ backgroundSize: "32px 32px" }}>
-          <div className="absolute inset-0 perspective-grid opacity-40" />
-          <div className="relative z-10 max-w-4xl">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-              你的角色。
+        {/* ── HERO ── */}
+        <section className="relative min-h-screen flex flex-col items-center justify-center px-6 text-center overflow-hidden">
+          {/* 视频占位背景 */}
+          <div className="hero-bg-video" />
+          {/* 粒子 */}
+          <div className="particles-bg">
+            {Array.from({ length: 20 }).map((_, i) => (
+              <div key={i} className="particle-dot" style={{
+                left: `${Math.random() * 100}%`,
+                bottom: "-5%",
+                animationDuration: `${6 + Math.random() * 10}s`,
+                animationDelay: `${Math.random() * 8}s`,
+                width: `${1 + Math.random() * 2}px`,
+                height: `${1 + Math.random() * 2}px`,
+              }} />
+            ))}
+          </div>
+          {/* 微光尘 */}
+          <div className="light-dust" />
+
+          <div className="relative z-10 max-w-5xl">
+            {/* 标签 */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-cyan/20 bg-brand-cyan/5 text-xs text-brand-cyan mb-8">
+              <Zap className="h-3 w-3" />
+              AI-Powered Sci-Fi Series Generator
+            </div>
+
+            {/* 故障风标题 */}
+            <h1 className="relative text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight leading-tight mb-6">
+              <span className="glitch-title text-brand-cyan text-glow-cyan" data-text="重塑现实，即刻开机">
+                重塑现实，即刻开机
+              </span>
               <br />
-              <span className="text-brand-cyan text-glow-cyan">始终如一。</span>每一集
+              <span className="text-2xl sm:text-3xl lg:text-4xl text-muted-foreground font-normal tracking-[0.3em] uppercase">
+                REDEFINE REALITY
+              </span>
             </h1>
 
-            <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
-              接入全球顶级模型，角色锁定 + 精品模板，出海短剧一站创作。
+            <p className="mt-8 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              全球首个 AI 驱动的科幻短剧生成平台。<br className="sm:hidden" />
+              一键输入灵感，一分钟输出大片。
             </p>
 
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-md bg-brand-cyan text-background font-semibold hover:bg-brand-cyan/90 hover:shadow-[0_0_20px_rgba(102,252,241,0.25)] transition-all"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-md bg-brand-cyan text-background font-semibold text-lg hover:bg-brand-cyan/90 hover:shadow-[0_0_30px_rgba(102,252,241,0.35)] transition-all"
               >
-                免费开始
-                <ArrowRight className="h-4 w-4" />
+                <Zap className="h-5 w-5" />
+                立即生成短剧
               </Link>
               <Link
-                href="#demo"
-                className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-md border border-brand-cyan text-brand-cyan font-semibold hover:bg-brand-cyan/10 hover:shadow-[0_0_15px_rgba(102,252,241,0.15)] transition-all"
+                href="#features"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-md border border-brand-cyan text-brand-cyan font-semibold text-lg hover:bg-brand-cyan/10 hover:shadow-[0_0_20px_rgba(102,252,241,0.2)] transition-all"
               >
+                <Film className="h-5 w-5" />
                 观看演示
               </Link>
             </div>
 
             <div className="gradient-divider h-px w-32 mx-auto mt-12 mb-6" />
-            <p className="text-xs text-brand-cyan/80">
-              HappyHorse · Seedance · Kling 多模型驱动 · 生成成功率 96.9%
+            <p className="text-xs text-brand-cyan/70">
+              Seedance · Kling · HappyHorse 多模型驱动 · 生成成功率 96.9%
             </p>
           </div>
-        </section>
 
-
-        {/* ── 创作入口 ── */}
-        <section id="create" className="py-20 px-6">
-          <div className="max-w-5xl mx-auto">
-            <h2 className="text-2xl font-bold text-center mb-3">开始创作</h2>
-            <p className="text-center text-muted-foreground mb-12">选择你的创作方式</p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* AI 短剧 */}
-              <Link
-                href="/dashboard/projects"
-                className="group relative rounded-xl p-8 frosted-card transition-all hover:border-brand-purple/40 hover:shadow-lg hover:shadow-brand-purple/5"
-              >
-                <div className="flex items-start gap-5">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl glow-circle bg-brand-purple/10 transition-colors group-hover:bg-brand-purple/20">
-                    <Clapperboard className="h-7 w-7 text-brand-purple" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold mb-2">AI 短剧</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      上传角色参考图即生成人物锚点，模板一键套用到整部剧集。支持多模型切换，适配 TikTok / YouTube 出海全流程。
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground">剧本拆解</span>
-                      <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground">角色锚点</span>
-                      <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground">多集管理</span>
-                    </div>
-                  </div>
-                </div>
-                <ArrowRight className="absolute top-8 right-8 h-5 w-5 text-muted-foreground/40 transition-transform group-hover:translate-x-1 group-hover:text-brand-purple" />
-              </Link>
-
-              {/* 视频生成 */}
-              <Link
-                href="/dashboard/generate"
-                className="group relative rounded-xl p-8 frosted-card transition-all hover:border-brand-cyan/40 hover:shadow-lg hover:shadow-brand-cyan/5"
-              >
-                <div className="flex items-start gap-5">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl glow-circle bg-brand-cyan/10 transition-colors group-hover:bg-brand-cyan/20">
-                    <Wand2 className="h-7 w-7 text-brand-cyan" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold mb-2">视频生成</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      选择模型即时生成 AI 视频。Seedance 多镜头叙事 / Kling 4K 直出 / HappyHorse 高真实感，按需切换，统一 Credits 消耗。
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground">文生视频</span>
-                      <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground">图生视频</span>
-                      <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground">多模型</span>
-                    </div>
-                  </div>
-                </div>
-                <ArrowRight className="absolute top-8 right-8 h-5 w-5 text-muted-foreground/40 transition-transform group-hover:translate-x-1 group-hover:text-brand-cyan" />
-              </Link>
+          {/* 向下滚动指示 */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground/40">
+            <span className="text-[10px] uppercase tracking-widest">探索功能</span>
+            <div className="w-4 h-6 rounded-full border border-muted-foreground/30 flex justify-center pt-1">
+              <div className="w-1 h-1.5 rounded-full bg-brand-cyan/60 animate-bounce" />
             </div>
           </div>
         </section>
-        {/* ── 屏 2: THE PROBLEM ── */}
-        <section id="problem" className="py-24 px-6">
+
+        {/* ── BENTO BOX: 核心功能特性 ── */}
+        <section id="features" className="py-24 px-6">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-4">
-              角色{"“"}换脸{"”"}，是 AI 短剧最大的硬伤。
-            </h2>
-            <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
-              没有角色锁定，AI 短剧跨集一致性跌破 40%。
-            </p>
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold mb-4">
+                <span className="text-brand-cyan">AI</span> 短剧全链路解决方案
+              </h2>
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                从剧本到分发，一站式覆盖短剧创作全流程
+              </p>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
+              {([
                 {
-                  title: "第 1 集 vs 第 3 集",
-                  desc: "同一角色，仅隔两集——面部特征偏移至无法辨认。",
-                },
-                {
-                  title: "光照变化",
-                  desc: "不同场景光照彻底改变肤色与面部结构。",
-                },
-                {
-                  title: "角度切换",
-                  desc: "一个新机位，主角形象面目全非。",
-                },
-              ].map((item) => (
-                <div
-                  key={item.title}
-                  className="frosted-card rounded-lg p-6"
-                >
-                  <h3 className="font-semibold mb-1">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground mb-6">
-                    {item.desc}
-                  </p>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    {/* Without */}
-                    <div aria-label="未使用 ReelRay 的效果" className="text-center">
-                      <span className="text-xs text-destructive font-medium">
-                        Without ReelRay
-                      </span>
-                      <div className="mt-2 h-24 rounded-md bg-destructive/10 border border-destructive/30 flex flex-col items-center justify-center">
-                        <div className="h-8 w-8 rounded-full bg-destructive/40 mb-1" />
-                        <span className="text-[10px] text-destructive/80">
-                          Face drift
-                        </span>
-                      </div>
-                    </div>
-                    {/* With */}
-                    <div aria-label="使用 ReelRay 的效果" className="text-center">
-                      <span className="text-xs text-green-400 font-medium">
-                        With ReelRay
-                      </span>
-                      <div className="mt-2 h-24 rounded-md bg-green-500/10 border border-green-500/30 flex flex-col items-center justify-center">
-                        <div className="h-8 w-8 rounded-full bg-green-400/40 mb-1" />
-                        <span className="text-[10px] text-green-400/80">
-                          Locked ✓
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── 屏 3: HOW IT WORKS ── */}
-        <section
-          id="how-it-works"
-          className="py-24 px-6 bg-secondary/30"
-        >
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-16">
-              工作原理
-            </h2>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-              {[
-                {
-                  icon: Upload,
-                  step: "01",
-                  title: "上传参考照片",
-                  desc: "提供数张角色清晰照片，涵盖不同角度。",
-                },
-                {
-                  icon: Sparkles,
-                  step: "02",
-                  title: "AI 生成角色锚点",
-                  desc: "模型基于参考构建稳定的身份锚点。",
-                },
-                {
-                  icon: Lock,
-                  step: "03",
-                  title: "逐帧锁定锚点",
-                  desc: "每一帧画面均受锚点身份约束。",
+                  icon: Brain,
+                  iconClass: "text-brand-purple",
+                  bgClass: "bg-brand-purple/10",
+                  dotClass: "bg-brand-purple/60",
+                  borderHover: "hover:border-brand-purple/30",
+                  dividerClass: "via-brand-purple/15",
+                  title: "剧本智核矩阵",
+                  subtitle: "AI 自动扩写、分镜拆解",
+                  bullets: ["智能剧本扩写引擎", "一键分镜拆解", "角色关系图谱生成"],
                 },
                 {
                   icon: Film,
-                  step: "04",
-                  title: "导出至 TikTok / YouTube",
-                  desc: "下载成片，直发 TikTok / YouTube。",
+                  iconClass: "text-brand-cyan",
+                  bgClass: "bg-brand-cyan/10",
+                  dotClass: "bg-brand-cyan/60",
+                  borderHover: "hover:border-brand-cyan/30",
+                  dividerClass: "via-brand-cyan/15",
+                  title: "全模态资产生成",
+                  subtitle: "场景、角色、配音一键生成",
+                  bullets: ["场景概念图生成", "角色锚点锁定", "多语言配音合成"],
                 },
-              ].map((item, i) => (
-                <div key={item.step} className="flex items-start gap-4">
-                  <div className="text-center flex-1">
-                    <div className="mx-auto h-12 w-12 rounded-full glow-circle flex items-center justify-center mb-4">
-                      <item.icon className="h-5 w-5 text-brand-cyan" />
-                    </div>
-                    <p className="text-brand-cyan font-sans text-sm mb-1">
-                      步骤 {item.step}
-                    </p>
-                    <h3 className="font-semibold mb-2">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground">{item.desc}</p>
-                  </div>
-                  {/* Desktop arrow between steps */}
-                  {i < 3 && (
-                    <div className="hidden lg:flex items-center pt-5 text-muted-foreground/40">
-                      <ArrowRight className="h-5 w-5" />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── 屏 4: 模板市场预览 ── */}
-        <section id="templates" className="py-24 px-6">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-4">
-              精品模板，一键套用
-            </h2>
-            <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
-              8 套专业模板覆盖复仇、甜宠、悬疑、仙侠、穿越、总裁、战神、重生，选中模板即生成全剧分镜。
-            </p>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-              {([
-                { name: "复仇女王归来", genre: "revenge", shots: 15, desc: "经典复仇短剧模板", badge: "复仇", badgeClass: "bg-red-500/10 text-red-400" },
-                { name: "霸道总裁爱上我", genre: "romance", shots: 12, desc: "甜宠爱情短剧模板", badge: "甜宠", badgeClass: "bg-pink-500/10 text-pink-400" },
-                { name: "密室逃脱", genre: "thriller", shots: 10, desc: "悬疑惊悚短剧模板", badge: "悬疑", badgeClass: "bg-gray-500/10 text-gray-400" },
-                { name: "修仙之路", genre: "fantasy", shots: 14, desc: "仙侠玄幻短剧模板", badge: "仙侠", badgeClass: "bg-purple-500/10 text-purple-400" },
-                { name: "异世界穿越", genre: "crossworld", shots: 13, desc: "穿越异世界短剧模板", badge: "穿越", badgeClass: "bg-brand-cyan/10 text-brand-cyan" },
-                { name: "总裁的契约新娘", genre: "ceo", shots: 11, desc: "总裁契约短剧模板", badge: "总裁", badgeClass: "bg-brand-gold/10 text-brand-gold" },
-                { name: "战神归来", genre: "warlord", shots: 16, desc: "战神回归短剧模板", badge: "战神", badgeClass: "bg-orange-500/10 text-orange-400" },
-                { name: "重生之商业帝国", genre: "comeback", shots: 12, desc: "重生逆袭短剧模板", badge: "重生", badgeClass: "bg-green-500/10 text-green-400" },
-              ] as const).map((tpl) => (
+                {
+                  icon: Globe,
+                  iconClass: "text-brand-green",
+                  bgClass: "bg-brand-green/10",
+                  dotClass: "bg-brand-green/60",
+                  borderHover: "hover:border-brand-green/30",
+                  dividerClass: "via-brand-green/15",
+                  title: "全球无缝分发",
+                  subtitle: "一键多语种翻译与格式适配",
+                  bullets: ["TikTok / YouTube 直出", "15+ 语种自动翻译", "多平台格式自动适配"],
+                },
+              ] as const).map((card) => (
                 <div
-                  key={tpl.genre}
-                  className="frosted-card rounded-lg p-4 hover:border-brand-cyan/30 transition-colors"
+                  key={card.title}
+                  className={`frosted-card rounded-xl p-8 flex flex-col items-center text-center ${card.borderHover} transition-all group`}
                 >
-                  <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full ${tpl.badgeClass} mb-3`}>
-                    {tpl.badge}
-                  </span>
-                  <h3 className="font-semibold mb-1 text-sm">{tpl.name}</h3>
-                  <p className="text-xs text-muted-foreground mb-2">{tpl.desc}</p>
-                  <span className="text-xs text-muted-foreground">{tpl.shots} 个镜头</span>
+                  <div className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl glow-circle ${card.bgClass} mb-6`}>
+                    <card.icon className={`h-8 w-8 ${card.iconClass}`} />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">{card.title}</h3>
+                  <p className="text-sm text-muted-foreground mb-6">{card.subtitle}</p>
+                  <ul className="space-y-2 text-left w-full">
+                    {card.bullets.map((b) => (
+                      <li key={b} className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <span className={`h-1.5 w-1.5 rounded-full ${card.dotClass} shrink-0`} />
+                        {b}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className={`mt-auto pt-6 w-full h-px bg-gradient-to-r from-transparent ${card.dividerClass} to-transparent`} />
                 </div>
               ))}
-            </div>
-
-            <div className="text-center">
-              <Link
-                href="/dashboard/templates"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md border border-brand-cyan text-brand-cyan font-semibold hover:bg-brand-cyan/10 hover:shadow-[0_0_12px_rgba(102,252,241,0.15)] transition-all"
-              >
-                查看全部模板
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        </section>
-
-
-        {/* ── 屏 5: 多模型驱动 ── */}
-        <section id="models" className="py-24 px-6 bg-secondary/30">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-4">
-              全球顶级模型驱动
-            </h2>
-            <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
-              不绑定单一 API。按场景选择最佳模型，统一 Credits 消费。
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {([
-                {
-                  badge: "推荐",
-                  badgeClass: "bg-brand-cyan/10 text-brand-cyan",
-                  title: "多镜头叙事专家",
-                  name: "Seedance 2.0",
-                  desc: "字节跳动出品，92% 角色保留率，原生多镜头连贯生成，适合长叙事。",
-                },
-                {
-                  badge: "4K",
-                  badgeClass: "bg-brand-purple/10 text-brand-purple",
-                  title: "4K 品质天花板",
-                  name: "Kling 3.0",
-                  desc: "快手出品，电影级画质直出，ARR $5 亿验证，适合追求极致品质。",
-                },
-                {
-                  badge: "稳定",
-                  badgeClass: "bg-brand-purple/10 text-brand-purple",
-                  title: "高真实感引擎",
-                  name: "HappyHorse 1.1",
-                  desc: "96.9% 生成成功率，t2v 与 r2v 双模式，实测稳定可靠。",
-                },
-              ] as const).map((model) => (
-                <div
-                  key={model.name}
-                  className="frosted-card rounded-lg p-6 hover:border-brand-purple/20 transition-colors"
-                >
-                  <span className={`inline-block text-xs font-medium px-2.5 py-1 rounded-full ${model.badgeClass} mb-4`}>
-                    {model.badge}
-                  </span>
-                  <h3 className="font-semibold text-lg mb-1">{model.name}</h3>
-                  <p className="text-sm text-brand-purple/80 mb-2">{model.title}</p>
-                  <p className="text-sm text-muted-foreground">{model.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── 屏 6: 样片展示 ── */}
-        <section id="demo" className="py-24 px-6">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-16">
-              样片展示
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                { label: "复仇", video: "/demos/revenge_gala.mp4" },
-                { label: "甜宠", video: "/demos/ceo_office.mp4" },
-                { label: "悬疑", video: "/demos/thriller_room.mp4" },
-                { label: "穿越", video: "/demos/crossworld_portal.mp4" },
-                { label: "仙侠", video: "/demos/fantasy_cave.mp4" },
-                { label: "战神", video: "/demos/warlord_return.mp4" },
-                { label: "重生", video: "/demos/comeback_villa.mp4" },
-                { label: "复仇·商战", video: "/demos/revenge_boardroom.mp4" },
-                { label: "甜宠·咖啡", video: "/demos/romance_cafe.mp4" },
-                { label: "穿越·宫廷", video: "/demos/crossworld_court.mp4" },
-                { label: "仙侠·试炼", video: "/demos/fantasy_trial.mp4" },
-                { label: "战神·王座", video: "/demos/warlord_throne.mp4" },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="frosted-card rounded-lg overflow-hidden"
-                >
-                  <div className="p-4">
-                    <span
-                      className="inline-block text-xs font-medium px-3 py-1 rounded-full bg-brand-green/10 text-brand-green"
-                    >
-                      {item.label}
-                    </span>
-                  </div>
-
-                  <div className="px-4">
-                    <video
-                      className="aspect-video w-full rounded-lg bg-black"
-                      controls
-                      preload="metadata"
-                      playsInline
-                      aria-label={`${item.label} 类型演示视频`}
-                    >
-                      <source src={item.video} type="video/mp4" />
-                      您的浏览器不支持视频播放。
-                    </video>
-                  </div>
-
-                  <p className="text-xs text-muted-foreground p-4 text-center">
-                    ReelRay 生成 · 角色全程一致
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── 屏 7: PRICING + CTA ── */}
-        <section id="pricing" className="py-24 px-6 bg-secondary/30">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-4">
-              选择适合你的方案
-            </h2>
-            <p className="text-center text-muted-foreground mb-16">
-              选择匹配你产能的方案。
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                {
-                  name: "Starter",
-                  price: "¥149",
-                  credits: "20,000 额度",
-                  episodes: "约 2 集",
-                  popular: false,
-                  theme: "cyan",
-                  features: [
-                    "角色锚点锁定",
-                    "720p 导出",
-                    "邮件支持",
-                    "TikTok 格式输出",
-                  ],
-                },
-                {
-                  name: "Pro",
-                  price: "¥499",
-                  credits: "80,000 额度",
-                  episodes: "约 8 集",
-                  popular: true,
-                  theme: "purple",
-                  features: [
-                    "包含 Starter 全部功能",
-                    "1080p 导出",
-                    "优先渲染",
-                    "自定义角色预设",
-                    "YouTube Shorts 支持",
-                  ],
-                },
-                {
-                  name: "Studio",
-                  price: "¥1,499",
-                  credits: "300,000 额度",
-                  episodes: "约 30 集",
-                  popular: false,
-                  theme: "gold",
-                  features: [
-                    "包含 Pro 全部功能",
-                    "4K 导出",
-                    "专属渲染队列",
-                    "团队协作",
-                    "API 访问",
-                    "优先支持",
-                  ],
-                },
-              ].map((plan) => {
-                const themeMap = {
-                  cyan: {
-                    border: "border-brand-cyan",
-                    borderHover: "border-brand-cyan/50",
-                    badge: "bg-brand-cyan",
-                    credits: "text-brand-cyan",
-                    check: "text-brand-cyan",
-                    btn: "bg-brand-cyan text-background font-semibold hover:bg-brand-cyan/90 hover:shadow-[0_0_18px_rgba(102,252,241,0.25)] transition-all",
-                  },
-                  purple: {
-                    border: "border-brand-purple",
-                    borderHover: "border-brand-purple/50",
-                    badge: "bg-brand-purple",
-                    credits: "text-brand-purple",
-                    check: "text-brand-purple",
-                    btn: "bg-brand-purple text-background font-semibold hover:bg-brand-purple/90 hover:shadow-[0_0_18px_rgba(179,0,255,0.25)] transition-all",
-                  },
-                  gold: {
-                    border: "border-brand-gold",
-                    borderHover: "border-brand-gold/50",
-                    badge: "bg-brand-gold",
-                    credits: "text-brand-gold",
-                    check: "text-brand-gold",
-                    btn: "bg-brand-gold text-background font-semibold hover:bg-brand-gold/90 hover:shadow-[0_0_18px_rgba(212,168,67,0.25)] transition-all",
-                  },
-                } as const;
-                const t = themeMap[plan.theme as keyof typeof themeMap];
-                return (
-                  <div
-                    key={plan.name}
-                    className={`rounded-lg p-6 flex flex-col ${
-                      plan.popular
-                        ? `frosted-card border-2 ${t.border}/50 relative rounded-lg p-6 flex flex-col`
-                        : "frosted-card border border-border rounded-lg p-6 flex flex-col"
-                    }`}
-                  >
-                    {plan.popular && (
-                      <span className={`absolute -top-3 left-1/2 -translate-x-1/2 ${t.badge} text-background text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap`}>
-                        最受欢迎
-                      </span>
-                    )}
-
-                    <h3 className="font-semibold text-lg">{plan.name}</h3>
-                    <div className="mt-4 mb-1">
-                      <span className="text-3xl font-bold">{plan.price}</span>
-                      <span className="text-muted-foreground text-sm">/月</span>
-                    </div>
-                    <p className={`${t.credits} text-sm font-medium`}>
-                      {plan.credits}
-                    </p>
-                    <p className="text-xs text-muted-foreground mb-6">
-                      {plan.episodes}
-                    </p>
-
-                    <ul className="space-y-3 mb-8 flex-1">
-                      {plan.features.map((feature) => (
-                        <li
-                          key={feature}
-                          className="flex items-start gap-2 text-sm"
-                        >
-                          <Check className={`h-4 w-4 ${t.check} shrink-0 mt-0.5`} />
-                          <span className="text-muted-foreground">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <Link
-                      href="/login"
-                      className={`w-full text-center py-3 rounded-md font-medium transition-colors ${
-                        plan.popular
-                          ? t.btn
-                          : "border border-border text-foreground hover:bg-secondary"
-                      }`}
-                    >
-                      订阅
-                    </Link>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Bottom CTA */}
-            <div className="text-center mt-16">
-              <Link
-                href="/login"
-                className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-md bg-brand-cyan text-background font-semibold hover:bg-brand-cyan/90 hover:shadow-[0_0_24px_rgba(102,252,241,0.3)] transition-all text-lg"
-              >
-                免费开始
-                <ArrowRight className="h-5 w-5" />
-              </Link>
-              <p className="mt-4 text-sm text-muted-foreground">
-                按量购买资源包？{" "}
-                <Link
-                  href="/pricing"
-                  className="text-brand-cyan hover:underline"
-                >
-                  查看定价详情
-                </Link>
-              </p>
             </div>
           </div>
         </section>
@@ -597,36 +200,11 @@ export default function Home() {
             © 2026 Agito Technology (Jinan) Co., Ltd.{process.env.NEXT_PUBLIC_ICP_NUMBER ? ` | ${process.env.NEXT_PUBLIC_ICP_NUMBER}` : ""}
           </p>
           <div className="flex items-center gap-6">
-            <Link
-              href="/dashboard/templates"
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
-              模板库
-            </Link>
-            <Link
-              href="/pricing"
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
-              定价
-            </Link>
-            <Link
-              href="/contact"
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
-              联系我们
-            </Link>
-            <Link
-              href="/terms"
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Terms
-            </Link>
-            <Link
-              href="/privacy"
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Privacy
-            </Link>
+            <Link href="/dashboard/templates" className="text-xs text-muted-foreground hover:text-foreground transition-colors">模板库</Link>
+            <Link href="/pricing" className="text-xs text-muted-foreground hover:text-foreground transition-colors">定价</Link>
+            <Link href="/contact" className="text-xs text-muted-foreground hover:text-foreground transition-colors">联系我们</Link>
+            <Link href="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Terms</Link>
+            <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Privacy</Link>
           </div>
         </div>
       </footer>
@@ -640,7 +218,7 @@ export default function Home() {
             "name": "ReelRay",
             "applicationCategory": "MultimediaApplication",
             "operatingSystem": "Web",
-            "description": "多模型 AI 短剧创作平台。接入全球顶级模型，角色锁定 + 精品模板，出海短剧一站创作。",
+            "description": "全球首个 AI 驱动的科幻短剧生成平台。一键输入灵感，一分钟输出大片。Seedance / Kling / HappyHorse 多模型驱动。",
             "aggregateRating": {
               "@type": "AggregateRating",
               "ratingValue": "4.8",

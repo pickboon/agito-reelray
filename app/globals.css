@@ -285,3 +285,94 @@
 .gradient-divider {
   background: linear-gradient(90deg, transparent, rgba(102, 252, 241, 0.08), transparent);
 }
+
+/* ========== C2 Glitch + Particle ========== */
+
+/* 故障艺术标题 */
+@keyframes glitch-1 {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -1px); }
+  60% { transform: translate(2px, 1px); }
+  80% { transform: translate(1px, -2px); }
+}
+@keyframes glitch-2 {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(2px, -2px); }
+  40% { transform: translate(-2px, 1px); }
+  60% { transform: translate(1px, -1px); }
+  80% { transform: translate(-1px, 2px); }
+}
+
+.glitch-title {
+  text-shadow:
+    0 0 10px rgba(102,252,241,0.6),
+    0 0 20px rgba(102,252,241,0.3),
+    0 0 40px rgba(179,0,255,0.2);
+}
+.glitch-title::before,
+.glitch-title::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  opacity: 0.7;
+}
+.glitch-title::before {
+  animation: glitch-1 3s infinite;
+  color: #66FCF1;
+  z-index: -1;
+  clip-path: inset(0 0 60% 0);
+}
+.glitch-title::after {
+  animation: glitch-2 2.5s infinite;
+  color: #FF007F;
+  z-index: -1;
+  clip-path: inset(60% 0 0 0);
+}
+
+/* 粒子背景 */
+@keyframes float-up {
+  0% { transform: translateY(0) scale(1); opacity: 0; }
+  20% { opacity: 0.6; }
+  80% { opacity: 0.3; }
+  100% { transform: translateY(-100vh) scale(0.3); opacity: 0; }
+}
+.particles-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.particle-dot {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #66FCF1;
+  animation: float-up linear infinite;
+}
+
+/* Hero 视频占位背景 */
+.hero-bg-video {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(18,21,27,0.75) 0%, rgba(18,21,27,0.6) 50%, rgba(18,21,27,0.9) 100%),
+    radial-gradient(ellipse at 50% 30%, rgba(102,252,241,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse at 70% 60%, rgba(179,0,255,0.06) 0%, transparent 60%);
+}
+
+/* 微光尘 overlay */
+.light-dust {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(102,252,241,0.3), transparent),
+    radial-gradient(1px 1px at 40% 70%, rgba(179,0,255,0.2), transparent),
+    radial-gradient(1px 1px at 60% 20%, rgba(102,252,241,0.25), transparent),
+    radial-gradient(1px 1px at 80% 50%, rgba(255,0,127,0.15), transparent),
+    radial-gradient(2px 2px at 30% 60%, rgba(102,252,241,0.2), transparent),
+    radial-gradient(2px 2px at 70% 40%, rgba(179,0,255,0.15), transparent);
+  animation: float-up 12s linear infinite;
+}

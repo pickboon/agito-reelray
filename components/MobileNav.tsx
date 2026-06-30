@@ -27,25 +27,19 @@ export default function MobileNav() {
       {isOpen && (
         <div className="md:hidden absolute top-16 left-0 right-0 bg-background/95 backdrop-blur-md border-b border-border z-40">
           <div className="flex flex-col p-4 gap-3">
-            <Link
-              href="/dashboard/templates"
-              className="text-sm text-muted-foreground hover:text-foreground py-2"
-              onClick={() => setIsOpen(false)}
-            >
+            <Link href="/dashboard" className="text-sm text-muted-foreground hover:text-foreground py-2" onClick={() => setIsOpen(false)}>
+              工作台
+            </Link>
+            <Link href="/dashboard/templates" className="text-sm text-muted-foreground hover:text-foreground py-2" onClick={() => setIsOpen(false)}>
               模板库
             </Link>
-            <Link
-              href="/pricing"
-              className="text-sm text-muted-foreground hover:text-foreground py-2"
-              onClick={() => setIsOpen(false)}
-            >
+            <Link href="/dashboard/community" className="text-sm text-muted-foreground hover:text-foreground py-2" onClick={() => setIsOpen(false)}>
+              极光社区
+            </Link>
+            <Link href="/pricing" className="text-sm text-muted-foreground hover:text-foreground py-2" onClick={() => setIsOpen(false)}>
               定价
             </Link>
-            <Link
-              href="/login"
-              className="text-sm text-muted-foreground hover:text-foreground py-2"
-              onClick={() => setIsOpen(false)}
-            >
+            <Link href="/login" className="text-sm text-muted-foreground hover:text-foreground py-2" onClick={() => setIsOpen(false)}>
               登录
             </Link>
             <hr className="border-border my-1" />
