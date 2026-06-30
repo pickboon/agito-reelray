@@ -54,13 +54,13 @@ export default function Home() {
           id="hero"
           role="presentation"
           className="min-h-[85vh] flex flex-col items-center justify-center px-6 text-center relative overflow-hidden bg-[radial-gradient(circle,var(--color-brand-cyan)_1px,transparent_1px)]"
-          style={{ backgroundSize: "32px 32px" }}
-        >
+          style={{ backgroundSize: "32px 32px" }}>
+          <div className="absolute inset-0 perspective-grid opacity-40" />
           <div className="relative z-10 max-w-4xl">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
               你的角色。
               <br />
-              <span className="text-brand-cyan">始终如一。</span>每一集
+              <span className="text-brand-cyan text-glow-cyan">始终如一。</span>每一集
             </h1>
 
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -83,7 +83,8 @@ export default function Home() {
               </Link>
             </div>
 
-            <p className="mt-16 text-xs text-brand-cyan/80">
+            <div className="gradient-divider h-px w-32 mx-auto mt-12 mb-6" />
+            <p className="text-xs text-brand-cyan/80">
               HappyHorse · Seedance · Kling 多模型驱动 · 生成成功率 96.9%
             </p>
           </div>
@@ -100,7 +101,7 @@ export default function Home() {
               {/* AI 短剧 */}
               <Link
                 href="/dashboard/projects"
-                className="group relative rounded-xl border border-border bg-card p-8 transition-all hover:border-brand-purple/40 hover:shadow-lg hover:shadow-brand-purple/5"
+                className="group relative rounded-xl p-8 frosted-card transition-all hover:border-brand-purple/40 hover:shadow-lg hover:shadow-brand-purple/5"
               >
                 <div className="flex items-start gap-5">
                   <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-brand-purple/10 transition-colors group-hover:bg-brand-purple/20">
@@ -124,7 +125,7 @@ export default function Home() {
               {/* 视频生成 */}
               <Link
                 href="/dashboard/generate"
-                className="group relative rounded-xl border border-border bg-card p-8 transition-all hover:border-brand-cyan/40 hover:shadow-lg hover:shadow-brand-cyan/5"
+                className="group relative rounded-xl p-8 frosted-card transition-all hover:border-brand-cyan/40 hover:shadow-lg hover:shadow-brand-cyan/5"
               >
                 <div className="flex items-start gap-5">
                   <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-brand-cyan/10 transition-colors group-hover:bg-brand-cyan/20">
@@ -174,7 +175,7 @@ export default function Home() {
               ].map((item) => (
                 <div
                   key={item.title}
-                  className="bg-card border border-border rounded-lg p-6"
+                  className="frosted-card rounded-lg p-6"
                 >
                   <h3 className="font-semibold mb-1">{item.title}</h3>
                   <p className="text-sm text-muted-foreground mb-6">
@@ -252,7 +253,7 @@ export default function Home() {
               ].map((item, i) => (
                 <div key={item.step} className="flex items-start gap-4">
                   <div className="text-center flex-1">
-                    <div className="mx-auto h-12 w-12 rounded-full bg-brand-cyan/10 flex items-center justify-center mb-4">
+                    <div className="mx-auto h-12 w-12 rounded-full glow-circle flex items-center justify-center mb-4">
                       <item.icon className="h-5 w-5 text-brand-cyan" />
                     </div>
                     <p className="text-brand-cyan font-sans text-sm mb-1">
@@ -296,7 +297,7 @@ export default function Home() {
               ] as const).map((tpl) => (
                 <div
                   key={tpl.genre}
-                  className="bg-card border border-border rounded-lg p-4 hover:border-brand-cyan/30 transition-colors"
+                  className="frosted-card rounded-lg p-4 hover:border-brand-cyan/30 transition-colors"
                 >
                   <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full ${tpl.badgeClass} mb-3`}>
                     {tpl.badge}
@@ -357,7 +358,7 @@ export default function Home() {
               ] as const).map((model) => (
                 <div
                   key={model.name}
-                  className="bg-card border border-border rounded-lg p-6 hover:border-brand-purple/20 transition-colors"
+                  className="frosted-card rounded-lg p-6 hover:border-brand-purple/20 transition-colors"
                 >
                   <span className={`inline-block text-xs font-medium px-2.5 py-1 rounded-full ${model.badgeClass} mb-4`}>
                     {model.badge}
@@ -395,7 +396,7 @@ export default function Home() {
               ].map((item) => (
                 <div
                   key={item.label}
-                  className="bg-card border border-border rounded-lg overflow-hidden"
+                  className="frosted-card rounded-lg overflow-hidden"
                 >
                   <div className="p-4">
                     <span
@@ -517,8 +518,8 @@ export default function Home() {
                     key={plan.name}
                     className={`rounded-lg p-6 flex flex-col ${
                       plan.popular
-                        ? `bg-card border-2 ${t.border}/50 relative`
-                        : "bg-card border border-border"
+                        ? `frosted-card border-2 ${t.border}/50 relative rounded-lg p-6 flex flex-col`
+                        : "frosted-card border border-border rounded-lg p-6 flex flex-col"
                     }`}
                   >
                     {plan.popular && (

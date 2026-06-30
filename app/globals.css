@@ -232,3 +232,56 @@
 .animate-hud-fade-in {
   animation: hud-fade-in 0.5s ease-out forwards;
 }
+
+/* ========== v4 Material Utilities ========== */
+
+/* 磨砂黑毛玻璃卡片 */
+.frosted-card {
+  background: rgba(30, 33, 40, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  transition: all 0.3s ease;
+}
+.frosted-card:hover {
+  background: rgba(30, 33, 40, 0.75);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* 透视网格线 (Hero 背景叠加) */
+@keyframes perspective-grid {
+  0%   { background-position: 0 0; }
+  100% { background-position: 0 32px; }
+}
+
+.perspective-grid {
+  background-image:
+    linear-gradient(rgba(102, 252, 241, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(102, 252, 241, 0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+  animation: perspective-grid 8s linear infinite;
+}
+
+/* 文字微光 */
+.text-glow-cyan {
+  text-shadow:
+    0 0 12px rgba(102, 252, 241, 0.2),
+    0 0  4px rgba(102, 252, 241, 0.1);
+}
+
+/* 微光圆圈 (工作原理步骤) */
+.glow-circle {
+  border: 1px solid rgba(102, 252, 241, 0.2);
+  transition: all 0.4s ease;
+}
+.glow-circle:hover {
+  border-color: rgba(102, 252, 241, 0.5);
+  box-shadow:
+    0 0 16px rgba(102, 252, 241, 0.12),
+    inset 0 0 10px rgba(102, 252, 241, 0.04);
+}
+
+/* 渐变分割线 */
+.gradient-divider {
+  background: linear-gradient(90deg, transparent, rgba(102, 252, 241, 0.08), transparent);
+}
