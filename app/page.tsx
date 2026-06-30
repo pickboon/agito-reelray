@@ -67,7 +67,7 @@ export default function Home() {
 
             {/* 故障风标题 */}
             <h1 className="relative text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight leading-tight mb-6">
-              <span className="glitch-title text-brand-cyan text-glow-cyan" data-text="重塑现实，即刻开机" style={{ fontFamily: "var(--font-glitch)" }}>
+              <span className="glitch-title text-brand-cyan text-glow-cyan" data-text="重塑现实，即刻开机">
                 重塑现实，即刻开机
               </span>
               <br />
