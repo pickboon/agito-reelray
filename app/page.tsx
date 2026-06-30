@@ -104,7 +104,7 @@ export default function Home() {
                 className="group relative rounded-xl p-8 frosted-card transition-all hover:border-brand-purple/40 hover:shadow-lg hover:shadow-brand-purple/5"
               >
                 <div className="flex items-start gap-5">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-brand-purple/10 transition-colors group-hover:bg-brand-purple/20">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl glow-circle bg-brand-purple/10 transition-colors group-hover:bg-brand-purple/20">
                     <Clapperboard className="h-7 w-7 text-brand-purple" />
                   </div>
                   <div>
@@ -128,7 +128,7 @@ export default function Home() {
                 className="group relative rounded-xl p-8 frosted-card transition-all hover:border-brand-cyan/40 hover:shadow-lg hover:shadow-brand-cyan/5"
               >
                 <div className="flex items-start gap-5">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-brand-cyan/10 transition-colors group-hover:bg-brand-cyan/20">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl glow-circle bg-brand-cyan/10 transition-colors group-hover:bg-brand-cyan/20">
                     <Wand2 className="h-7 w-7 text-brand-cyan" />
                   </div>
                   <div>
