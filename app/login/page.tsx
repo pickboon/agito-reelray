@@ -106,6 +106,26 @@ function LoginForm() {
     }
   }, [email, password, confirmPassword, isSignUp, redirectTo, router, failedAttempts, isLockedOut]);
 
+  const handleForgotPassword = useCallback(async () => {
+    if (!email) {
+      toast.error("请先输入邮箱地址");
+      return;
+    }
+    try {
+      const supabase = createClient();
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/callback?redirectTo=/dashboard`,
+      });
+      if (resetError) {
+        toast.error("发送失败，请稍后重试");
+        return;
+      }
+      toast.success("密码重置邮件已发送，请查收邮箱");
+    } catch {
+      toast.error("发送失败，请稍后重试");
+    }
+  }, [email]);
+
   const buildOAuthRedirect = useCallback(() => {
     return `${window.location.origin}/auth/callback?redirectTo=${encodeURIComponent(redirectTo)}`;
   }, [redirectTo]);
@@ -176,6 +196,18 @@ function LoginForm() {
                 disabled={loading || isLockedOut}
               />
             </div>
+            {!isSignUp && (
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  disabled={loading || isLockedOut}
+                  className="text-xs text-brand-cyan hover:underline"
+                >
+                  忘记密码？
+                </button>
+              </div>
+            )}
             {isSignUp && (
               <div className="space-y-1.5">
                 <Label htmlFor="confirmPassword">确认密码</Label>
