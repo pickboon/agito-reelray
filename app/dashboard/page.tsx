@@ -18,7 +18,6 @@ import {
   ArrowRight,
   Sparkles,
   Zap,
-  Wand2,
   FlaskConical,
   LayoutTemplate,
 } from "lucide-react";
@@ -71,8 +70,6 @@ function CountUp({ target, duration = 800, formatter }: { target: number; durati
 }
 
 const quickLinks = [
-  { href: "/dashboard/projects", label: "新项目", desc: "创建短剧项目", icon: Film, color: "gold" as const },
-  { href: "/dashboard/hub", label: "创作中枢", desc: "剧本到分镜", icon: Wand2, color: "cyan" as const },
   { href: "/dashboard/forge", label: "资产锻造", desc: "角色/滤镜/配音", icon: Sparkles, color: "gold" as const },
   { href: "/dashboard/generate", label: "灵感沙盒", desc: "快速生成试验", icon: FlaskConical, color: "cyan" as const },
 ];
@@ -291,9 +288,58 @@ export default function DashboardPage() {
         </Card>
       )}
 
+      {/* 独立大 CTA */}
+      <div
+        className="group relative overflow-hidden rounded-xl bg-gradient-to-r from-brand-gold/20 via-brand-gold/10 to-transparent border border-brand-gold/30 cursor-pointer transition-all hover:border-brand-gold/50 hover:shadow-[0_0_24px_-4px_rgba(230,195,94,0.25)]"
+        onClick={() => router.push("/dashboard/projects")}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") router.push("/dashboard/projects"); }}
+      >
+        <div className="flex items-center justify-between px-6 py-8 sm:py-10">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">
+              🎬 创建新项目
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              选择模板，开始你的短剧之旅
+            </p>
+          </div>
+          <ArrowRight className="h-6 w-6 text-brand-gold transition-transform group-hover:translate-x-1" />
+        </div>
+      </div>
+
       {/* Bento 双栏区 */}
       <div className="grid gap-4 md:grid-cols-2">
-        {/* 左：快速开始 */}
+        {/* 左：推荐模板 — 点击打开预览弹窗 */}
+        <Card className="backdrop-blur bg-white/[0.03] border-white/[0.06]">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-base font-medium">
+              <LayoutTemplate className="h-4 w-4 text-brand-cyan" />
+              推荐模板
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-3 grid-cols-2 sm:grid-cols-4">
+              {templates.map((t) => (
+                <div
+                  key={t.key}
+                  className="flex flex-col items-center justify-center p-3 rounded-lg bg-brand-gold/5 hover:border-brand-gold/30 border border-transparent transition-colors cursor-pointer"
+                  onClick={() => {
+                    setPreviewTemplate({ preset: t.key, name: t.name, emoji: t.emoji, desc: t.desc });
+                    setPreviewOpen(true);
+                  }}
+                >
+                  <span className="text-2xl mb-1">{t.emoji}</span>
+                  <p className="text-sm font-medium text-foreground text-center">{t.name}</p>
+                  <p className="text-[11px] text-muted-foreground text-center">{t.desc}</p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* 右：快速开始 */}
         <Card className="backdrop-blur bg-white/[0.03] border-white/[0.06]">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base font-medium">
@@ -320,34 +366,6 @@ export default function DashboardPage() {
                 </Link>
               );
             })}
-          </CardContent>
-        </Card>
-
-        {/* 右：推荐模板 — 点击打开预览弹窗 */}
-        <Card className="backdrop-blur bg-white/[0.03] border-white/[0.06]">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-base font-medium">
-              <LayoutTemplate className="h-4 w-4 text-brand-cyan" />
-              推荐模板
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-3 grid-cols-2 sm:grid-cols-4">
-              {templates.map((t) => (
-                <div
-                  key={t.key}
-                  className="flex flex-col items-center justify-center p-3 rounded-lg bg-brand-gold/5 hover:border-brand-gold/30 border border-transparent transition-colors cursor-pointer"
-                  onClick={() => {
-                    setPreviewTemplate({ preset: t.key, name: t.name, emoji: t.emoji, desc: t.desc });
-                    setPreviewOpen(true);
-                  }}
-                >
-                  <span className="text-2xl mb-1">{t.emoji}</span>
-                  <p className="text-sm font-medium text-foreground text-center">{t.name}</p>
-                  <p className="text-[11px] text-muted-foreground text-center">{t.desc}</p>
-                </div>
-              ))}
-            </div>
           </CardContent>
         </Card>
       </div>
