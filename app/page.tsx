@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Zap, Globe, Brain, Film } from "lucide-react";
 import PublicNav from "@/components/layout/PublicNav";
 import PublicFooter from "@/components/layout/PublicFooter";
+import DemoShowcase from "@/components/DemoShowcase";
 
 export default function Home() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -183,6 +184,10 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* ── B7 样片展示 ── */}
+        <DemoShowcase />
+
       </main>
 
       {/* ── FOOTER (reusable) ── */}

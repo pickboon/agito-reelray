@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Film, Clapperboard, Wallet, TrendingUp, ArrowRight, Sparkles } from "lucide-react";
+import HowItWorksBanner from "@/components/HowItWorksBanner";
 
 interface DashboardStats {
   projectCount: number;
@@ -175,6 +176,9 @@ export default function DashboardPage() {
           <p className="text-sm text-muted-foreground mt-1">项目概览与快捷操作</p>
         </div>
 
+        {/* B4 工作原理 Banner */}
+        <HowItWorksBanner />
+
         {/* 欢迎引导卡片 */}
         <Card className="border-brand-gold/30 bg-brand-gold/5">
           <CardContent className="flex flex-col items-center justify-center py-12 px-6">
@@ -231,6 +235,9 @@ export default function DashboardPage() {
         <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
         <p className="text-sm text-muted-foreground mt-1">项目概览与快捷操作</p>
       </div>
+
+      {/* B4 工作原理 Banner */}
+      <HowItWorksBanner />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {statCards.map((card) => (
