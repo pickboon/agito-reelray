@@ -11,7 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, Sparkles } from "lucide-react";
+import { CreateProjectDialog } from "@/components/CreateProjectDialog";
 
 interface Character {
   name: string;
@@ -59,6 +60,9 @@ export default function HubPage() {
   const [analyzing, setAnalyzing] = useState(false);
   const [suggesting, setSuggesting] = useState(false);
   const [importing, setImporting] = useState(false);
+
+  // P2-4: 无项目时引导创建
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [episodes, setEpisodes] = useState<Episode[]>([]);
@@ -180,6 +184,28 @@ export default function HubPage() {
         <p className="text-sm text-muted-foreground mt-1">从一句话到全息分镜矩阵</p>
       </div>
 
+      {/* P2-4: 无项目时的引导卡片 */}
+      {projects.length === 0 ? (
+        <Card className="frosted-card border-brand-gold/30 bg-brand-gold/5">
+          <CardContent className="flex flex-col items-center justify-center py-12 px-6">
+            <div className="h-14 w-14 rounded-full bg-brand-gold/10 flex items-center justify-center mb-4">
+              <Sparkles className="h-6 w-6 text-brand-gold" />
+            </div>
+            <h2 className="text-lg font-semibold text-foreground mb-2">还没有项目？</h2>
+            <p className="text-sm text-muted-foreground text-center max-w-sm mb-6">
+              创建一个项目来开始 AI 编剧分析，上传角色照片，生成一致性短剧视频。
+            </p>
+            <Button
+              onClick={() => setCreateDialogOpen(true)}
+              className="gap-2"
+            >
+              <Sparkles className="h-4 w-4" />
+              创建新项目
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
+      <>
       {/* 左右分栏 */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* 左栏 */}
@@ -362,6 +388,11 @@ export default function HubPage() {
           )}
         </div>
       </div>
+      </>
+      )}
+
+      {/* P2-4: 新建项目对话框 */}
+      <CreateProjectDialog open={createDialogOpen} onOpenChange={setCreateDialogOpen} />
     </div>
   );
 }
