@@ -107,10 +107,10 @@ function LoginForm() {
           </div>
           <CardTitle className="text-2xl text-foreground">ReelRay</CardTitle>
           <CardDescription className="text-muted-foreground">
-            锁定你的角色
+            出海短剧，一站创作
           </CardDescription>
           <p className="mt-1 text-xs text-muted-foreground">
-            用 AI 锚定角色一致性，出海短剧每一集都精准
+            全球多模型驱动，精品模板加持，出海短剧每一集都出彩
           </p>
         </CardHeader>
         <CardContent className="space-y-4">

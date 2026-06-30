@@ -17,9 +17,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ReelRay — AI 短剧角色一致性引擎",
+  title: "ReelRay — 多模型 AI 短剧创作平台 · 出海利器",
   description:
-    "面向出海短剧创作者的 AI 角色一致性引擎。一次上传角色，每集保持一致。支持 TikTok 与 YouTube 导出，提供免费试用。",
+    "ReelRay 是面向出海短剧工作室的 AI 创作平台。接入 Seedance / Kling / HappyHorse 等多模型，角色全程锁定，精品模板一键套用，支持 TikTok / YouTube 一键发布。免费试用。",
   keywords: [
     "AI 短剧",
     "角色一致性",
@@ -28,11 +28,15 @@ export const metadata: Metadata = {
     "TikTok 短剧",
     "ReelShort",
     "DramaBox",
+    "多模型",
+    "Seedance",
+    "Kling",
+    "模板市场",
   ],
   openGraph: {
-    title: "ReelRay — AI 短剧角色一致性引擎",
+    title: "ReelRay — 多模型 AI 短剧创作平台 · 出海利器",
     description:
-      "面向出海短剧创作者的 AI 角色一致性引擎。一次上传角色，每集保持一致。",
+      "多模型 AI 短剧创作平台。接入全球顶级模型，角色锁定 + 精品模板，出海短剧一站创作。",
     url: "https://reelray.ai",
     siteName: "ReelRay",
     locale: "zh_CN",

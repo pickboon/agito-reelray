@@ -64,7 +64,7 @@ export default function Home() {
             </h1>
 
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
-              面向出海短剧创作者的 AI 角色一致性引擎。
+              接入全球顶级模型，角色锁定 + 精品模板，出海短剧一站创作。
             </p>
 
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
@@ -84,7 +84,7 @@ export default function Home() {
             </div>
 
             <p className="mt-16 text-xs text-muted-foreground/80">
-              基于 HappyHorse 1.1 · 生成成功率 96.9%
+              HappyHorse · Seedance · Kling 多模型驱动 · 生成成功率 96.9%
             </p>
           </div>
         </section>
@@ -109,7 +109,7 @@ export default function Home() {
                   <div>
                     <h3 className="text-lg font-semibold mb-2">AI 短剧</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      基于剧本自动拆解镜头，角色全程保持一致。适合 TikTok / YouTube 短剧出海。
+                      上传角色参考图即生成人物锚点，模板一键套用到整部剧集。支持多模型切换，适配 TikTok / YouTube 出海全流程。
                     </p>
                     <div className="flex flex-wrap gap-2">
                       <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground">剧本拆解</span>
@@ -133,12 +133,12 @@ export default function Home() {
                   <div>
                     <h3 className="text-lg font-semibold mb-2">视频生成</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      输入提示词即时生成 AI 视频。支持文生视频、图生视频，多模型可选。
+                      选择模型即时生成 AI 视频。Seedance 多镜头叙事 / Kling 4K 直出 / HappyHorse 高真实感，按需切换，统一 Credits 消耗。
                     </p>
                     <div className="flex flex-wrap gap-2">
                       <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground">文生视频</span>
                       <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground">图生视频</span>
-                      <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground">HappyHorse</span>
+                      <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground">多模型</span>
                     </div>
                   </div>
                 </div>
@@ -247,7 +247,7 @@ export default function Home() {
                   icon: Film,
                   step: "04",
                   title: "导出至 TikTok / YouTube",
-                  desc: "下载角色全程一致的成片，直接发布。",
+                  desc: "下载成片，直发 TikTok / YouTube。",
                 },
               ].map((item, i) => (
                 <div key={item.step} className="flex items-start gap-4">
@@ -277,7 +277,7 @@ export default function Home() {
         <section id="demo" className="py-24 px-6">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-16">
-              效果对比
+              样片展示
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -500,7 +500,7 @@ export default function Home() {
             "name": "ReelRay",
             "applicationCategory": "MultimediaApplication",
             "operatingSystem": "Web",
-            "description": "面向出海短剧创作者的 AI 角色一致性引擎。一次上传角色，每集保持一致。",
+            "description": "多模型 AI 短剧创作平台。接入全球顶级模型，角色锁定 + 精品模板，出海短剧一站创作。",
             "aggregateRating": {
               "@type": "AggregateRating",
               "ratingValue": "4.8",
