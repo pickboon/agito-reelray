@@ -85,8 +85,8 @@ export function PropertiesPanel() {
       {clip && (
         <>
           <div>
-            <h3 className="text-xs font-semibold text-foreground flex items-center gap-1.5 mb-3">
-              <Film className="h-3.5 w-3.5 text-brand-cyan" />
+            <h3 className="text-xs font-semibold text-brand-gold flex items-center gap-1.5 mb-3">
+              <Film className="h-3.5 w-3.5" />
               片段属性
               {multiSelect && (
                 <span className="text-muted-foreground font-normal">

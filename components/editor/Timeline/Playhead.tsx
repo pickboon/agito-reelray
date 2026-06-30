@@ -21,6 +21,7 @@ export function Playhead({ isOverlay }: PlayheadProps) {
       className="absolute top-0 bottom-0 pointer-events-none"
       style={{
         left: x + leftOffset,
+        boxShadow: "0 0 8px rgba(102,252,241,0.6), 0 0 20px rgba(102,252,241,0.3)",
         width: 2,
         zIndex: 50,
       }}

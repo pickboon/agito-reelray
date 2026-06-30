@@ -69,8 +69,8 @@ export function AudioPanel() {
   return (
     <div className="p-3 space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-xs font-semibold text-foreground flex items-center gap-1.5">
-          <Music className="h-3.5 w-3.5 text-brand-gold" />
+        <h3 className="text-xs font-semibold text-brand-purple flex items-center gap-1.5">
+          <Music className="h-3.5 w-3.5" />
           音频轨道
         </h3>
       </div>
