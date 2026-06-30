@@ -47,7 +47,19 @@ export default function Home() {
       <main>
         {/* ── HERO ── */}
         <section className="relative min-h-screen flex flex-col items-center justify-center px-6 text-center overflow-hidden">
-          {/* 视频占位背景 */}
+          {/* 全屏赛博朋克背景视频 */}
+          <video
+            className="absolute inset-0 w-full h-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+          >
+            <source src="/demos/warlord_return.mp4" type="video/mp4" />
+          </video>
+          {/* 深色遮罩 + 微粒光尘 */}
           <div className="hero-bg-video" />
           {/* 粒子 */}
           <div className="particles-bg">
@@ -91,7 +103,7 @@ export default function Home() {
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-md bg-brand-cyan text-background font-semibold text-lg hover:bg-brand-cyan/90 hover:shadow-[0_0_30px_rgba(102,252,241,0.35)] transition-all"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-md bg-brand-cyan text-background font-semibold text-lg shadow-[0_0_20px_rgba(102,252,241,0.4)] hover:bg-brand-cyan/90 hover:shadow-[0_0_40px_rgba(102,252,241,0.6)] animate-breathe transition-all"
               >
                 <Zap className="h-5 w-5" />
                 立即生成短剧
