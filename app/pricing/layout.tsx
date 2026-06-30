@@ -1,5 +1,5 @@
 import PublicLayout from "@/components/layout/PublicLayout";
 
-export default function TemplatesLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return <PublicLayout>{children}</PublicLayout>;
 }
