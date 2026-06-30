@@ -1,6 +1,3 @@
-"use client";
-
-import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { Zap, Globe, Brain, Film } from "lucide-react";
 import PublicNav from "@/components/layout/PublicNav";
@@ -8,17 +5,6 @@ import PublicFooter from "@/components/layout/PublicFooter";
 import DemoShowcase from "@/components/DemoShowcase";
 
 export default function Home() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (video) {
-      video.play().catch(() => {
-        // 部分浏览器需用户交互后才允许播放，静默失败
-      });
-    }
-  }, []);
-
   return (
     <>
       {/* ── NAV (reusable) ── */}
@@ -26,39 +12,8 @@ export default function Home() {
 
       <main>
         {/* ── HERO ── */}
-        <section className="relative min-h-screen flex flex-col items-center justify-center px-6 text-center overflow-hidden">
-          {/* 全屏赛博朋克背景视频 */}
-          <video
-            ref={videoRef}
-            className="absolute inset-0 w-full h-full object-cover hero-bg-video-parallax"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            aria-hidden="true"
-          >
-            <source src="/demos/warlord_return.mp4" type="video/mp4" />
-          </video>
-          {/* 深色遮罩 + 微粒光尘 */}
-          <div className="hero-bg-video" />
-          {/* 粒子 */}
-          <div className="particles-bg">
-            {Array.from({ length: 20 }).map((_, i) => (
-              <div key={i} className="particle-dot" style={{
-                left: `${Math.random() * 100}%`,
-                bottom: "-5%",
-                animationDuration: `${6 + Math.random() * 10}s`,
-                animationDelay: `${Math.random() * 8}s`,
-                width: `${1 + Math.random() * 2}px`,
-                height: `${1 + Math.random() * 2}px`,
-              }} />
-            ))}
-          </div>
-          {/* 微光尘 */}
-          <div className="light-dust" />
-
-          <div className="relative z-10 max-w-5xl">
+        <section className="py-24 px-6 text-center">
+          <div className="max-w-5xl mx-auto">
             {/* 标签 */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-cyan/20 bg-brand-cyan/5 text-xs text-brand-cyan mb-8">
               <Zap className="h-3 w-3" />
@@ -102,14 +57,6 @@ export default function Home() {
             <p className="text-xs text-brand-cyan/70">
               Seedance · Kling · HappyHorse 多模型驱动 · 生成成功率 96.9%
             </p>
-          </div>
-
-          {/* 向下滚动指示 */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground/40">
-            <span className="text-[10px] uppercase tracking-widest">探索功能</span>
-            <div className="w-4 h-6 rounded-full border border-muted-foreground/30 flex justify-center pt-1">
-              <div className="w-1 h-1.5 rounded-full bg-brand-cyan/60 animate-bounce" />
-            </div>
           </div>
         </section>
 
