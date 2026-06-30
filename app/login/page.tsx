@@ -29,6 +29,8 @@ function LoginForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isSignUp, setIsSignUp] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [failedAttempts, setFailedAttempts] = useState(0);
@@ -47,6 +49,31 @@ function LoginForm() {
 
     try {
       const supabase = createClient();
+
+      if (isSignUp) {
+        // 注册模式
+        if (password !== confirmPassword) {
+          setFormError("两次输入的密码不一致");
+          setLoading(false);
+          return;
+        }
+        const { error: signUpError } = await supabase.auth.signUp({
+          email,
+          password,
+        });
+        if (signUpError) {
+          setFormError(signUpError.message || "注册失败，请重试");
+          setLoading(false);
+          return;
+        }
+        toast.success("注册成功，请查收验证邮件");
+        setIsSignUp(false);
+        setConfirmPassword("");
+        setLoading(false);
+        return;
+      }
+
+      // 登录模式
       const { error: authError } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -73,11 +100,11 @@ function LoginForm() {
       setFailedAttempts(0);
       router.push(redirectTo);
     } catch {
-      setFormError("登录失败，请重试");
+      setFormError(isSignUp ? "注册失败，请重试" : "登录失败，请重试");
     } finally {
       setLoading(false);
     }
-  }, [email, password, redirectTo, router, failedAttempts, isLockedOut]);
+  }, [email, password, confirmPassword, isSignUp, redirectTo, router, failedAttempts, isLockedOut]);
 
   const buildOAuthRedirect = useCallback(() => {
     return `${window.location.origin}/auth/callback?redirectTo=${encodeURIComponent(redirectTo)}`;
@@ -107,11 +134,13 @@ function LoginForm() {
           </div>
           <CardTitle className="text-2xl text-foreground">ReelRay</CardTitle>
           <CardDescription className="text-muted-foreground">
-            出海短剧，一站创作
+            {isSignUp ? "创建账户，开始短剧创作" : "出海短剧，一站创作"}
           </CardDescription>
-          <p className="mt-1 text-xs text-muted-foreground">
-            全球多模型驱动，精品模板加持，出海短剧每一集都出彩
-          </p>
+          {!isSignUp && (
+            <p className="mt-1 text-xs text-muted-foreground">
+              全球多模型驱动，精品模板加持，出海短剧每一集都出彩
+            </p>
+          )}
         </CardHeader>
         <CardContent className="space-y-4">
           {(error ?? formError) && (
@@ -139,7 +168,7 @@ function LoginForm() {
               <Input
                 id="password"
                 type="password"
-                autoComplete="current-password"
+                autoComplete={isSignUp ? "new-password" : "current-password"}
                 minLength={8}
                 required
                 value={password}
@@ -147,20 +176,68 @@ function LoginForm() {
                 disabled={loading || isLockedOut}
               />
             </div>
+            {isSignUp && (
+              <div className="space-y-1.5">
+                <Label htmlFor="confirmPassword">确认密码</Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  autoComplete="new-password"
+                  minLength={8}
+                  required
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  disabled={loading || isLockedOut}
+                />
+              </div>
+            )}
             <Button
               type="submit"
               className="w-full bg-foreground text-background hover:bg-foreground/90"
               size="lg"
-              disabled={loading || !email || !password || isLockedOut}
+              disabled={loading || !email || !password || isLockedOut || (isSignUp && !confirmPassword)}
             >
               {loading ? (
                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
               ) : (
                 <LogIn className="mr-2 h-5 w-5" />
               )}
-              {loading ? "加载中…" : isLockedOut ? "请稍后重试" : "登录"}
+              {loading
+                ? "加载中…"
+                : isLockedOut
+                  ? "请稍后重试"
+                  : isSignUp
+                    ? "注册"
+                    : "登录"}
             </Button>
           </form>
+
+          {/* 切换登录/注册 */}
+          <div className="text-center text-sm text-muted-foreground">
+            {isSignUp ? (
+              <>
+                已有账户？{" "}
+                <button
+                  type="button"
+                  onClick={() => { setIsSignUp(false); setFormError(null); setConfirmPassword(""); }}
+                  className="text-brand-cyan hover:underline"
+                >
+                  登录
+                </button>
+              </>
+            ) : (
+              <>
+                还没有账户？{" "}
+                <button
+                  type="button"
+                  onClick={() => { setIsSignUp(true); setFormError(null); }}
+                  className="text-brand-cyan hover:underline"
+                >
+                  注册
+                </button>
+              </>
+            )}
+          </div>
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
