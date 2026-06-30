@@ -30,10 +30,12 @@
   --color-sidebar-ring: var(--sidebar-ring);
 
   /* Brand tokens */
-  --color-brand-gold: #FACC15;
+  --color-brand-gold: #FFD600;
   --color-brand-cyan: #00F0FF;
-  --color-brand-gold-dim: #ca9e0e;
+  --color-brand-gold-dim: #C7A600;
   --color-brand-cyan-dim: #00b8c4;
+  --color-brand-magenta: #FF2D78;
+  --color-brand-magenta-dim: #C41E5C;
 
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
@@ -47,30 +49,30 @@
 /* Dark cyberpunk theme - default */
 :root {
   --radius: 0.5rem;
-  --background: #0a0a1a;
+  --background: #050510;
   --foreground: #e4e4e7;
   --card: #111127;
   --card-foreground: #e4e4e7;
   --popover: #111127;
   --popover-foreground: #e4e4e7;
-  --primary: #FACC15;
-  --primary-foreground: #0a0a1a;
+  --primary: #FF2D78;
+  --primary-foreground: #050510;
   --secondary: #1a1a3e;
   --secondary-foreground: #e4e4e7;
   --muted: #1a1a3e;
   --muted-foreground: #71717a;
   --accent: #00F0FF;
-  --accent-foreground: #0a0a1a;
+  --accent-foreground: #050510;
   --destructive: #ef4444;
   --border: #27273a;
   --input: #1a1a3e;
-  --ring: #FACC15;
+  --ring: #FF2D78;
   --sidebar: #0d0d20;
   --sidebar-foreground: #e4e4e7;
   --sidebar-accent: #1a1a3e;
-  --sidebar-accent-foreground: #FACC15;
+  --sidebar-accent-foreground: #FF2D78;
   --sidebar-border: #27273a;
-  --sidebar-ring: #FACC15;
+  --sidebar-ring: #FF2D78;
 }
 
 /* Light theme variables (P2-3) */
@@ -105,30 +107,30 @@
 
 /* .dark class always uses dark theme regardless of system preference */
 .dark {
-  --background: #0a0a1a;
+  --background: #050510;
   --foreground: #e4e4e7;
   --card: #111127;
   --card-foreground: #e4e4e7;
   --popover: #111127;
   --popover-foreground: #e4e4e7;
-  --primary: #FACC15;
-  --primary-foreground: #0a0a1a;
+  --primary: #FF2D78;
+  --primary-foreground: #050510;
   --secondary: #1a1a3e;
   --secondary-foreground: #e4e4e7;
   --muted: #1a1a3e;
   --muted-foreground: #71717a;
   --accent: #00F0FF;
-  --accent-foreground: #0a0a1a;
+  --accent-foreground: #050510;
   --destructive: #ef4444;
   --border: #27273a;
   --input: #1a1a3e;
-  --ring: #FACC15;
+  --ring: #FF2D78;
   --sidebar: #0d0d20;
   --sidebar-foreground: #e4e4e7;
   --sidebar-accent: #1a1a3e;
-  --sidebar-accent-foreground: #FACC15;
+  --sidebar-accent-foreground: #FF2D78;
   --sidebar-border: #27273a;
-  --sidebar-ring: #FACC15;
+  --sidebar-ring: #FF2D78;
 }
 
 @layer base {
@@ -174,10 +176,10 @@
 
 @keyframes neon-gold-pulse {
   0% {
-    box-shadow: 0 0 5px #FACC15;
+    box-shadow: 0 0 5px #FFD600;
   }
   100% {
-    box-shadow: 0 0 20px #FACC15;
+    box-shadow: 0 0 20px #FFD600;
   }
 }
 
@@ -187,6 +189,15 @@
   }
   100% {
     box-shadow: 0 0 20px #00F0FF;
+  }
+}
+
+@keyframes neon-magenta-pulse {
+  0% {
+    box-shadow: 0 0 5px #FF2D78;
+  }
+  100% {
+    box-shadow: 0 0 20px #FF2D78;
   }
 }
 
@@ -229,6 +240,11 @@
 .animate-neon-cyan {
   animation: neon-cyan-pulse 2s ease-in-out infinite alternate;
   animation-delay: 1s;
+}
+
+.animate-neon-magenta {
+  animation: neon-magenta-pulse 2s ease-in-out infinite alternate;
+  animation-delay: 0.5s;
 }
 
 .animate-cursor-blink {
