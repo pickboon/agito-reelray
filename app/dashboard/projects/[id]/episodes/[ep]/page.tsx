@@ -48,6 +48,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { apiFetch } from "@/lib/api-fetch";
+import { ShotDrawer } from "@/components/ShotDrawer";
 
 interface Episode {
   id: string;
@@ -120,6 +121,7 @@ export default function EpisodeDetailPage({
   // 批量操作状态
   const [batchMode, setBatchMode] = useState(false);
   const [selectedShots, setSelectedShots] = useState<Set<string>>(new Set());
+  const [drawerShotId, setDrawerShotId] = useState<string | null>(null);
 
   // 批量生成状态
   const [batchGenerating, setBatchGenerating] = useState(false);
@@ -206,10 +208,7 @@ export default function EpisodeDetailPage({
 
   // 编辑镜头
   const handleEditShot = (shot: Shot) => {
-    setEditingShot(shot);
-    setNewPrompt(shot.prompt);
-    setNewCharacterId(shot.reference_character_id || "");
-    setEditDialogOpen(true);
+    setDrawerShotId(shot.id);
   };
 
   const handleUpdateShot = async () => {
@@ -893,58 +892,16 @@ export default function EpisodeDetailPage({
         </DialogContent>
       </Dialog>
 
-      {/* 编辑镜头对话框 */}
-      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>编辑镜头 #{editingShot?.shot_number}</DialogTitle>
-            <DialogDescription>
-              修改镜头的提示词和关联角色。
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">提示词</label>
-              <Textarea
-                value={newPrompt}
-                onChange={(e) => setNewPrompt(e.target.value)}
-                rows={4}
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">关联角色（可选）</label>
-              <Select value={newCharacterId} onValueChange={(v) => setNewCharacterId(v ?? "")}>
-                <SelectTrigger>
-                  <SelectValue placeholder="选择角色" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">无</SelectItem>
-                  {characters.map((char) => (
-                    <SelectItem key={char.id} value={char.id}>
-                      {char.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setEditDialogOpen(false)}>
-              取消
-            </Button>
-            <Button onClick={handleUpdateShot} disabled={saving || !newPrompt.trim()}>
-              {saving ? (
-                <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  更新中...
-                </>
-              ) : (
-                "更新"
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
+      {/* C4 全息属性抽屉 — 替代独立 Shot Detail 页 */}
+      <ShotDrawer
+        open={drawerShotId !== null}
+        onOpenChange={(open) => { if (!open) setDrawerShotId(null); }}
+        shotId={drawerShotId}
+        projectId={id}
+        episodeId={ep}
+        onShotUpdated={fetchData}
+      />
+
+</div>
   );
 }
