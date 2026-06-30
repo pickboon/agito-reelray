@@ -287,40 +287,40 @@ export default function TemplatesPage() {
 
   return (
     <div className="space-y-4">
-      {/* 顶部搜索栏 */}
-      <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <input
-          type="text"
-          placeholder="搜索模板、风格关键词…"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full h-9 pl-9 pr-9 rounded-md border border-input bg-background text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-        />
-        {searchQuery && (
-          <button
-            type="button"
-            onClick={() => setSearchQuery("")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-          >
-            <X className="h-3.5 w-3.5" />
-          </button>
-        )}
-      </div>
-
-      {/* 顶部分类标签 */}
-      <div className="flex items-center gap-1.5 flex-wrap">
-        {TOP_FILTERS.map((cat) => (
-          <Button
-            key={cat.key}
-            variant={activeCategory === cat.key ? "default" : "outline"}
-            size="sm"
-            className="h-7 text-xs"
-            onClick={() => setActiveCategory(cat.key)}
-          >
-            {cat.label}
-          </Button>
-        ))}
+      {/* 顶部工具栏：分类标签 + 搜索 */}
+      <div className="flex items-center gap-3 flex-wrap">
+        <div className="flex items-center gap-1.5 flex-1 min-w-0">
+          {TOP_FILTERS.map((cat) => (
+            <Button
+              key={cat.key}
+              variant={activeCategory === cat.key ? "default" : "outline"}
+              size="sm"
+              className="h-7 text-xs"
+              onClick={() => setActiveCategory(cat.key)}
+            >
+              {cat.label}
+            </Button>
+          ))}
+        </div>
+        <div className="relative w-56 shrink-0">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <input
+            type="text"
+            placeholder="搜索模板、风格关键词…"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full h-9 pl-9 pr-9 rounded-md border border-input bg-background text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* 主体：左侧导航 + 右侧网格 */}
