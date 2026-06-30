@@ -1,8 +1,22 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { Zap, Globe, Brain, Film, User } from "lucide-react";
 import MobileNav from "@/components/MobileNav";
 
 export default function Home() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.play().catch(() => {
+        // 部分浏览器需用户交互后才允许播放，静默失败
+      });
+    }
+  }, []);
+
   return (
     <>
       {/* ── NAV (sticky, blur) ── */}
@@ -49,6 +63,7 @@ export default function Home() {
         <section className="relative min-h-screen flex flex-col items-center justify-center px-6 text-center overflow-hidden">
           {/* 全屏赛博朋克背景视频 */}
           <video
+            ref={videoRef}
             className="absolute inset-0 w-full h-full object-cover"
             autoPlay
             muted
