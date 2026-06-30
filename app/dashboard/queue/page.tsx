@@ -12,7 +12,11 @@ import {
   Loader2,
   Play,
   Download,
+  RotateCcw,
+  XCircle,
 } from "lucide-react";
+import { toast } from "sonner";
+import { apiFetch } from "@/lib/api-fetch";
 
 interface QueueItem {
   id: string;
@@ -43,6 +47,83 @@ export default function QueuePage() {
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+
+  // P2-6: 重试/取消状态
+  const [retryingIds, setRetryingIds] = useState<Set<string>>(new Set());
+  const [cancellingIds, setCancellingIds] = useState<Set<string>>(new Set());
+
+  async function handleRetry(item: QueueItem) {
+    setRetryingIds((prev) => new Set(prev).add(item.id));
+    try {
+      if (item.type === "shot") {
+        // 重新触发 shot 生成
+        const res = await apiFetch("/api/generate", {
+          method: "POST",
+          json: { shot_id: item.id },
+        });
+        if (!res.ok) {
+          const data = await res.json();
+          toast.error(data.error || "重试失败");
+          return;
+        }
+        toast.success("已重新提交到渲染队列");
+        fetchData();
+      } else {
+        // task 类型暂无重试 API
+        toast.info("沙盒任务重试功能开发中");
+      }
+    } catch {
+      toast.error("网络错误");
+    } finally {
+      setRetryingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(item.id);
+        return next;
+      });
+    }
+  }
+
+  async function handleCancel(item: QueueItem) {
+    setCancellingIds((prev) => new Set(prev).add(item.id));
+    try {
+      if (item.type === "task" && item.taskId) {
+        // 尝试更新任务状态为 cancelled
+        const supabase = createClient();
+        const { error } = await supabase
+          .from("generation_tasks")
+          .update({ status: "cancelled", updated_at: new Date().toISOString() })
+          .eq("id", item.id);
+        if (error) {
+          toast.error("取消失败");
+          return;
+        }
+        toast.success("任务已取消");
+        fetchData();
+      } else if (item.type === "shot") {
+        const supabase = createClient();
+        const { error } = await supabase
+          .from("shots")
+          .update({ status: "cancelled", updated_at: new Date().toISOString() })
+          .eq("id", item.id);
+        if (error) {
+          toast.error("取消失败");
+          return;
+        }
+        toast.success("任务已取消");
+        fetchData();
+      } else {
+        toast.info("取消功能开发中");
+      }
+    } catch {
+      toast.error("网络错误");
+    } finally {
+      setCancellingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(item.id);
+        return next;
+      });
+    }
+  }
 
   const fetchData = useCallback(async () => {
     setRefreshing(true);
@@ -282,13 +363,63 @@ export default function QueuePage() {
                           </a>
                         </>
                       )}
-                      {item.status === "failed" && item.errorMessage && (
-                        <span className="text-xs text-destructive truncate" title={item.errorMessage}>
-                          {item.errorMessage}
-                        </span>
+                      {item.status === "failed" && (
+                        <>
+                          {item.errorMessage && (
+                            <span className="text-xs text-destructive truncate max-w-24" title={item.errorMessage}>
+                              {item.errorMessage}
+                            </span>
+                          )}
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-7 gap-1 text-xs"
+                            disabled={retryingIds.has(item.id)}
+                            onClick={() => handleRetry(item)}
+                          >
+                            {retryingIds.has(item.id) ? (
+                              <Loader2 className="h-3 w-3 animate-spin" />
+                            ) : (
+                              <RotateCcw className="h-3 w-3" />
+                            )}
+                            重试
+                          </Button>
+                        </>
                       )}
                       {s.animated && (
-                        <Loader2 className="h-4 w-4 animate-spin text-brand-cyan" />
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin text-brand-cyan" />
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-7 gap-1 text-xs"
+                            disabled={cancellingIds.has(item.id)}
+                            onClick={() => handleCancel(item)}
+                          >
+                            {cancellingIds.has(item.id) ? (
+                              <Loader2 className="h-3 w-3 animate-spin" />
+                            ) : (
+                              <XCircle className="h-3 w-3" />
+                            )}
+                            取消
+                          </Button>
+                        </>
+                      )}
+                      {(item.status === "submitted" || item.status === "pending") && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 gap-1 text-xs"
+                          disabled={cancellingIds.has(item.id)}
+                          onClick={() => handleCancel(item)}
+                        >
+                          {cancellingIds.has(item.id) ? (
+                            <Loader2 className="h-3 w-3 animate-spin" />
+                          ) : (
+                            <XCircle className="h-3 w-3" />
+                          )}
+                          取消
+                        </Button>
                       )}
                     </div>
                   </CardContent>
