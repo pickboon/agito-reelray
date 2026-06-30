@@ -1,9 +1,20 @@
 import type { Metadata } from "next";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "sonner";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-// Font handled via CSS in globals.css (no network dependency on Google Fonts)
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-sans",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-mono",
+});
 
 export const metadata: Metadata = {
   title: "ReelRay — AI 短剧角色一致性引擎",
@@ -48,7 +59,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" className="dark scroll-smooth">
+    <html lang="zh-CN" className={`dark scroll-smooth ${inter.variable} ${jetbrainsMono.variable}`}>
 
       <body className="min-h-screen bg-background font-sans antialiased">
         <TooltipProvider>

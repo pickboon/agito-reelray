@@ -219,7 +219,7 @@ export default function ShotDetailPage({
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="输入视频生成提示词…"
-              className="min-h-32 font-mono text-sm"
+              className="min-h-32 font-sans text-sm"
             />
             <Button
               onClick={handleGenerate}

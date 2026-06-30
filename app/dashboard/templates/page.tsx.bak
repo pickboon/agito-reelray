@@ -206,7 +206,7 @@ export default function TemplatesPage() {
             <CardContent className="flex flex-col items-center justify-center py-12">
               <Sparkles className="h-10 w-10 text-muted-foreground/30 mb-3" />
               <p className="text-sm text-muted-foreground">
-                还没有保存的模板，在生成页面点击&ldquo;保存为模板&rdquo;开始收藏
+                还没有保存的模板，在生成页面点击"保存为模板"开始收藏
               </p>
             </CardContent>
           </Card>

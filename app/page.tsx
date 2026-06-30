@@ -255,7 +255,7 @@ export default function Home() {
                     <div className="mx-auto h-12 w-12 rounded-full bg-brand-gold/10 flex items-center justify-center mb-4">
                       <item.icon className="h-5 w-5 text-brand-gold" />
                     </div>
-                    <p className="text-brand-gold font-mono text-sm mb-1">
+                    <p className="text-brand-gold font-sans text-sm mb-1">
                       步骤 {item.step}
                     </p>
                     <h3 className="font-semibold mb-2">{item.title}</h3>
