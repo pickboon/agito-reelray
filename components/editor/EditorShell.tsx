@@ -94,10 +94,10 @@ export function EditorShell() {
       <div className="flex flex-1 min-h-0">
         {/* 左侧素材面板 */}
         {panels.assetsOpen && (
-          <div className="w-64 shrink-0 border-r border-border overflow-y-auto">
+          <div className="w-64 shrink-0 border-r border-border overflow-y-auto editor-panel-asset">
             <AssetPanel />
             <div className="border-t border-border/50 mt-2" />
-            <AudioPanel />
+            <div className="editor-panel-audio"><AudioPanel /></div>
           </div>
         )}
 
@@ -110,7 +110,7 @@ export function EditorShell() {
 
         {/* 右侧属性面板 */}
         {panels.propertiesOpen && (
-          <div className="w-72 shrink-0 border-l border-border overflow-y-auto">
+          <div className="w-72 shrink-0 border-l border-border overflow-y-auto editor-panel-props">
             <PropertiesPanel />
           </div>
         )}

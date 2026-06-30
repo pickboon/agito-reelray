@@ -64,7 +64,7 @@ export default function Home() {
           {/* 全屏赛博朋克背景视频 */}
           <video
             ref={videoRef}
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover hero-bg-video-parallax"
             autoPlay
             muted
             loop
@@ -194,10 +194,10 @@ export default function Home() {
                   subtitle: "一键多语种翻译与格式适配",
                   bullets: ["TikTok / YouTube 直出", "15+ 语种自动翻译", "多平台格式自动适配"],
                 },
-              ] as const).map((card) => (
+              ] as const).map((card, index) => (
                 <div
                   key={card.title}
-                  className={`frosted-card rounded-xl p-8 flex flex-col items-center text-center ${card.borderHover} transition-all group`}
+                  className={`frosted-card rounded-xl p-8 flex flex-col items-center text-center ${card.borderHover} transition-all group animate-fade-in-up ${index === 0 ? "delay-0" : index === 1 ? "delay-200" : "delay-400"}`}
                 >
                   <div className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl glow-circle ${card.bgClass} mb-6`}>
                     <card.icon className={`h-8 w-8 ${card.iconClass}`} />

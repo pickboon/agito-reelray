@@ -26,7 +26,7 @@ export function Playhead({ isOverlay }: PlayheadProps) {
       }}
     >
       {/* 线 */}
-      <div className="absolute inset-0 bg-brand-gold" />
+      <div className="absolute inset-0 bg-[#66FCF1]" />
       {/* 顶部三角 */}
       {!isOverlay && (
         <div
@@ -34,7 +34,7 @@ export function Playhead({ isOverlay }: PlayheadProps) {
           style={{
             borderLeft: "6px solid transparent",
             borderRight: "6px solid transparent",
-            borderTop: "8px solid #FACC15",
+            borderTop: "8px solid #66FCF1",
           }}
         />
       )}

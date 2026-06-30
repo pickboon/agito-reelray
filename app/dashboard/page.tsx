@@ -93,10 +93,10 @@ export default function DashboardPage() {
       <div className="space-y-6">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-28 rounded-xl" />
+            <Skeleton key={i} className="h-28 rounded-xl" style={{ animation: "skeleton-breathe 2s ease-in-out infinite" }} />
           ))}
         </div>
-        <Skeleton className="h-64 rounded-xl" />
+        <Skeleton className="h-64 rounded-xl" style={{ animation: "skeleton-breathe 2s ease-in-out infinite" }} />
       </div>
     );
   }
@@ -198,7 +198,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-hud-fade-in">
       <div>
         <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
         <p className="text-sm text-muted-foreground mt-1">项目概览与快捷操作</p>
@@ -206,7 +206,7 @@ export default function DashboardPage() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {statCards.map((card) => (
-          <Card key={card.label}>
+          <Card key={card.label} className="frosted-card card-hover-lift">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 {card.label}
@@ -247,7 +247,7 @@ export default function DashboardPage() {
           <div className="space-y-2">
             {projects.map((project) => (
               <Link key={project.id} href={`/dashboard/projects/${project.id}`}>
-                <Card className="hover:border-brand-gold/30 transition-colors cursor-pointer">
+                <Card className="card-hover-lift transition-colors cursor-pointer hover:border-l-2 hover:border-l-brand-cyan">
                   <CardContent className="flex items-center justify-between py-3">
                     <div className="flex items-center gap-3">
                       <Film className="h-4 w-4 text-muted-foreground" />

@@ -385,3 +385,77 @@
     radial-gradient(2px 2px at 70% 40%, rgba(179,0,255,0.15), transparent);
   animation: float-up 12s linear infinite;
 }
+
+
+/* ========== Phase D 视觉增强层 ========== */
+
+/* 卡片 hover 上浮 */
+.card-hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 24px rgba(102,252,241,0.08);
+}
+
+/* 渐入上浮 */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+/* 交错延迟工具 */
+.delay-0 { animation-delay: 0s; }
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+
+/* 骨架屏呼吸微光 */
+@keyframes skeleton-breathe {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+.skeleton-breathe {
+  animation: skeleton-breathe 2s ease-in-out infinite;
+}
+
+/* 编辑器面板色彩 */
+.editor-panel-asset {
+  border-left: 2px solid rgba(102,252,241,0.2);
+}
+.editor-panel-audio {
+  border-left: 2px solid rgba(179,0,255,0.2);
+}
+.editor-panel-props {
+  border-left: 2px solid rgba(212,168,67,0.2);
+}
+
+/* 导出进度条 */
+.editor-export-progress {
+  background: linear-gradient(90deg, #66FCF1, #00FF88, #66FCF1);
+  background-size: 200% 100%;
+  animation: export-shimmer 2s linear infinite;
+}
+@keyframes export-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Hero 视频视差 */
+@supports (animation-timeline: scroll()) {
+  .hero-bg-video-parallax {
+    animation: bg-zoom-out linear;
+    animation-timeline: scroll();
+  }
+  @keyframes bg-zoom-out {
+    from { transform: scale(1); }
+    to   { transform: scale(1.08); }
+  }
+}
