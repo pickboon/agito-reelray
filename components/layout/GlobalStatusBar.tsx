@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Loader2, Zap, Clock } from "lucide-react";
 
@@ -54,13 +55,13 @@ export function GlobalStatusBar() {
   return (
     <div className="border-t border-sidebar-border p-3 space-y-1.5">
       {/* 渲染队列 */}
-      <div className="flex items-center gap-2 text-[11px] text-sidebar-foreground/60">
+      <Link href="/dashboard/queue" className="flex items-center gap-2 text-[11px] text-sidebar-foreground/60 hover:text-brand-cyan transition-colors cursor-pointer">
         <Clock className="h-3 w-3 text-brand-cyan/70" />
         <span className="flex-1">渲染队列</span>
         <span className="font-mono font-semibold text-sidebar-foreground">
           {renderCount ?? 0} 任务
         </span>
-      </div>
+      </Link>
 
       {/* 积分 */}
       <div className="flex items-center gap-2 text-[11px] text-sidebar-foreground/60 mt-1">
