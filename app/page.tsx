@@ -103,7 +103,7 @@ export default function Home() {
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-md bg-brand-cyan text-background font-semibold text-lg shadow-[0_0_20px_rgba(102,252,241,0.4)] hover:bg-brand-cyan/90 hover:shadow-[0_0_40px_rgba(102,252,241,0.6)] animate-breathe transition-all"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-md bg-brand-cyan text-background font-semibold text-lg animate-hero-btn hover:bg-brand-cyan/90 transition-all"
               >
                 <Zap className="h-5 w-5" />
                 立即生成短剧
