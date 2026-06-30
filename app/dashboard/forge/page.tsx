@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { apiFetch } from "@/lib/api-fetch";
@@ -278,11 +279,13 @@ export default function ForgePage() {
                     className="flex items-center gap-2 p-2 rounded-lg border border-white/[0.06] bg-white/[0.03] hover:border-brand-cyan/30 transition-colors"
                   >
                     {char.anchor_image_url || char.reference_image_url ? (
-                      <img
-                        src={char.anchor_image_url ?? char.reference_image_url ?? ""}
-                        alt={char.name}
-                        className="w-8 h-8 rounded-full object-cover"
-                      />
+                      <Image
+          src={char.anchor_image_url ?? char.reference_image_url ?? ""}
+          alt={char.name}
+          width=32
+          height=32
+          className="rounded-full object-cover"
+        />
                     ) : (
                       <div className="w-8 h-8 rounded-full bg-brand-cyan/10 flex items-center justify-center">
                         <span className="text-xs font-medium text-brand-cyan">

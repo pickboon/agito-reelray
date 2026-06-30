@@ -1,6 +1,7 @@
 "use client";
 
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import Image from "next/image";
 import { Play, Heart, Eye, FolderPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -88,11 +89,13 @@ export function VideoDetailSheet({ post, open, onOpenChange }: VideoDetailSheetP
 
           <div className="flex items-center gap-2">
             {post.profiles.avatar_url ? (
-              <img
-                src={post.profiles.avatar_url}
-                alt={username}
-                className="h-8 w-8 rounded-full object-cover"
-              />
+              <Image
+          src={post.profiles.avatar_url}
+          alt={username}
+          width=32
+          height=32
+          className="rounded-full object-cover"
+        />
             ) : (
               <div className="h-8 w-8 rounded-full bg-brand-cyan/20 flex items-center justify-center text-xs font-bold text-brand-cyan">
                 {initials}

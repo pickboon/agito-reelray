@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -760,11 +761,12 @@ export default function GeneratePage() {
                     <CardContent className="p-3 flex gap-3">
                       <div className="w-20 h-20 shrink-0 bg-muted rounded flex items-center justify-center">
                         {task.thumbnail_url ? (
-                          <img
-                            src={task.thumbnail_url}
-                            alt="Thumbnail"
-                            className="w-full h-full object-cover rounded"
-                          />
+                          <Image
+          src={task.thumbnail_url}
+          alt="Thumbnail"
+          fill
+          className="w-full h-full object-cover rounded"
+        />
                         ) : task.status === "running" ? (
                           <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                         ) : task.status === "failed" ? (

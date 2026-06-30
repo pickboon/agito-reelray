@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, use, useCallback, Suspense } from "react";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
@@ -557,11 +558,13 @@ function EpisodePageContent({
                   }`}
                 >
                   {char.anchor_image_url ? (
-                    <img
-                      src={char.anchor_image_url}
-                      alt={char.name}
-                      className="h-5 w-5 rounded object-cover"
-                    />
+                    <Image
+          src={char.anchor_image_url}
+          alt={char.name}
+          width=20
+          height=20
+          className="rounded object-cover"
+        />
                   ) : (
                     <Users className="h-4 w-4" />
                   )}
@@ -583,11 +586,13 @@ function EpisodePageContent({
                   <div key={charId} className="flex flex-col items-center">
                     <div className="h-12 w-12 rounded bg-brand-cyan/10 flex items-center justify-center">
                       {char?.anchor_image_url ? (
-                        <img
-                          src={char.anchor_image_url}
-                          alt={char?.name}
-                          className="h-10 w-10 rounded object-cover"
-                        />
+                        <Image
+          src={char.anchor_image_url}
+          alt={char?.name}
+          width=40
+          height=40
+          className="rounded object-cover"
+        />
                       ) : (
                         <Users className="h-5 w-5 text-brand-cyan" />
                       )}

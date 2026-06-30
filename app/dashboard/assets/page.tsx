@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -389,11 +390,12 @@ export default function AssetsPage() {
             <Card key={asset.id} className="overflow-hidden group cursor-pointer">
               <div className="aspect-video bg-muted relative">
                 {asset.thumbnail_url ? (
-                  <img
-                    src={asset.thumbnail_url}
-                    alt={asset.title}
-                    className="w-full h-full object-cover"
-                  />
+                  <Image
+          src={asset.thumbnail_url}
+          alt={asset.title}
+          fill
+          className="w-full h-full object-cover"
+        />
                 ) : asset.type === "video" ? (
                   <div className="w-full h-full flex items-center justify-center">
                     <Video className="h-8 w-8 text-muted-foreground/50" />

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -56,11 +57,13 @@ function AvatarFallback({ username, avatarUrl }: { username: string; avatarUrl?:
   const initials = username.slice(0, 1).toUpperCase();
   if (avatarUrl) {
     return (
-      <img
-        src={avatarUrl}
-        alt={username}
-        className="h-8 w-8 rounded-full object-cover shrink-0"
-      />
+      <Image
+          src={avatarUrl}
+          alt={username}
+          width=32
+          height=32
+          className="rounded-full object-cover shrink-0"
+        />
     );
   }
   return (
@@ -325,11 +328,12 @@ export default function CommunityPage() {
                         onClick={() => openSheet(post)}
                       >
                         {post.generation_tasks.thumbnail_url ? (
-                          <img
-                            src={post.generation_tasks.thumbnail_url}
-                            alt={post.title}
-                            className="w-full h-full object-cover"
-                          />
+                          <Image
+          src={post.generation_tasks.thumbnail_url}
+          alt={post.title}
+          fill
+          className="w-full h-full object-cover"
+        />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
                             <Video className="h-12 w-12 text-muted-foreground/30" />

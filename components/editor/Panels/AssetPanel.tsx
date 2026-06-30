@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { useEditorStore } from "@/lib/editor/store";
 import type { AssetItem } from "@/lib/editor/types";
@@ -118,11 +119,12 @@ export function AssetPanel() {
                 {/* 缩略图 */}
                 <div className="w-14 h-10 shrink-0 rounded bg-secondary/50 flex items-center justify-center overflow-hidden">
                   {asset.thumbnailUrl ? (
-                    <img
-                      src={asset.thumbnailUrl}
-                      alt={asset.name}
-                      className="w-full h-full object-cover"
-                    />
+                    <Image
+          src={asset.thumbnailUrl}
+          alt={asset.name}
+          fill
+          className="w-full h-full object-cover"
+        />
                   ) : (
                     <Video className="h-4 w-4 text-muted-foreground/50" />
                   )}
