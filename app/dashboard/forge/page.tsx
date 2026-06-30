@@ -282,8 +282,8 @@ export default function ForgePage() {
                       <Image
           src={char.anchor_image_url ?? char.reference_image_url ?? ""}
           alt={char.name}
-          width=32
-          height=32
+          width={32}
+          height={32}
           className="rounded-full object-cover"
         />
                     ) : (

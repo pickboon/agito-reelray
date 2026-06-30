@@ -92,8 +92,8 @@ export function VideoDetailSheet({ post, open, onOpenChange }: VideoDetailSheetP
               <Image
           src={post.profiles.avatar_url}
           alt={username}
-          width=32
-          height=32
+          width={32}
+          height={32}
           className="rounded-full object-cover"
         />
             ) : (

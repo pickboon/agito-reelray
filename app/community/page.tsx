@@ -60,8 +60,8 @@ function AvatarFallback({ username, avatarUrl }: { username: string; avatarUrl?:
       <Image
           src={avatarUrl}
           alt={username}
-          width=32
-          height=32
+          width={32}
+          height={32}
           className="rounded-full object-cover shrink-0"
         />
     );

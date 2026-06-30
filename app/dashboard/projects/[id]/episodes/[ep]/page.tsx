@@ -561,8 +561,8 @@ function EpisodePageContent({
                     <Image
           src={char.anchor_image_url}
           alt={char.name}
-          width=20
-          height=20
+          width={20}
+          height={20}
           className="rounded object-cover"
         />
                   ) : (
@@ -589,8 +589,8 @@ function EpisodePageContent({
                         <Image
           src={char.anchor_image_url}
           alt={char?.name}
-          width=40
-          height=40
+          width={40}
+          height={40}
           className="rounded object-cover"
         />
                       ) : (
