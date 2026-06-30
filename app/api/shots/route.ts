@@ -20,7 +20,20 @@ export async function POST(request: NextRequest) {
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const body = await request.json();
-    const { episode_id, prompt, reference_character_id } = body;
+    const {
+      episode_id,
+      prompt,
+      reference_character_id,
+      // 导入场景额外字段
+      model,
+      mode,
+      aspect_ratio,
+      duration,
+      status,
+      video_url,
+      thumbnail_url,
+      task_id,
+    } = body;
 
     if (!episode_id || !prompt) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -56,16 +69,26 @@ export async function POST(request: NextRequest) {
 
     const nextNumber = (lastShot?.shot_number ?? 0) + 1;
 
-    // 创建 shot
+    // 创建 shot（支持导入场景的预填字段）
+    const shotData: Record<string, unknown> = {
+      episode_id,
+      shot_number: nextNumber,
+      prompt: prompt.trim(),
+      reference_character_id: reference_character_id || null,
+      status: status || "pending",
+    };
+
+    if (model) shotData.model = model;
+    if (mode) shotData.mode = mode;
+    if (aspect_ratio) shotData.aspect_ratio = aspect_ratio;
+    if (duration) shotData.duration = duration;
+    if (video_url) shotData.video_url = video_url;
+    if (thumbnail_url) shotData.thumbnail_url = thumbnail_url;
+    if (task_id) shotData.task_id = task_id;
+
     const { data: shot, error } = await supabase
       .from("shots")
-      .insert({
-        episode_id,
-        shot_number: nextNumber,
-        prompt: prompt.trim(),
-        reference_character_id: reference_character_id || null,
-        status: "pending",
-      })
+      .insert(shotData)
       .select()
       .single();
 

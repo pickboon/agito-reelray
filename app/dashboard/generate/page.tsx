@@ -37,6 +37,7 @@ import {
   ChevronLeft,
   ChevronRight,
   AlertTriangle,
+  FolderPlus,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -135,6 +136,15 @@ export default function GeneratePage() {
   const [templateDescription, setTemplateDescription] = useState("");
   const [savingTemplate, setSavingTemplate] = useState(false);
   const pollErrorCountRef = useRef<Record<string, number>>({});
+
+  // P1-4: 导入到项目状态
+  const [importDialogOpen, setImportDialogOpen] = useState(false);
+  const [importProjects, setImportProjects] = useState<{ id: string; title: string }[]>([]);
+  const [importEpisodes, setImportEpisodes] = useState<{ id: string; title: string }[]>([]);
+  const [selectedProjectId, setSelectedProjectId] = useState<string>("");
+  const [selectedEpisodeId, setSelectedEpisodeId] = useState<string>("");
+  const [importing, setImporting] = useState(false);
+  const [importLoadingEpisodes, setImportLoadingEpisodes] = useState(false);
 
   const fetchTasks = useCallback(async (pageNum = 0) => {
     try {
@@ -405,6 +415,76 @@ export default function GeneratePage() {
       toast.error("网络错误");
     } finally {
       setPublishing(false);
+    }
+  }
+
+  // P1-4: 导入到项目 - 加载项目列表
+  async function handleOpenImportDialog() {
+    if (!selectedTask || selectedTask.status !== "completed") return;
+    setImportDialogOpen(true);
+    setSelectedProjectId("");
+    setSelectedEpisodeId("");
+    setImportEpisodes([]);
+
+    const supabase = createClient();
+    const { data } = await supabase
+      .from("projects")
+      .select("id, title")
+      .order("updated_at", { ascending: false });
+    setImportProjects((data ?? []) as { id: string; title: string }[]);
+  }
+
+  // P1-4: 选择项目后加载集列表
+  async function handleSelectProject(projectId: string) {
+    setSelectedProjectId(projectId);
+    setSelectedEpisodeId("");
+    setImportLoadingEpisodes(true);
+
+    const supabase = createClient();
+    const { data } = await supabase
+      .from("episodes")
+      .select("id, title")
+      .eq("project_id", projectId)
+      .order("episode_number", { ascending: true });
+    setImportEpisodes((data ?? []) as { id: string; title: string }[]);
+    setImportLoadingEpisodes(false);
+  }
+
+  // P1-4: 确认导入
+  async function handleImportToProject() {
+    if (!selectedTask || !selectedEpisodeId) return;
+    setImporting(true);
+
+    try {
+      const res = await apiFetch("/api/shots", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          episode_id: selectedEpisodeId,
+          prompt: selectedTask.prompt,
+          model: selectedTask.model_id,
+          mode: selectedTask.mode,
+          aspect_ratio: selectedTask.aspect_ratio,
+          duration: selectedTask.duration,
+          status: "completed",
+          video_url: selectedTask.video_url,
+          thumbnail_url: selectedTask.thumbnail_url,
+          task_id: selectedTask.id,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        toast.error(data.error || "导入失败");
+        return;
+      }
+
+      toast.success("已导入到项目！");
+      setImportDialogOpen(false);
+    } catch {
+      toast.error("导入失败，请重试");
+    } finally {
+      setImporting(false);
     }
   }
 
@@ -842,6 +922,14 @@ export default function GeneratePage() {
                       <Share2 className="h-4 w-4 mr-2" />
                       发布到社区
                     </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={handleOpenImportDialog}
+                      title="导入到项目"
+                    >
+                      <FolderPlus className="h-4 w-4" />
+                    </Button>
                   </>
                 )}
                 <Button
@@ -920,6 +1008,76 @@ export default function GeneratePage() {
                 </>
               ) : (
                 "发布"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* P1-4: 导入到项目对话框 */}
+      <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>导入到项目</DialogTitle>
+            <DialogDescription>
+              将生成的视频导入到项目中的某一集
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">选择项目</label>
+              <Select value={selectedProjectId} onValueChange={handleSelectProject}>
+                <SelectTrigger>
+                  <SelectValue placeholder="请选择项目..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {importProjects.map((p) => (
+                    <SelectItem key={p.id} value={p.id}>
+                      {p.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">选择集</label>
+              {importLoadingEpisodes ? (
+                <Skeleton className="h-10 w-full" />
+              ) : (
+                <Select
+                  value={selectedEpisodeId}
+                  onValueChange={setSelectedEpisodeId}
+                  disabled={!selectedProjectId}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="请选择集..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {importEpisodes.map((ep) => (
+                      <SelectItem key={ep.id} value={ep.id}>
+                        {ep.title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setImportDialogOpen(false)}>
+              取消
+            </Button>
+            <Button
+              onClick={handleImportToProject}
+              disabled={importing || !selectedEpisodeId}
+            >
+              {importing ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  导入中...
+                </>
+              ) : (
+                "导入"
               )}
             </Button>
           </DialogFooter>
