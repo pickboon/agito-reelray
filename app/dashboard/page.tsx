@@ -324,7 +324,7 @@ export default function DashboardPage() {
               {templates.map((t) => (
                 <div
                   key={t.key}
-                  className="flex flex-col items-center justify-center p-3 rounded-lg bg-brand-gold/5 hover:border-brand-gold/30 border border-transparent transition-colors cursor-pointer"
+                  className="flex flex-col items-center justify-center p-3 rounded-lg bg-brand-gold/5 hover:border-brand-gold/30 border border-transparent transition-colors cursor-pointer card-hover-lift"
                   onClick={() => {
                     setPreviewTemplate({ preset: t.key, name: t.name, emoji: t.emoji, desc: t.desc });
                     setPreviewOpen(true);

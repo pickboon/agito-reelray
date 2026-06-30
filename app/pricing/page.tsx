@@ -334,7 +334,7 @@ export default function PricingPage() {
           </p>
           <div className="grid gap-4 md:grid-cols-3">
             {BUNDLES.map((bundle) => (
-              <Card key={bundle.bundleId} className="border-border">
+              <Card key={bundle.bundleId} className="frosted-card card-hover-lift">
                 <CardHeader className="text-center pb-2">
                   <bundle.icon className="mx-auto h-8 w-8 text-brand-gold mb-2" />
                   <CardTitle className="text-base">{bundle.name}</CardTitle>
