@@ -2,10 +2,14 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { apiFetch } from "@/lib/api-fetch";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
+import { TemplatePreviewDialog } from "@/components/community/TemplatePreviewDialog";
 import {
   Film,
   Clapperboard,
@@ -74,17 +78,30 @@ const quickLinks = [
 ];
 
 const templates = [
-  { emoji: "🗡️", name: "复仇重生", desc: "逆袭打脸爽剧" },
-  { emoji: "💕", name: "甜宠虐恋", desc: "甜虐交织恋爱" },
-  { emoji: "🔍", name: "悬疑惊悚", desc: "烧脑反转推理" },
-  { emoji: "🧚", name: "穿越仙侠", desc: "修仙奇幻冒险" },
+  { key: "revenge", emoji: "🗡️", name: "复仇重生", desc: "逆袭打脸爽剧" },
+  { key: "romance", emoji: "💕", name: "甜宠虐恋", desc: "甜虐交织恋爱" },
+  { key: "thriller", emoji: "🔍", name: "悬疑惊悚", desc: "烧脑反转推理" },
+  { key: "fantasy", emoji: "🧚", name: "穿越仙侠", desc: "修仙奇幻冒险" },
 ];
 
+interface PreviewTemplate {
+  preset: string;
+  name: string;
+  emoji: string;
+  desc: string;
+}
+
 export default function DashboardPage() {
+  const router = useRouter();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [projects, setProjects] = useState<RecentProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // 模板预览弹窗 state
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewTemplate, setPreviewTemplate] = useState<PreviewTemplate | null>(null);
+  const [applyLoading, setApplyLoading] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -138,6 +155,29 @@ export default function DashboardPage() {
     }
     fetchData();
   }, []);
+
+  async function handleApplyTemplate() {
+    if (!previewTemplate) return;
+    setApplyLoading(true);
+    try {
+      const res = await apiFetch("/api/templates/apply", {
+        method: "POST",
+        json: { preset: previewTemplate.preset },
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error ?? "创建项目失败");
+        return;
+      }
+      toast.success(`已使用「${previewTemplate.name}」模板创建新项目`);
+      setPreviewOpen(false);
+      router.push(`/dashboard/projects/${data.project_id}/episodes/${data.episode_id}`);
+    } catch {
+      toast.error("网络错误，请稍后重试");
+    } finally {
+      setApplyLoading(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -283,7 +323,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        {/* 右：推荐模板 */}
+        {/* 右：推荐模板 — 点击打开预览弹窗 */}
         <Card className="backdrop-blur bg-white/[0.03] border-white/[0.06]">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base font-medium">
@@ -292,17 +332,22 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Link href="/templates">
-              <div className="grid gap-3 grid-cols-2 sm:grid-cols-4">
-                {templates.map((t) => (
-                  <div key={t.name} className="flex flex-col items-center justify-center p-3 rounded-lg bg-brand-gold/5 hover:border-brand-gold/30 border border-transparent transition-colors cursor-pointer">
-                    <span className="text-2xl mb-1">{t.emoji}</span>
-                    <p className="text-sm font-medium text-foreground text-center">{t.name}</p>
-                    <p className="text-[11px] text-muted-foreground text-center">{t.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </Link>
+            <div className="grid gap-3 grid-cols-2 sm:grid-cols-4">
+              {templates.map((t) => (
+                <div
+                  key={t.key}
+                  className="flex flex-col items-center justify-center p-3 rounded-lg bg-brand-gold/5 hover:border-brand-gold/30 border border-transparent transition-colors cursor-pointer"
+                  onClick={() => {
+                    setPreviewTemplate({ preset: t.key, name: t.name, emoji: t.emoji, desc: t.desc });
+                    setPreviewOpen(true);
+                  }}
+                >
+                  <span className="text-2xl mb-1">{t.emoji}</span>
+                  <p className="text-sm font-medium text-foreground text-center">{t.name}</p>
+                  <p className="text-[11px] text-muted-foreground text-center">{t.desc}</p>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -359,6 +404,20 @@ export default function DashboardPage() {
           </div>
         )}
       </div>
+
+      {/* 模板预览弹窗 */}
+      {previewTemplate && (
+        <TemplatePreviewDialog
+          open={previewOpen}
+          onOpenChange={setPreviewOpen}
+          templateName={previewTemplate.name}
+          templateDesc={previewTemplate.desc}
+          templateEmoji={previewTemplate.emoji}
+          presetKey={previewTemplate.preset}
+          onApply={handleApplyTemplate}
+          loading={applyLoading}
+        />
+      )}
     </div>
   );
 }
