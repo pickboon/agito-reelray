@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "sonner";
-import { Inter, JetBrains_Mono, Orbitron } from "next/font/google";
+import { Inter, JetBrains_Mono, Rajdhani, ZCOOL_QingKe_HuangYou } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -10,10 +10,18 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
-const orbitron = Orbitron({
+const rajdhani = Rajdhani({
   subsets: ["latin"],
+  weight: ["500", "600", "700"],
   display: "swap",
-  variable: "--font-orbitron",
+  variable: "--font-heading",
+});
+
+const zcool = ZCOOL_QingKe_HuangYou({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  variable: "--font-glitch",
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -69,7 +77,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" className={`dark scroll-smooth ${inter.variable} ${jetbrainsMono.variable} ${orbitron.variable}`}>
+    <html lang="zh-CN" className={`dark scroll-smooth ${inter.variable} ${jetbrainsMono.variable} ${rajdhani.variable} ${zcool.variable}`}>
 
       <body className="min-h-screen bg-background font-sans antialiased">
         <TooltipProvider>
