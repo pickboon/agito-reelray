@@ -12,8 +12,30 @@ export default function Home() {
 
       <main>
         {/* ── HERO ── */}
-        <section className="py-24 px-6 text-center">
-          <div className="max-w-5xl mx-auto">
+        <section className="relative min-h-screen flex flex-col items-center justify-center px-6 text-center overflow-hidden">
+          {/* 全屏赛博朋克背景视频 */}
+          <video
+            className="absolute inset-0 w-full h-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+          >
+            <source src="/demos/warlord_return.mp4" type="video/mp4" />
+          </video>
+
+          {/* 视觉叠加层 */}
+          <div className="hero-bg-video" />
+          <div className="particles-bg">
+            {Array.from({ length: 20 }).map((_, i) => (
+              <div key={i} className="particle-dot" />
+            ))}
+          </div>
+          <div className="light-dust" />
+
+          <div className="relative z-10 max-w-5xl mx-auto">
             {/* 标签 */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-cyan/20 bg-brand-cyan/5 text-xs text-brand-cyan mb-8">
               <Zap className="h-3 w-3" />
@@ -39,7 +61,7 @@ export default function Home() {
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-md bg-brand-cyan text-background font-semibold text-lg animate-hero-btn hover:bg-brand-cyan/90 transition-all"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-md bg-brand-cyan text-background font-semibold text-lg shadow-[0_0_20px_rgba(102,252,241,0.4)] animate-breathe hover:shadow-[0_0_40px_rgba(102,252,241,0.6)] hover:bg-brand-cyan/90 transition-all"
               >
                 <Zap className="h-5 w-5" />
                 立即生成短剧
@@ -58,6 +80,15 @@ export default function Home() {
               Seedance · Kling · HappyHorse 多模型驱动 · 生成成功率 96.9%
             </p>
           </div>
+
+          {/* 向下滚动指示 */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground/40">
+            <span className="text-[10px] uppercase tracking-widest">探索功能</span>
+            <div className="w-4 h-6 rounded-full border border-muted-foreground/30 flex justify-center pt-1">
+              <div className="w-1 h-1.5 rounded-full bg-brand-cyan/60 animate-bounce" />
+            </div>
+          </div>
+
         </section>
 
         {/* ── BENTO BOX: 核心功能特性 ── */}
