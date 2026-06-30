@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Download, Trash2, AlertTriangle } from "lucide-react";
+import { Trash2, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { apiFetch } from "@/lib/api-fetch";
 import { createClient } from "@/lib/supabase/client";
@@ -11,29 +11,8 @@ import { useRouter } from "next/navigation";
 
 export default function SettingsPage() {
   const router = useRouter();
-  const [exporting, setExporting] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-
-  const handleExport = async () => {
-    setExporting(true);
-    try {
-      const res = await apiFetch("/api/user/data-export");
-      if (!res.ok) throw new Error("Export failed");
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `reelray-data-export-${Date.now()}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-      toast.success("数据导出成功");
-    } catch {
-      toast.error("导出失败，请重试");
-    } finally {
-      setExporting(false);
-    }
-  };
 
   const handleDeleteAccount = async () => {
     setDeleting(true);
@@ -55,19 +34,6 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-foreground">账户设置</h1>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">数据导出</CardTitle>
-          <CardDescription>导出您的所有项目、角色、镜头、模板和社区帖子数据</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button onClick={handleExport} disabled={exporting} variant="outline">
-            <Download className="mr-2 h-4 w-4" />
-            {exporting ? "导出中..." : "导出我的数据"}
-          </Button>
-        </CardContent>
-      </Card>
 
       <Card className="border-destructive/30">
         <CardHeader>
