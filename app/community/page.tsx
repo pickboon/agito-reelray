@@ -22,6 +22,10 @@ interface CommunityPost {
     video_url: string;
     thumbnail_url?: string;
     prompt: string;
+    model_id?: string;
+    mode?: string;
+    aspect_ratio?: string;
+    duration?: number;
   };
   profiles: {
     username?: string;

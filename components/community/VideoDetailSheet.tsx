@@ -1,8 +1,9 @@
 "use client";
 
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { Play, Heart, Eye, X } from "lucide-react";
+import { Play, Heart, Eye, FolderPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 interface VideoDetailSheetProps {
   post: {
@@ -15,6 +16,11 @@ interface VideoDetailSheetProps {
     generation_tasks: {
       video_url: string;
       thumbnail_url?: string;
+      prompt?: string;
+      model_id?: string;
+      mode?: string;
+      aspect_ratio?: string;
+      duration?: number;
     };
     profiles: {
       username?: string;
@@ -32,10 +38,25 @@ function formatViews(count: number): string {
 }
 
 export function VideoDetailSheet({ post, open, onOpenChange }: VideoDetailSheetProps) {
+  const router = useRouter();
+
   if (!post) return null;
 
   const username = post.profiles.username ?? "匿名用户";
   const initials = username.slice(0, 1).toUpperCase();
+
+  // P1-5: 以此创建项目 - 跳转到生成页并预填参数
+  const handleUseAsTemplate = () => {
+    const task = post.generation_tasks;
+    const params = new URLSearchParams();
+    if (task.prompt) params.set("prompt", task.prompt);
+    if (task.model_id) params.set("model", task.model_id);
+    if (task.mode) params.set("mode", task.mode);
+    if (task.aspect_ratio) params.set("aspect_ratio", task.aspect_ratio);
+    if (task.duration) params.set("duration", String(task.duration));
+    router.push(`/dashboard/generate?${params.toString()}`);
+    onOpenChange(false);
+  };
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -94,6 +115,20 @@ export function VideoDetailSheet({ post, open, onOpenChange }: VideoDetailSheetP
               {formatViews(post.likes_count)} 获赞
             </span>
           </div>
+
+          {/* P1-5: 操作按钮 */}
+          {post.generation_tasks.prompt && (
+            <div className="pt-3 border-t border-border">
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={handleUseAsTemplate}
+              >
+                <FolderPlus className="h-4 w-4 mr-2" />
+                以此创建项目
+              </Button>
+            </div>
+          )}
         </div>
       </SheetContent>
     </Sheet>

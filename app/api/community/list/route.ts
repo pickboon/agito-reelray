@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
       .from("community_posts")
       .select(`
         *,
-        generation_tasks(video_url, thumbnail_url, prompt),
+        generation_tasks(video_url, thumbnail_url, prompt, model_id, mode, aspect_ratio, duration),
         profiles(username, avatar_url)
       `)
       .eq("is_public", true)
