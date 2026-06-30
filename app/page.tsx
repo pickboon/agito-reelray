@@ -384,6 +384,8 @@ export default function Home() {
                 { label: "甜宠", video: "/demos/ceo_office.mp4" },
                 { label: "悬疑", video: "/demos/thriller_room.mp4" },
                 { label: "穿越", video: "/demos/crossworld_portal.mp4" },
+                { label: "仙侠", video: "/demos/fantasy_cave.mp4" },
+                { label: "战神", video: "/demos/warlord_return.mp4" },
               ].map((item) => (
                 <div
                   key={item.label}
