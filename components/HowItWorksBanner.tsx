@@ -21,10 +21,10 @@ const STEPS = [
   {
     icon: Wand2,
     label: "AI 生成",
-    desc: "一键生成分镜视频，全自动渲染",
+    desc: "输入提示词，AI 即时生成短视频",
     color: "text-brand-gold",
     bg: "bg-brand-gold/10",
-    href: "/dashboard/hub",
+    href: "/dashboard/generate",
   },
   {
     icon: Rocket,
