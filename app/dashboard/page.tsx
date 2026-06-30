@@ -44,18 +44,32 @@ const statusMap: Record<string, string> = {
   completed: "已完成",
 };
 
-/** 数字跳动动画 — 从 0 缓动到 target */
+/** 数字跳动动画 — 进入视口后从 0 缓动到 target */
 function CountUp({ target, duration = 800, formatter }: { target: number; duration?: number; formatter?: (n: number) => string }) {
   const [display, setDisplay] = useState(0);
+  const [started, setStarted] = useState(false);
+  const elRef = useRef<HTMLSpanElement>(null);
   const rafRef = useRef<number | null>(null);
 
+  // IntersectionObserver — 进入视口才触发
   useEffect(() => {
-    let start = 0;
+    const el = elRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setStarted(true); obs.disconnect(); } },
+      { threshold: 0.3 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  // 数字缓动动画
+  useEffect(() => {
+    if (!started) return;
     const startTime = performance.now();
     const animate = (now: number) => {
       const elapsed = now - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      // ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
       setDisplay(Math.round(eased * target));
       if (progress < 1) {
@@ -64,9 +78,9 @@ function CountUp({ target, duration = 800, formatter }: { target: number; durati
     };
     rafRef.current = requestAnimationFrame(animate);
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
-  }, [target, duration]);
+  }, [target, duration, started]);
 
-  return <>{formatter ? formatter(display) : display.toLocaleString()}</>;
+  return <span ref={elRef}>{formatter ? formatter(display) : display.toLocaleString()}</span>;
 }
 
 const quickLinks = [
