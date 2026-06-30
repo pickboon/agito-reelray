@@ -9,6 +9,8 @@ import {
   Settings,
   Clapperboard,
   Wand2,
+  Sparkles,
+  Clock,
   FolderOpen,
   LayoutTemplate,
   Users,
@@ -18,7 +20,9 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/dashboard/generate", label: "创作", icon: Wand2 },
+  { href: "/dashboard/hub", label: "中枢", icon: Wand2 },
+  { href: "/dashboard/forge", label: "锻造", icon: Sparkles },
+  { href: "/dashboard/queue", label: "队列", icon: Clock },
   { href: "/dashboard/assets", label: "资产", icon: FolderOpen },
   { href: "/dashboard/projects", label: "Projects", icon: Film },
   { href: "/templates", label: "模板", icon: LayoutTemplate },
