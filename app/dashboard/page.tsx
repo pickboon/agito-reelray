@@ -22,6 +22,7 @@ import {
   LayoutTemplate,
 } from "lucide-react";
 import HowItWorksBanner from "@/components/HowItWorksBanner";
+import { CreateProjectDialog } from "@/components/CreateProjectDialog";
 
 interface DashboardStats {
   projectCount: number;
@@ -113,6 +114,9 @@ export default function DashboardPage() {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewTemplate, setPreviewTemplate] = useState<PreviewTemplate | null>(null);
   const [applyLoading, setApplyLoading] = useState(false);
+
+  // P2-1: 新建项目弹窗
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -291,13 +295,13 @@ export default function DashboardPage() {
             <p className="text-sm text-muted-foreground text-center max-w-sm mb-6">
               创建你的第一个项目，上传角色照片，开始生成一致性短剧视频。
             </p>
-            <Link
-              href="/dashboard/projects"
+            <button
+              onClick={() => setCreateDialogOpen(true)}
               className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-md btn-primary text-sm font-medium"
             >
               创建第一个项目
               <ArrowRight className="h-4 w-4" />
-            </Link>
+            </button>
           </CardContent>
         </Card>
       )}
@@ -305,10 +309,10 @@ export default function DashboardPage() {
       {/* 独立大 CTA */}
       <div
         className="group relative overflow-hidden rounded-xl bg-gradient-to-r from-brand-gold/20 via-brand-gold/10 to-transparent border border-brand-gold/30 cursor-pointer transition-all hover:border-brand-gold/50 hover:shadow-[0_0_24px_-4px_rgba(230,195,94,0.25)]"
-        onClick={() => router.push("/dashboard/projects")}
+        onClick={() => setCreateDialogOpen(true)}
         role="button"
         tabIndex={0}
-        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") router.push("/dashboard/projects"); }}
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setCreateDialogOpen(true); }}
       >
         <div className="flex items-center justify-between px-6 py-8 sm:py-10">
           <div>
@@ -450,6 +454,8 @@ export default function DashboardPage() {
           loading={applyLoading}
         />
       )}
+      {/* P2-1: 新建项目对话框 */}
+      <CreateProjectDialog open={createDialogOpen} onOpenChange={setCreateDialogOpen} />
     </div>
   );
 }
