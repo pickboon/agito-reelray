@@ -60,7 +60,7 @@ export default function Home() {
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
               你的角色。
               <br />
-              <span className="text-brand-gold">始终如一。</span>每一集
+              <span className="text-brand-cyan">始终如一。</span>每一集
             </h1>
 
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -70,20 +70,20 @@ export default function Home() {
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-md btn-primary"
+                className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-md bg-brand-cyan text-background font-semibold hover:bg-brand-cyan/90 transition-colors"
               >
                 免费开始
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="#demo"
-                className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-md border border-brand-gold text-brand-gold font-semibold hover:bg-brand-gold/10 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-md border border-brand-cyan text-brand-cyan font-semibold hover:bg-brand-cyan/10 transition-colors"
               >
                 观看演示
               </Link>
             </div>
 
-            <p className="mt-16 text-xs text-muted-foreground/80">
+            <p className="mt-16 text-xs text-muted-foreground/60">
               HappyHorse · Seedance · Kling 多模型驱动 · 生成成功率 96.9%
             </p>
           </div>
@@ -100,11 +100,11 @@ export default function Home() {
               {/* AI 短剧 */}
               <Link
                 href="/dashboard/projects"
-                className="group relative rounded-xl border border-border bg-card p-8 transition-all hover:border-brand-gold/40 hover:shadow-lg hover:shadow-brand-gold/5"
+                className="group relative rounded-xl border border-border bg-card p-8 transition-all hover:border-brand-purple/40 hover:shadow-lg hover:shadow-brand-purple/5"
               >
                 <div className="flex items-start gap-5">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-brand-gold/10 transition-colors group-hover:bg-brand-gold/20">
-                    <Clapperboard className="h-7 w-7 text-brand-gold" />
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-brand-purple/10 transition-colors group-hover:bg-brand-purple/20">
+                    <Clapperboard className="h-7 w-7 text-brand-purple" />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold mb-2">AI 短剧</h3>
@@ -118,7 +118,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-                <ArrowRight className="absolute top-8 right-8 h-5 w-5 text-muted-foreground/40 transition-transform group-hover:translate-x-1 group-hover:text-brand-gold" />
+                <ArrowRight className="absolute top-8 right-8 h-5 w-5 text-muted-foreground/40 transition-transform group-hover:translate-x-1 group-hover:text-brand-purple" />
               </Link>
 
               {/* 视频生成 */}
@@ -252,10 +252,10 @@ export default function Home() {
               ].map((item, i) => (
                 <div key={item.step} className="flex items-start gap-4">
                   <div className="text-center flex-1">
-                    <div className="mx-auto h-12 w-12 rounded-full bg-brand-gold/10 flex items-center justify-center mb-4">
-                      <item.icon className="h-5 w-5 text-brand-gold" />
+                    <div className="mx-auto h-12 w-12 rounded-full bg-brand-cyan/10 flex items-center justify-center mb-4">
+                      <item.icon className="h-5 w-5 text-brand-cyan" />
                     </div>
-                    <p className="text-brand-gold font-sans text-sm mb-1">
+                    <p className="text-brand-cyan font-sans text-sm mb-1">
                       步骤 {item.step}
                     </p>
                     <h3 className="font-semibold mb-2">{item.title}</h3>
@@ -296,7 +296,7 @@ export default function Home() {
               ] as const).map((tpl) => (
                 <div
                   key={tpl.genre}
-                  className="bg-card border border-border rounded-lg p-4 hover:border-brand-gold/30 transition-colors"
+                  className="bg-card border border-border rounded-lg p-4 hover:border-brand-purple/30 transition-colors"
                 >
                   <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full ${tpl.badgeClass} mb-3`}>
                     {tpl.badge}
@@ -311,7 +311,7 @@ export default function Home() {
             <div className="text-center">
               <Link
                 href="/dashboard/templates"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md border border-brand-gold text-brand-gold font-semibold hover:bg-brand-gold/10 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md border border-brand-cyan text-brand-cyan font-semibold hover:bg-brand-cyan/10 transition-colors"
               >
                 查看全部模板
                 <ArrowRight className="h-4 w-4" />
@@ -335,7 +335,7 @@ export default function Home() {
               {([
                 {
                   badge: "推荐",
-                  badgeClass: "bg-brand-gold/10 text-brand-gold",
+                  badgeClass: "bg-brand-purple/10 text-brand-purple",
                   title: "多镜头叙事专家",
                   name: "Seedance 2.0",
                   desc: "字节跳动出品，92% 角色保留率，原生多镜头连贯生成，适合长叙事。",
@@ -349,7 +349,7 @@ export default function Home() {
                 },
                 {
                   badge: "稳定",
-                  badgeClass: "bg-brand-gold/10 text-brand-gold",
+                  badgeClass: "bg-brand-purple/10 text-brand-purple",
                   title: "高真实感引擎",
                   name: "HappyHorse 1.1",
                   desc: "96.9% 生成成功率，t2v 与 r2v 双模式，实测稳定可靠。",
@@ -357,13 +357,13 @@ export default function Home() {
               ] as const).map((model) => (
                 <div
                   key={model.name}
-                  className="bg-card border border-border rounded-lg p-6 hover:border-brand-gold/20 transition-colors"
+                  className="bg-card border border-border rounded-lg p-6 hover:border-brand-purple/20 transition-colors"
                 >
                   <span className={`inline-block text-xs font-medium px-2.5 py-1 rounded-full ${model.badgeClass} mb-4`}>
                     {model.badge}
                   </span>
                   <h3 className="font-semibold text-lg mb-1">{model.name}</h3>
-                  <p className="text-sm text-brand-gold/80 mb-2">{model.title}</p>
+                  <p className="text-sm text-brand-purple/80 mb-2">{model.title}</p>
                   <p className="text-sm text-muted-foreground">{model.desc}</p>
                 </div>
               ))}
@@ -445,6 +445,7 @@ export default function Home() {
                   credits: "20,000 额度",
                   episodes: "约 2 集",
                   popular: false,
+                  theme: "cyan",
                   features: [
                     "角色锚点锁定",
                     "720p 导出",
@@ -458,6 +459,7 @@ export default function Home() {
                   credits: "80,000 额度",
                   episodes: "约 8 集",
                   popular: true,
+                  theme: "purple",
                   features: [
                     "包含 Starter 全部功能",
                     "1080p 导出",
@@ -472,6 +474,7 @@ export default function Home() {
                   credits: "300,000 额度",
                   episodes: "约 30 集",
                   popular: false,
+                  theme: "gold",
                   features: [
                     "包含 Pro 全部功能",
                     "4K 导出",
@@ -481,64 +484,93 @@ export default function Home() {
                     "优先支持",
                   ],
                 },
-              ].map((plan) => (
-                <div
-                  key={plan.name}
-                  className={`rounded-lg p-6 flex flex-col ${
-                    plan.popular
-                      ? "bg-card border-2 border-brand-gold/50 relative"
-                      : "bg-card border border-border"
-                  }`}
-                >
-                  {plan.popular && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-gold text-background text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">
-                      最受欢迎
-                    </span>
-                  )}
-
-                  <h3 className="font-semibold text-lg">{plan.name}</h3>
-                  <div className="mt-4 mb-1">
-                    <span className="text-3xl font-bold">{plan.price}</span>
-                    <span className="text-muted-foreground text-sm">/月</span>
-                  </div>
-                  <p className="text-brand-cyan text-sm font-medium">
-                    {plan.credits}
-                  </p>
-                  <p className="text-xs text-muted-foreground mb-6">
-                    {plan.episodes}
-                  </p>
-
-                  <ul className="space-y-3 mb-8 flex-1">
-                    {plan.features.map((feature) => (
-                      <li
-                        key={feature}
-                        className="flex items-start gap-2 text-sm"
-                      >
-                        <Check className="h-4 w-4 text-brand-gold shrink-0 mt-0.5" />
-                        <span className="text-muted-foreground">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Link
-                    href="/login"
-                    className={`w-full text-center py-3 rounded-md font-medium transition-colors ${
+              ].map((plan) => {
+                const themeMap = {
+                  cyan: {
+                    border: "border-brand-cyan",
+                    borderHover: "border-brand-cyan/50",
+                    badge: "bg-brand-cyan",
+                    credits: "text-brand-cyan",
+                    check: "text-brand-cyan",
+                    btn: "bg-brand-cyan text-background font-semibold hover:bg-brand-cyan/90",
+                  },
+                  purple: {
+                    border: "border-brand-purple",
+                    borderHover: "border-brand-purple/50",
+                    badge: "bg-brand-purple",
+                    credits: "text-brand-purple",
+                    check: "text-brand-purple",
+                    btn: "bg-brand-purple text-background font-semibold hover:bg-brand-purple/90",
+                  },
+                  gold: {
+                    border: "border-brand-gold",
+                    borderHover: "border-brand-gold/50",
+                    badge: "bg-brand-gold",
+                    credits: "text-brand-gold",
+                    check: "text-brand-gold",
+                    btn: "bg-brand-gold text-background font-semibold hover:bg-brand-gold/90",
+                  },
+                } as const;
+                const t = themeMap[plan.theme as keyof typeof themeMap];
+                return (
+                  <div
+                    key={plan.name}
+                    className={`rounded-lg p-6 flex flex-col ${
                       plan.popular
-                        ? "btn-primary"
-                        : "border border-border text-foreground hover:bg-secondary"
+                        ? `bg-card border-2 ${t.border}/50 relative`
+                        : "bg-card border border-border"
                     }`}
                   >
-                    订阅
-                  </Link>
-                </div>
-              ))}
+                    {plan.popular && (
+                      <span className={`absolute -top-3 left-1/2 -translate-x-1/2 ${t.badge} text-background text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap`}>
+                        最受欢迎
+                      </span>
+                    )}
+
+                    <h3 className="font-semibold text-lg">{plan.name}</h3>
+                    <div className="mt-4 mb-1">
+                      <span className="text-3xl font-bold">{plan.price}</span>
+                      <span className="text-muted-foreground text-sm">/月</span>
+                    </div>
+                    <p className={`${t.credits} text-sm font-medium`}>
+                      {plan.credits}
+                    </p>
+                    <p className="text-xs text-muted-foreground mb-6">
+                      {plan.episodes}
+                    </p>
+
+                    <ul className="space-y-3 mb-8 flex-1">
+                      {plan.features.map((feature) => (
+                        <li
+                          key={feature}
+                          className="flex items-start gap-2 text-sm"
+                        >
+                          <Check className={`h-4 w-4 ${t.check} shrink-0 mt-0.5`} />
+                          <span className="text-muted-foreground">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <Link
+                      href="/login"
+                      className={`w-full text-center py-3 rounded-md font-medium transition-colors ${
+                        plan.popular
+                          ? t.btn
+                          : "border border-border text-foreground hover:bg-secondary"
+                      }`}
+                    >
+                      订阅
+                    </Link>
+                  </div>
+                );
+              })}
             </div>
 
             {/* Bottom CTA */}
             <div className="text-center mt-16">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-md btn-primary text-lg"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-md bg-brand-cyan text-background font-semibold hover:bg-brand-cyan/90 transition-colors text-lg"
               >
                 免费开始
                 <ArrowRight className="h-5 w-5" />
@@ -547,7 +579,7 @@ export default function Home() {
                 按量购买资源包？{" "}
                 <Link
                   href="/pricing"
-                  className="text-brand-gold hover:underline"
+                  className="text-brand-cyan hover:underline"
                 >
                   查看定价详情
                 </Link>

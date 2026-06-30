@@ -30,15 +30,20 @@
   --color-sidebar-ring: var(--sidebar-ring);
 
   /* Brand tokens */
-  --color-brand-gold: #FFD600;
-  --color-brand-cyan: #00F0FF;
-  --color-brand-gold-dim: #C7A600;
-  --color-brand-cyan-dim: #00b8c4;
-  --color-brand-magenta: #FF2D78;
-  --color-brand-magenta-dim: #C41E5C;
+  --color-brand-gold: #D4A843;
+  --color-brand-cyan: #66FCF1;
+  --color-brand-gold-dim: #A07D2E;
+  --color-brand-cyan-dim: #4AB8B0;
+  --color-brand-magenta: #FF007F;
+  --color-brand-magenta-dim: #C4005E;
+  --color-brand-green: #00FF88;
+  --color-brand-green-dim: #00C86A;
+  --color-brand-purple: #B300FF;
+  --color-brand-purple-dim: #8A00C4;
 
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
+  --font-orbitron: var(--font-orbitron);
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -49,30 +54,30 @@
 /* Dark cyberpunk theme - default */
 :root {
   --radius: 0.5rem;
-  --background: #050510;
-  --foreground: #e4e4e7;
-  --card: #111127;
-  --card-foreground: #e4e4e7;
-  --popover: #111127;
-  --popover-foreground: #e4e4e7;
-  --primary: #FF2D78;
-  --primary-foreground: #050510;
-  --secondary: #1a1a3e;
-  --secondary-foreground: #e4e4e7;
-  --muted: #1a1a3e;
-  --muted-foreground: #71717a;
-  --accent: #00F0FF;
-  --accent-foreground: #050510;
-  --destructive: #ef4444;
-  --border: #27273a;
-  --input: #1a1a3e;
-  --ring: #FF2D78;
-  --sidebar: #0d0d20;
-  --sidebar-foreground: #e4e4e7;
-  --sidebar-accent: #1a1a3e;
-  --sidebar-accent-foreground: #FF2D78;
-  --sidebar-border: #27273a;
-  --sidebar-ring: #FF2D78;
+  --background: #12151B;
+  --foreground: #E0E0E0;
+  --card: #1E2128;
+  --card-foreground: #E0E0E0;
+  --popover: #1E2128;
+  --popover-foreground: #E0E0E0;
+  --primary: #66FCF1;
+  --primary-foreground: #12151B;
+  --secondary: #1B1F26;
+  --secondary-foreground: #E0E0E0;
+  --muted: #1B1F26;
+  --muted-foreground: #8A8F98;
+  --accent: #B300FF;
+  --accent-foreground: #E0E0E0;
+  --destructive: #FF007F;
+  --border: rgba(255,255,255,0.06);
+  --input: #1B1F26;
+  --ring: #66FCF1;
+  --sidebar: #0E1015;
+  --sidebar-foreground: #E0E0E0;
+  --sidebar-accent: #1B1F26;
+  --sidebar-accent-foreground: #66FCF1;
+  --sidebar-border: rgba(255,255,255,0.06);
+  --sidebar-ring: #66FCF1;
 }
 
 /* Light theme variables (P2-3) */
@@ -107,30 +112,30 @@
 
 /* .dark class always uses dark theme regardless of system preference */
 .dark {
-  --background: #050510;
-  --foreground: #e4e4e7;
-  --card: #111127;
-  --card-foreground: #e4e4e7;
-  --popover: #111127;
-  --popover-foreground: #e4e4e7;
-  --primary: #FF2D78;
-  --primary-foreground: #050510;
-  --secondary: #1a1a3e;
-  --secondary-foreground: #e4e4e7;
-  --muted: #1a1a3e;
-  --muted-foreground: #71717a;
-  --accent: #00F0FF;
-  --accent-foreground: #050510;
-  --destructive: #ef4444;
-  --border: #27273a;
-  --input: #1a1a3e;
-  --ring: #FF2D78;
-  --sidebar: #0d0d20;
-  --sidebar-foreground: #e4e4e7;
-  --sidebar-accent: #1a1a3e;
-  --sidebar-accent-foreground: #FF2D78;
-  --sidebar-border: #27273a;
-  --sidebar-ring: #FF2D78;
+  --background: #12151B;
+  --foreground: #E0E0E0;
+  --card: #1E2128;
+  --card-foreground: #E0E0E0;
+  --popover: #1E2128;
+  --popover-foreground: #E0E0E0;
+  --primary: #66FCF1;
+  --primary-foreground: #12151B;
+  --secondary: #1B1F26;
+  --secondary-foreground: #E0E0E0;
+  --muted: #1B1F26;
+  --muted-foreground: #8A8F98;
+  --accent: #B300FF;
+  --accent-foreground: #E0E0E0;
+  --destructive: #FF007F;
+  --border: rgba(255,255,255,0.06);
+  --input: #1B1F26;
+  --ring: #66FCF1;
+  --sidebar: #0E1015;
+  --sidebar-foreground: #E0E0E0;
+  --sidebar-accent: #1B1F26;
+  --sidebar-accent-foreground: #66FCF1;
+  --sidebar-border: rgba(255,255,255,0.06);
+  --sidebar-ring: #66FCF1;
 }
 
 @layer base {
@@ -161,7 +166,7 @@
   background: var(--muted-foreground);
 }
 
-/* ========== Cyber HUD Keyframes ========== */
+/* ========== Breathing Glow Keyframes ========== */
 
 @keyframes scanline {
   0% {
@@ -174,31 +179,14 @@
   }
 }
 
-@keyframes neon-gold-pulse {
-  0% {
-    box-shadow: 0 0 5px #FFD600;
-  }
-  100% {
-    box-shadow: 0 0 20px #FFD600;
-  }
+@keyframes breathe-glow {
+  0%, 100% { box-shadow: 0 0 8px var(--glow-color, rgba(102,252,241,0.1)); }
+  50% { box-shadow: 0 0 24px var(--glow-color, rgba(102,252,241,0.25)); }
 }
 
-@keyframes neon-cyan-pulse {
-  0% {
-    box-shadow: 0 0 5px #00F0FF;
-  }
-  100% {
-    box-shadow: 0 0 20px #00F0FF;
-  }
-}
-
-@keyframes neon-magenta-pulse {
-  0% {
-    box-shadow: 0 0 5px #FF2D78;
-  }
-  100% {
-    box-shadow: 0 0 20px #FF2D78;
-  }
+@keyframes border-glow {
+  0%, 100% { border-color: var(--glow-color, rgba(102,252,241,0.15)); }
+  50% { border-color: var(--glow-color, rgba(102,252,241,0.4)); }
 }
 
 @keyframes cursor-blink {
@@ -221,7 +209,7 @@
   }
 }
 
-/* ========== Cyber HUD Utility Classes ========== */
+/* ========== Utility Classes ========== */
 
 @layer utilities {
   .btn-primary {
@@ -233,18 +221,8 @@
   animation: scanline 10s linear infinite;
 }
 
-.animate-neon-gold {
-  animation: neon-gold-pulse 2s ease-in-out infinite alternate;
-}
-
-.animate-neon-cyan {
-  animation: neon-cyan-pulse 2s ease-in-out infinite alternate;
-  animation-delay: 1s;
-}
-
-.animate-neon-magenta {
-  animation: neon-magenta-pulse 2s ease-in-out infinite alternate;
-  animation-delay: 0.5s;
+.animate-breathe {
+  animation: breathe-glow 3s ease-in-out infinite;
 }
 
 .animate-cursor-blink {
