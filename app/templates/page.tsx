@@ -493,7 +493,7 @@ function UnifiedCard({
     >
       {/* 视频预览区 */}
       <div
-        className="relative h-[240px] bg-card flex items-center justify-center overflow-hidden"
+        className="relative aspect-[9/16] max-h-[360px] w-full bg-card flex items-center justify-center overflow-hidden"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
