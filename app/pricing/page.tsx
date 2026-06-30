@@ -20,6 +20,8 @@ import {
   Crown,
 } from "lucide-react";
 import { getCsrfHeader } from "@/lib/csrf";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 /* ── 常量 ──────────────────────────────────────────────── */
 
@@ -134,10 +136,20 @@ export default function PricingPage() {
     "monthly",
   );
 
+  const router = useRouter();
+
   const handleCheckout = async (
     type: "subscription" | "bundle",
     id: string,
   ) => {
+    // 未登录用户引导至登录页
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      router.push(`/login?redirectTo=${encodeURIComponent("/pricing")}`);
+      return;
+    }
+
     setCheckoutLoading(id);
     setCheckoutError(null);
     try {
