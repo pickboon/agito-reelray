@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import {
   ArrowLeft,
   Users,
@@ -20,9 +21,16 @@ import {
   FlaskConical,
   Loader2,
   Play,
+  FolderPlus,
+  RotateCcw,
 } from "lucide-react";
 
 interface Project {
+  id: string;
+  title: string;
+}
+
+interface Episode {
   id: string;
   title: string;
 }
@@ -40,6 +48,18 @@ interface VisualStyle {
   neonGlow: number;
   glitchIntensity: number;
   hueShift: number;
+}
+
+interface SandboxTask {
+  id: string;
+  status: string;
+  video_url: string | null;
+  thumbnail_url: string | null;
+  prompt: string;
+  model_id: string;
+  mode: string;
+  aspect_ratio: string;
+  duration: number;
 }
 
 const STYLE_PRESETS: { name: string; emoji: string; desc: string; style: VisualStyle }[] = [
@@ -87,6 +107,16 @@ export default function ForgePage() {
   const [sandboxRefImage, setSandboxRefImage] = useState("");
   const [sandboxLoading, setSandboxLoading] = useState(false);
 
+  // P1-6: 沙盒任务追踪 & 导入
+  const [sandboxTasks, setSandboxTasks] = useState<SandboxTask[]>([]);
+  const [importDialogOpen, setImportDialogOpen] = useState(false);
+  const [importingTaskId, setImportingTaskId] = useState<string | null>(null);
+  const [importProjectId, setImportProjectId] = useState<string>("");
+  const [importEpisodeId, setImportEpisodeId] = useState<string>("");
+  const [importEpisodes, setImportEpisodes] = useState<Episode[]>([]);
+  const [importLoading, setImportLoading] = useState(false);
+  const pollingRef = useRef<Map<string, ReturnType<typeof setInterval>>>(new Map());
+
   // 初始化
   useEffect(() => {
     async function init() {
@@ -100,6 +130,39 @@ export default function ForgePage() {
           .eq("status", "active")
           .maybeSingle();
         if (data) setCredits(data.credits_remaining);
+
+        // P1-8: 优先从 Supabase 加载视觉风格
+        try {
+          const settingsRes = await apiFetch("/api/user/settings");
+          if (settingsRes.ok) {
+            const settingsData = await settingsRes.json();
+            if (settingsData.visual_style) {
+              const vs = settingsData.visual_style as VisualStyle;
+              setSelectedStyle(vs);
+              setNeonGlow(vs.neonGlow);
+              setGlitchIntensity(vs.glitchIntensity);
+              setHueShift(vs.hueShift);
+            }
+          }
+        } catch {
+          // Supabase 读取失败，fallback localStorage
+        }
+      }
+
+      // localStorage fallback（Supabase 无数据时）
+      if (!selectedStyle) {
+        const saved = localStorage.getItem("reelray-vstyle");
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved) as VisualStyle;
+            setSelectedStyle(parsed);
+            setNeonGlow(parsed.neonGlow);
+            setGlitchIntensity(parsed.glitchIntensity);
+            setHueShift(parsed.hueShift);
+          } catch {
+            // ignore
+          }
+        }
       }
 
       const { data: projectData } = await supabase
@@ -107,22 +170,16 @@ export default function ForgePage() {
         .select("id, title")
         .order("updated_at", { ascending: false });
       if (projectData) setProjects(projectData as Project[]);
-
-      // 加载保存的视觉风格
-      const saved = localStorage.getItem("reelray-vstyle");
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved) as VisualStyle;
-          setSelectedStyle(parsed);
-          setNeonGlow(parsed.neonGlow);
-          setGlitchIntensity(parsed.glitchIntensity);
-          setHueShift(parsed.hueShift);
-        } catch {
-          // ignore
-        }
-      }
     }
     init();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 清理轮询
+  useEffect(() => {
+    return () => {
+      pollingRef.current.forEach((timer) => clearInterval(timer));
+    };
   }, []);
 
   // 选择项目后拉取角色
@@ -175,11 +232,21 @@ export default function ForgePage() {
     setHueShift(preset.style.hueShift);
   }
 
-  function handleSaveStyle() {
+  async function handleSaveStyle() {
     if (!selectedStyle) return;
     const style: VisualStyle = { name: selectedStyle.name, neonGlow, glitchIntensity, hueShift };
     localStorage.setItem("reelray-vstyle", JSON.stringify(style));
-    toast.success("风格预设已保存");
+
+    // P1-8: 同步写 Supabase
+    try {
+      await apiFetch("/api/user/settings", {
+        method: "POST",
+        json: { visual_style: style },
+      });
+      toast.success("风格预设已保存（已同步云端）");
+    } catch {
+      toast.success("风格预设已保存（本地）");
+    }
   }
 
   function buildPromptPrefix() {
@@ -189,6 +256,54 @@ export default function ForgePage() {
     if (glitchIntensity > 0) parts.push(`glitch ${glitchIntensity}%`);
     if (hueShift > 0) parts.push(`hue shift ${hueShift}°`);
     return parts.length > 0 ? `[Style: ${selectedStyle.name}] ${parts.join(", ")}` : "";
+  }
+
+  // P1-6: 轮询沙盒任务状态
+  function startPolling(task: SandboxTask) {
+    if (task.status === "completed" || task.status === "failed") return;
+
+    const timer = setInterval(async () => {
+      try {
+        const supabase = createClient();
+        const { data } = await supabase
+          .from("generation_tasks")
+          .select("id, status, video_url, thumbnail_url")
+          .eq("id", task.id)
+          .single();
+
+        if (!data) return;
+
+        setSandboxTasks((prev) =>
+          prev.map((t) =>
+            t.id === task.id
+              ? {
+                  ...t,
+                  status: data.status,
+                  video_url: data.video_url ?? t.video_url,
+                  thumbnail_url: data.thumbnail_url ?? t.thumbnail_url,
+                }
+              : t
+          )
+        );
+
+        if (data.status === "completed" || data.status === "failed") {
+          clearInterval(timer);
+          pollingRef.current.delete(task.id);
+        }
+      } catch {
+        // 轮询失败静默处理
+      }
+    }, 10000);
+
+    pollingRef.current.set(task.id, timer);
+
+    // 最多 5 分钟自动停止
+    setTimeout(() => {
+      if (pollingRef.current.has(task.id)) {
+        clearInterval(pollingRef.current.get(task.id));
+        pollingRef.current.delete(task.id);
+      }
+    }, 300000);
   }
 
   async function handleSandboxGenerate() {
@@ -215,12 +330,144 @@ export default function ForgePage() {
         const err = await res.json();
         throw new Error(err.error ?? "生成失败");
       }
-      toast.success("任务已提交，在渲染队列查看");
+      const result = await res.json();
+      const taskId = result.task_id || result.id;
+      toast.success("任务已提交");
+
+      // P1-6: 追踪任务
+      const newTask: SandboxTask = {
+        id: taskId,
+        status: "pending",
+        video_url: null,
+        thumbnail_url: null,
+        prompt: sandboxPrompt,
+        model_id: "happyhorse-1.1",
+        mode: sandboxMode,
+        aspect_ratio: sandboxAspectRatio,
+        duration: parseInt(sandboxDuration),
+      };
+      setSandboxTasks((prev) => [newTask, ...prev].slice(0, 5));
+      startPolling(newTask);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "生成失败");
     } finally {
       setSandboxLoading(false);
     }
+  }
+
+  // P1-6: 打开导入弹窗，拉取项目-集级联
+  async function openImportDialog(taskId: string) {
+    setImportingTaskId(taskId);
+    setImportProjectId("");
+    setImportEpisodeId("");
+    setImportEpisodes([]);
+    setImportDialogOpen(true);
+  }
+
+  async function handleProjectChange(projectId: string) {
+    setImportProjectId(projectId);
+    setImportEpisodeId("");
+    if (!projectId) {
+      setImportEpisodes([]);
+      return;
+    }
+    const supabase = createClient();
+    const { data } = await supabase
+      .from("episodes")
+      .select("id, title")
+      .eq("project_id", projectId)
+      .order("episode_number", { ascending: true });
+    setImportEpisodes((data as Episode[]) ?? []);
+  }
+
+  async function handleStartImport() {
+    if (!importingTaskId || !importProjectId || !importEpisodeId) {
+      toast.error("请选择项目和集");
+      return;
+    }
+
+    const task = sandboxTasks.find((t) => t.id === importingTaskId);
+    if (!task) return;
+
+    setImportLoading(true);
+    try {
+      const res = await apiFetch("/api/shots", {
+        method: "POST",
+        json: {
+          project_id: importProjectId,
+          episode_id: importEpisodeId,
+          prompt: task.prompt,
+          model: task.model_id,
+          mode: task.mode,
+          aspect_ratio: task.aspect_ratio,
+          duration: task.duration,
+          video_url: task.video_url,
+          thumbnail_url: task.thumbnail_url,
+          status: task.status,
+        },
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error ?? "导入失败");
+      }
+      toast.success("已导入到项目集");
+      setSandboxTasks((prev) => prev.filter((t) => t.id !== importingTaskId));
+      setImportDialogOpen(false);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "导入失败");
+    } finally {
+      setImportLoading(false);
+    }
+  }
+
+  async function handleRetrySandboxTask(task: SandboxTask) {
+    setSandboxTasks((prev) =>
+      prev.map((t) => (t.id === task.id ? { ...t, status: "pending", video_url: null, thumbnail_url: null } : t))
+    );
+    try {
+      const res = await apiFetch("/api/generation/create", {
+        method: "POST",
+        json: {
+          model_id: task.model_id,
+          prompt: task.prompt,
+          mode: task.mode,
+          aspect_ratio: task.aspect_ratio,
+          duration: task.duration,
+          project_id: null,
+        },
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error ?? "重试失败");
+      }
+      const result = await res.json();
+      const newId = result.task_id || result.id;
+      const newTask: SandboxTask = { ...task, id: newId, status: "pending", video_url: null, thumbnail_url: null };
+      setSandboxTasks((prev) => prev.map((t) => (t.id === task.id ? newTask : t)));
+      startPolling(newTask);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "重试失败");
+      setSandboxTasks((prev) =>
+        prev.map((t) => (t.id === task.id ? { ...t, status: "failed" } : t))
+      );
+    }
+  }
+
+  function statusBadge(status: string) {
+    const map: Record<string, { label: string; className: string }> = {
+      pending: { label: "等待中", className: "text-muted-foreground" },
+      running: { label: "生成中", className: "text-brand-cyan" },
+      submitted: { label: "已提交", className: "text-brand-cyan" },
+      completed: { label: "已完成", className: "text-brand-green" },
+      failed: { label: "失败", className: "text-brand-magenta" },
+      cancelled: { label: "已取消", className: "text-muted-foreground" },
+    };
+    const info = map[status] ?? { label: status, className: "text-muted-foreground" };
+    return (
+      <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${info.className}`}>
+        {info.label}
+      </Badge>
+    );
   }
 
   return (
@@ -280,12 +527,12 @@ export default function ForgePage() {
                   >
                     {char.anchor_image_url || char.reference_image_url ? (
                       <Image
-          src={char.anchor_image_url ?? char.reference_image_url ?? ""}
-          alt={char.name}
-          width={32}
-          height={32}
-          className="rounded-full object-cover"
-        />
+                        src={char.anchor_image_url ?? char.reference_image_url ?? ""}
+                        alt={char.name}
+                        width={32}
+                        height={32}
+                        className="rounded-full object-cover"
+                      />
                     ) : (
                       <div className="w-8 h-8 rounded-full bg-brand-cyan/10 flex items-center justify-center">
                         <span className="text-xs font-medium text-brand-cyan">
@@ -565,6 +812,66 @@ export default function ForgePage() {
               )}
             </Button>
 
+            {/* P1-6: 最近生成任务列表 */}
+            {sandboxTasks.length > 0 && (
+              <div className="space-y-2 pt-2 border-t border-white/[0.06]">
+                <p className="text-xs text-muted-foreground font-medium">最近生成</p>
+                {sandboxTasks.map((task) => (
+                  <div
+                    key={task.id}
+                    className="flex items-center gap-2 p-2 rounded-lg border border-white/[0.06] bg-white/[0.02]"
+                  >
+                    {task.thumbnail_url && task.status === "completed" ? (
+                      <Image
+                        src={task.thumbnail_url}
+                        alt={task.prompt.slice(0, 20)}
+                        width={40}
+                        height={56}
+                        className="rounded object-cover shrink-0"
+                      />
+                    ) : (
+                      <div className="w-[40px] h-[56px] rounded bg-white/[0.04] flex items-center justify-center shrink-0">
+                        {task.status === "failed" ? (
+                          <span className="text-brand-magenta text-[10px]">✕</span>
+                        ) : (
+                          <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
+                        )}
+                      </div>
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs truncate">{task.prompt.slice(0, 30)}</p>
+                      <div className="flex items-center gap-1 mt-0.5">
+                        {statusBadge(task.status)}
+                        <span className="text-[10px] text-muted-foreground">
+                          {task.mode === "t2v" ? "文生视频" : "图生视频"} · {task.aspect_ratio} · {task.duration}s
+                        </span>
+                      </div>
+                    </div>
+                    {task.status === "completed" && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-7 px-2 text-brand-cyan hover:text-brand-cyan hover:bg-brand-cyan/10"
+                        onClick={() => openImportDialog(task.id)}
+                      >
+                        <FolderPlus className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
+                    {task.status === "failed" && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-7 px-2 text-muted-foreground hover:text-foreground"
+                        onClick={() => handleRetrySandboxTask(task)}
+                      >
+                        <RotateCcw className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
             <p className="text-xs text-muted-foreground text-center">
               满意的结果可转存到素材库
             </p>
@@ -576,6 +883,62 @@ export default function ForgePage() {
       <p className="text-xs text-muted-foreground text-center py-2">
         灵感沙盒消耗积分与正式生成相同，满意后可在队列中转存。
       </p>
+
+      {/* P1-6: 导入弹窗 */}
+      <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
+        <DialogContent className="sm:max-w-[420px]">
+          <DialogHeader>
+            <DialogTitle>导入到项目</DialogTitle>
+            <DialogDescription>
+              将沙盒生成结果保存为项目集中的镜头。
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label className="text-sm text-muted-foreground">选择项目</label>
+              <Select value={importProjectId} onValueChange={handleProjectChange}>
+                <SelectTrigger className="bg-white/[0.03] border-white/[0.06] w-full">
+                  <SelectValue placeholder="选择项目" />
+                </SelectTrigger>
+                <SelectContent>
+                  {projects.map((p) => (
+                    <SelectItem key={p.id} value={p.id}>{p.title}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm text-muted-foreground">选择集</label>
+              <Select value={importEpisodeId} onValueChange={setImportEpisodeId} disabled={!importProjectId}>
+                <SelectTrigger className="bg-white/[0.03] border-white/[0.06] w-full">
+                  <SelectValue placeholder={importProjectId ? "选择集" : "请先选择项目"} />
+                </SelectTrigger>
+                <SelectContent>
+                  {importEpisodes.map((ep) => (
+                    <SelectItem key={ep.id} value={ep.id}>{ep.title}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setImportDialogOpen(false)}>取消</Button>
+            <Button
+              onClick={handleStartImport}
+              disabled={importLoading || !importProjectId || !importEpisodeId}
+            >
+              {importLoading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  导入中...
+                </>
+              ) : (
+                "确认导入"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
