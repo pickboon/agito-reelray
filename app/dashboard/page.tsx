@@ -6,7 +6,18 @@ import { createClient } from "@/lib/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import { Film, Clapperboard, Wallet, TrendingUp, ArrowRight, Sparkles } from "lucide-react";
+import {
+  Film,
+  Clapperboard,
+  Wallet,
+  TrendingUp,
+  ArrowRight,
+  Sparkles,
+  Zap,
+  Wand2,
+  FlaskConical,
+  LayoutTemplate,
+} from "lucide-react";
 import HowItWorksBanner from "@/components/HowItWorksBanner";
 
 interface DashboardStats {
@@ -54,6 +65,20 @@ function CountUp({ target, duration = 800, formatter }: { target: number; durati
 
   return <>{formatter ? formatter(display) : display.toLocaleString()}</>;
 }
+
+const quickLinks = [
+  { href: "/dashboard/projects", label: "新项目", desc: "创建短剧项目", icon: Film, color: "gold" as const },
+  { href: "/dashboard/hub", label: "创作中枢", desc: "剧本到分镜", icon: Wand2, color: "cyan" as const },
+  { href: "/dashboard/forge", label: "资产锻造", desc: "角色/滤镜/配音", icon: Sparkles, color: "gold" as const },
+  { href: "/dashboard/generate", label: "灵感沙盒", desc: "快速生成试验", icon: FlaskConical, color: "cyan" as const },
+];
+
+const templates = [
+  { emoji: "🗡️", name: "复仇重生", desc: "逆袭打脸爽剧" },
+  { emoji: "💕", name: "甜宠虐恋", desc: "甜虐交织恋爱" },
+  { emoji: "🔍", name: "悬疑惊悚", desc: "烧脑反转推理" },
+  { emoji: "🧚", name: "穿越仙侠", desc: "修仙奇幻冒险" },
+];
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -167,78 +192,19 @@ export default function DashboardPage() {
     },
   ] as const;
 
-  // P2-2: projectCount === 0 时显示欢迎引导
-  if (stats && stats.projectCount === 0) {
-    return (
-      <div className="space-y-8">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
-          <p className="text-sm text-muted-foreground mt-1">项目概览与快捷操作</p>
-        </div>
-
-        {/* B4 工作原理 Banner */}
-        <HowItWorksBanner />
-
-        {/* 欢迎引导卡片 */}
-        <Card className="border-brand-gold/30 bg-brand-gold/5">
-          <CardContent className="flex flex-col items-center justify-center py-12 px-6">
-            <div className="h-14 w-14 rounded-full bg-brand-gold/10 flex items-center justify-center mb-4">
-              <Sparkles className="h-6 w-6 text-brand-gold" />
-            </div>
-            <h2 className="text-lg font-semibold text-foreground mb-2">
-              欢迎使用 ReelRay！
-            </h2>
-            <p className="text-sm text-muted-foreground text-center max-w-sm mb-6">
-              创建你的第一个项目，上传角色照片，开始生成一致性短剧视频。
-            </p>
-            <Link
-              href="/dashboard/projects"
-              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-md btn-primary text-sm font-medium"
-            >
-              创建第一个项目
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </CardContent>
-        </Card>
-
-        {/* 快捷引导 */}
-        <div className="grid gap-4 sm:grid-cols-3">
-          <Card>
-            <CardContent className="py-6 text-center">
-              <Film className="h-5 w-5 text-brand-gold mx-auto mb-2" />
-              <p className="text-sm font-medium">步骤 1</p>
-              <p className="text-xs text-muted-foreground mt-1">创建项目并选择模板</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="py-6 text-center">
-              <Clapperboard className="h-5 w-5 text-brand-cyan mx-auto mb-2" />
-              <p className="text-sm font-medium">步骤 2</p>
-              <p className="text-xs text-muted-foreground mt-1">上传角色参考照片</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="py-6 text-center">
-              <Sparkles className="h-5 w-5 text-brand-gold mx-auto mb-2" />
-              <p className="text-sm font-medium">步骤 3</p>
-              <p className="text-xs text-muted-foreground mt-1">生成一致性视频片段</p>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
-  }
+  const isEmpty = stats && stats.projectCount === 0;
 
   return (
     <div className="space-y-8 animate-hud-fade-in">
       <div>
         <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
-        <p className="text-sm text-muted-foreground mt-1">项目概览与快捷操作</p>
+        <p className="text-sm text-muted-foreground mt-1">项目概览与创作中枢</p>
       </div>
 
       {/* B4 工作原理 Banner */}
       <HowItWorksBanner />
 
+      {/* 4 指标卡 */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {statCards.map((card) => (
           <Card key={card.label} className="frosted-card card-hover-lift">
@@ -261,6 +227,87 @@ export default function DashboardPage() {
         ))}
       </div>
 
+      {/* 空项目欢迎引导 */}
+      {isEmpty && (
+        <Card className="border-brand-gold/30 bg-brand-gold/5">
+          <CardContent className="flex flex-col items-center justify-center py-12 px-6">
+            <div className="h-14 w-14 rounded-full bg-brand-gold/10 flex items-center justify-center mb-4">
+              <Sparkles className="h-6 w-6 text-brand-gold" />
+            </div>
+            <h2 className="text-lg font-semibold text-foreground mb-2">
+              欢迎使用 ReelRay！
+            </h2>
+            <p className="text-sm text-muted-foreground text-center max-w-sm mb-6">
+              创建你的第一个项目，上传角色照片，开始生成一致性短剧视频。
+            </p>
+            <Link
+              href="/dashboard/projects"
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-md btn-primary text-sm font-medium"
+            >
+              创建第一个项目
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Bento 双栏区 */}
+      <div className="grid gap-4 md:grid-cols-2">
+        {/* 左：快速开始 */}
+        <Card className="backdrop-blur bg-white/[0.03] border-white/[0.06]">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-base font-medium">
+              <Zap className="h-4 w-4 text-brand-gold" />
+              快速开始
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-3 grid-cols-2">
+            {quickLinks.map((link) => {
+              const borderClass = link.color === "gold" ? "hover:border-brand-gold/30" : "hover:border-brand-cyan/30";
+              const iconBg = link.color === "gold" ? "bg-brand-gold/10" : "bg-brand-cyan/10";
+              const iconColor = link.color === "gold" ? "text-brand-gold" : "text-brand-cyan";
+              return (
+                <Link key={link.href} href={link.href}>
+                  <div className={`flex items-center gap-3 h-[54px] px-3 rounded-lg border border-white/[0.06] bg-white/[0.03] backdrop-blur hover:bg-white/[0.06] ${borderClass} transition-colors cursor-pointer`}>
+                    <div className={`flex items-center justify-center w-8 h-8 rounded-full ${iconBg}`}>
+                      <link.icon className={`h-4 w-4 ${iconColor}`} />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-foreground truncate">{link.label}</p>
+                      <p className="text-[11px] text-muted-foreground truncate">{link.desc}</p>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </CardContent>
+        </Card>
+
+        {/* 右：推荐模板 */}
+        <Card className="backdrop-blur bg-white/[0.03] border-white/[0.06]">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-base font-medium">
+              <LayoutTemplate className="h-4 w-4 text-brand-cyan" />
+              推荐模板
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Link href="/templates">
+              <div className="grid gap-3 grid-cols-2 sm:grid-cols-4">
+                {templates.map((t) => (
+                  <div key={t.name} className="flex flex-col items-center justify-center p-3 rounded-lg bg-brand-gold/5 hover:border-brand-gold/30 border border-transparent transition-colors cursor-pointer">
+                    <span className="text-2xl mb-1">{t.emoji}</span>
+                    <p className="text-sm font-medium text-foreground text-center">{t.name}</p>
+                    <p className="text-[11px] text-muted-foreground text-center">{t.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* 最近项目列表 */}
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-foreground">最近项目</h2>
