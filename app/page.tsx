@@ -386,6 +386,12 @@ export default function Home() {
                 { label: "穿越", video: "/demos/crossworld_portal.mp4" },
                 { label: "仙侠", video: "/demos/fantasy_cave.mp4" },
                 { label: "战神", video: "/demos/warlord_return.mp4" },
+                { label: "重生", video: "/demos/comeback_villa.mp4" },
+                { label: "复仇·商战", video: "/demos/revenge_boardroom.mp4" },
+                { label: "甜宠·咖啡", video: "/demos/romance_cafe.mp4" },
+                { label: "穿越·宫廷", video: "/demos/crossworld_court.mp4" },
+                { label: "仙侠·试炼", video: "/demos/fantasy_trial.mp4" },
+                { label: "战神·王座", video: "/demos/warlord_throne.mp4" },
               ].map((item) => (
                 <div
                   key={item.label}
