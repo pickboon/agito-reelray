@@ -30,6 +30,9 @@ interface QueueItem {
   taskId: string | null;
   updatedAt: string;
   type: "shot" | "task";
+  prompt?: string;
+  aspectRatio?: string;
+  duration?: number;
 }
 
 const statusMap: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline"; animated?: boolean }> = {
@@ -69,8 +72,25 @@ export default function QueuePage() {
         toast.success("已重新提交到渲染队列");
         fetchData();
       } else {
-        // task 类型暂无重试 API
-        toast.info("沙盒任务重试功能开发中");
+        // task 类型：重新提交生成任务
+        const res = await apiFetch("/api/generation/create", {
+          method: "POST",
+          json: {
+            model_id: item.model,
+            prompt: item.prompt || "retry task",
+            mode: "t2v",
+            aspect_ratio: "9:16",
+            duration: 5,
+            project_id: null,
+          },
+        });
+        if (!res.ok) {
+          const data = await res.json();
+          toast.error(data.error || "重试失败");
+          return;
+        }
+        toast.success("已重新提交到渲染队列");
+        fetchData();
       }
     } catch {
       toast.error("网络错误");
@@ -209,6 +229,7 @@ export default function QueuePage() {
             taskId: task.task_id,
             updatedAt,
             type: "task",
+            prompt: task.prompt ?? "",
           });
         }
       }

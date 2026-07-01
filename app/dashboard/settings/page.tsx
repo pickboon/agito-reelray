@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trash2, AlertTriangle, LogOut } from "lucide-react";
+import { Trash2, AlertTriangle, LogOut, Download, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { apiFetch } from "@/lib/api-fetch";
 import { createClient } from "@/lib/supabase/client";
@@ -14,6 +14,29 @@ export default function SettingsPage() {
   const [deleting, setDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
+  const [exporting, setExporting] = useState(false);
+
+  const handleExportData = async () => {
+    setExporting(true);
+    try {
+      const res = await apiFetch("/api/user/data-export");
+      if (!res.ok) throw new Error("Export failed");
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `reelray-data-export-${Date.now()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast.success("数据导出成功");
+    } catch {
+      toast.error("导出失败，请重试");
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const handleDeleteAccount = async () => {
     setDeleting(true);
@@ -62,6 +85,30 @@ export default function SettingsPage() {
           >
             <LogOut className="mr-2 h-4 w-4" />
             {loggingOut ? "登出中..." : "登出"}
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* 数据导出 */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Download className="h-5 w-5" />
+            数据导出
+          </CardTitle>
+          <CardDescription>导出您的所有数据（项目、视频、模板、社区帖子）为 JSON 文件。</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button
+            variant="outline"
+            onClick={handleExportData}
+            disabled={exporting}
+          >
+            {exporting ? (
+              <><Loader2 className="mr-2 h-4 w-4 animate-spin" />导出中...</>
+            ) : (
+              <><Download className="mr-2 h-4 w-4" />导出我的数据</>
+            )}
           </Button>
         </CardContent>
       </Card>

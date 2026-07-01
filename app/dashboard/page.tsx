@@ -335,6 +335,12 @@ export default function DashboardPage() {
             <CardTitle className="flex items-center gap-2 text-base font-medium">
               <LayoutTemplate className="h-4 w-4 text-brand-cyan" />
               推荐模板
+              <Link
+                href="/dashboard/templates"
+                className="ml-auto text-xs text-brand-cyan hover:text-brand-cyan/80 transition-colors font-normal"
+              >
+                浏览全部 →
+              </Link>
             </CardTitle>
           </CardHeader>
           <CardContent>

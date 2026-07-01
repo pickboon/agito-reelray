@@ -79,18 +79,39 @@ export default function ProjectsPage() {
       return;
     }
     
-    const { error: err } = await supabase.from("projects").insert({
-      user_id: user.id,
-      title: newTitle.trim(),
-      description: newDescription.trim() || null,
-      template_id: newTemplate,
-      target_languages: [newLanguage],
-    });
+    // 1. 创建项目
+    const { data: project, error: err } = await supabase
+      .from("projects")
+      .insert({
+        user_id: user.id,
+        title: newTitle.trim(),
+        description: newDescription.trim() || null,
+        template_id: newTemplate,
+        target_languages: [newLanguage],
+      })
+      .select("id")
+      .single();
 
     if (err) {
       console.error("[Create Project]", err);
       alert(`创建失败: ${err.message}\n\n代码: ${err.code}`);
-    } else {
+      setCreating(false);
+      return;
+    }
+
+    // 2. 自动创建第一集
+    const { error: epErr } = await supabase.from("episodes").insert({
+      project_id: project.id,
+      episode_number: 1,
+      title: "第1集",
+      status: "draft",
+    });
+
+    if (epErr) {
+      console.warn("[Create Project] episode error:", epErr.message);
+    }
+
+    {
       setProjects((prev) => [
         {
           id: crypto.randomUUID(),

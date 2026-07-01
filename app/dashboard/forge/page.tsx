@@ -99,6 +99,7 @@ export default function ForgePage() {
   const [emotionSadness, setEmotionSadness] = useState(30);
   const [speechRate, setSpeechRate] = useState(1.0);
   const [ttsLoading, setTtsLoading] = useState(false);
+  const [ttsCustomText, setTtsCustomText] = useState<string>("");
 
   // 灵感沙盒
   const [sandboxPrompt, setSandboxPrompt] = useState("");
@@ -460,13 +461,16 @@ export default function ForgePage() {
       return;
     }
 
-    // Build test text
-    let charName = "测试角色";
-    if (selectedCharacter) {
-      const char = characters.find((c) => c.id === selectedCharacter);
-      if (char) charName = char.name;
+    // Build test text - use custom text if provided, otherwise default
+    let testText = ttsCustomText.trim();
+    if (!testText) {
+      let charName = "测试角色";
+      if (selectedCharacter) {
+        const char = characters.find((c) => c.id === selectedCharacter);
+        if (char) charName = char.name;
+      }
+      testText = `你好，我是${charName}，这是我的声音`;
     }
-    const testText = `你好，我是${charName}，这是我的声音`;
 
     setTtsLoading(true);
     try {
@@ -736,6 +740,18 @@ export default function ForgePage() {
                 ))}
               </SelectContent>
             </Select>
+
+            <Textarea
+              rows={3}
+              placeholder="输入试听文本（可选，默认：你好，我是XXX...）"
+              value={ttsCustomText}
+              onChange={(e) => setTtsCustomText(e.target.value)}
+              className="bg-white/[0.03] border-white/[0.06] text-sm resize-none"
+              maxLength={300}
+            />
+            <p className="text-[10px] text-muted-foreground text-right">
+              {ttsCustomText.length}/300
+            </p>
 
             <Button
               size="sm"

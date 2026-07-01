@@ -60,7 +60,8 @@ export function CreateProjectDialog({ open, onOpenChange }: CreateProjectDialogP
       return;
     }
 
-    const { data, error } = await supabase
+    // 1. 创建项目
+    const { data: project, error } = await supabase
       .from("projects")
       .insert({
         user_id: user.id,
@@ -75,19 +76,36 @@ export function CreateProjectDialog({ open, onOpenChange }: CreateProjectDialogP
     if (error) {
       console.error("[CreateProjectDialog]", error);
       toast.error(`创建失败: ${error.message}`);
+      setCreating(false);
+      return;
+    }
+
+    // 2. 自动创建第一集
+    const { data: episode, error: epError } = await supabase
+      .from("episodes")
+      .insert({
+        project_id: project.id,
+        episode_number: 1,
+        title: "第1集",
+        status: "draft",
+      })
+      .select("id")
+      .single();
+
+    if (epError) {
+      console.error("[CreateProjectDialog] episode error:", epError);
+      toast.error(`项目已创建，但创建集数失败: ${epError.message}`);
+    }
+
+    toast.success(`项目「${title.trim()}」已创建`);
+    onOpenChange(false);
+    resetForm();
+
+    // 3. 跳转到编辑器
+    if (episode && !epError) {
+      router.push(`/dashboard/projects/${project.id}/episodes/${episode.id}`);
     } else {
-      toast.success(`项目「${title.trim()}」已创建`);
-      onOpenChange(false);
-      resetForm();
-      // 跳转到项目编辑器：先取第一集
-      const { data: eps } = await supabase
-        .from("episodes")
-        .select("id")
-        .eq("project_id", data.id)
-        .order("episode_number", { ascending: true })
-        .limit(1);
-      const epId = eps?.[0]?.id;
-      router.push(epId ? `/dashboard/projects/${data.id}/episodes/${epId}` : `/dashboard/projects/${data.id}`);
+      router.push(`/dashboard/projects/${project.id}`);
     }
     setCreating(false);
   }

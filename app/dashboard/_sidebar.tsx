@@ -11,6 +11,8 @@ import {
   Sparkles,
   Clock,
   FolderOpen,
+  Users,
+  LayoutTemplate,
 } from "lucide-react";
 import { GlobalStatusBar } from "@/components/layout/GlobalStatusBar";
 import { cn } from "@/lib/utils";
@@ -21,6 +23,8 @@ const navItems = [
   { href: "/dashboard/forge", label: "锻造", icon: Sparkles },
   { href: "/dashboard/queue", label: "队列", icon: Clock },
   { href: "/dashboard/assets", label: "资产", icon: FolderOpen },
+  { href: "/dashboard/community", label: "社区", icon: Users },
+  { href: "/dashboard/templates", label: "模板市场", icon: LayoutTemplate },
   { href: "/dashboard/projects", label: "Projects", icon: Film },
 ];
 
