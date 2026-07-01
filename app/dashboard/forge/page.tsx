@@ -98,6 +98,7 @@ export default function ForgePage() {
   const [emotionAnger, setEmotionAnger] = useState(50);
   const [emotionSadness, setEmotionSadness] = useState(30);
   const [speechRate, setSpeechRate] = useState(1.0);
+  const [ttsLoading, setTtsLoading] = useState(false);
 
   // 灵感沙盒
   const [sandboxPrompt, setSandboxPrompt] = useState("");
@@ -453,6 +454,58 @@ export default function ForgePage() {
     }
   }
 
+  async function handleTtsPreview() {
+    if (!selectedVoice) {
+      toast.error("请选择音色");
+      return;
+    }
+
+    // Build test text
+    let charName = "测试角色";
+    if (selectedCharacter) {
+      const char = characters.find((c) => c.id === selectedCharacter);
+      if (char) charName = char.name;
+    }
+    const testText = `你好，我是${charName}，这是我的声音`;
+
+    setTtsLoading(true);
+    try {
+      // Determine emotion from sliders
+      let emotion: string | undefined;
+      if (emotionAnger > emotionSadness && emotionAnger > 50) {
+        emotion = "angry";
+      } else if (emotionSadness > emotionAnger && emotionSadness > 50) {
+        emotion = "sad";
+      }
+
+      const res = await apiFetch("/api/audio/tts", {
+        method: "POST",
+        json: {
+          text: testText,
+          voice: selectedVoice,
+          speech_rate: speechRate,
+          ...(emotion ? { emotion } : {}),
+        },
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error ?? "配音失败");
+      }
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      audio.onended = () => URL.revokeObjectURL(url);
+      await audio.play();
+      toast.success("试听播放中");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "配音失败");
+    } finally {
+      setTtsLoading(false);
+    }
+  }
+
   function statusBadge(status: string) {
     const map: Record<string, { label: string; className: string }> = {
       pending: { label: "等待中", className: "text-muted-foreground" },
@@ -684,9 +737,24 @@ export default function ForgePage() {
               </SelectContent>
             </Select>
 
-            <Button size="sm" variant="outline" disabled className="w-full">
-              <Play className="h-3 w-3 mr-1" />
-              试听
+            <Button
+              size="sm"
+              variant="outline"
+              className="w-full"
+              onClick={handleTtsPreview}
+              disabled={ttsLoading || !selectedVoice}
+            >
+              {ttsLoading ? (
+                <>
+                  <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                  合成中...
+                </>
+              ) : (
+                <>
+                  <Play className="h-3 w-3 mr-1" />
+                  试听
+                </>
+              )}
             </Button>
 
             <div className="space-y-2">
@@ -734,7 +802,9 @@ export default function ForgePage() {
               />
             </div>
 
-            <p className="text-xs text-muted-foreground text-center">配音功能即将上线</p>
+            <p className="text-xs text-muted-foreground text-center">
+              试听消耗积分，实际配音导出时从项目积分扣除
+            </p>
           </CardContent>
         </Card>
 
