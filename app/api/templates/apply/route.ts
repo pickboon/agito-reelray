@@ -50,6 +50,43 @@ const PRESETS: Record<string, {
     name: "穿越仙侠",
     description: "修仙奇幻冒险",
   },
+  crossworld: {
+    prompt: "time-travel drama, portal effects, dual-era visual contrast",
+    model: "happyhorse-1.1-t2v",
+    mode: "t2v",
+    aspect_ratio: "9:16",
+    duration: 5,
+    name: "穿越时空",
+    description: "现代女孩意外穿越古代宫廷",
+  },
+  ceo: {
+    prompt: "CEO romance, luxury office setting, emotional tension, high fashion",
+    model: "happyhorse-1.1-t2v",
+    mode: "t2v",
+    aspect_ratio: "9:16",
+    duration: 5,
+    name: "霸总契约",
+    description: "平凡女孩与冷面CEO签订契约恋爱合同",
+  },
+  warlord: {
+    prompt: "warrior return, action sequences, urban justice, intense combat",
+    model: "happyhorse-1.1-t2v",
+    mode: "t2v",
+    aspect_ratio: "9:16",
+    duration: 5,
+    name: "战神归来",
+    description: "退役特种兵战神回归都市",
+  },
+  comeback: {
+    prompt: "comeback queen, fashion design, luxury lifestyle, revenge arc",
+    model: "happyhorse-1.1-t2v",
+    mode: "t2v",
+    aspect_ratio: "9:16",
+    duration: 5,
+    name: "逆袭女王",
+    description: "被豪门扫地出门的灰姑娘真实身份竟是顶级设计师",
+  },
+
 };
 
 // 5 个分镜的通用描述后缀

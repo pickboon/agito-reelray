@@ -20,6 +20,7 @@ import {
   Crown,
 } from "lucide-react";
 import { getCsrfHeader } from "@/lib/csrf";
+import { apiFetch } from "@/lib/api-fetch";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
@@ -153,15 +154,9 @@ export default function PricingPage() {
     setCheckoutLoading(id);
     setCheckoutError(null);
     try {
-      const res = await fetch("/api/stripe/checkout", {
+      const res = await apiFetch("/api/stripe/checkout", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-csrf-token": getCsrfHeader(),
-        },
-        body: JSON.stringify(
-          type === "subscription" ? { type, plan: id } : { type, bundle: id },
-        ),
+        json: type === "subscription" ? { type, plan: id } : { type, bundle: id },
       });
       const data = await res.json();
       if (data.url) {

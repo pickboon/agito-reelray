@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { useEditorStore } from "@/lib/editor/store";
+import { apiFetch } from "@/lib/api-fetch";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,7 +27,7 @@ export function AudioPanel() {
       formData.append("file", file);
       formData.append("type", "audio");
 
-      const res = await fetch("/api/upload", {
+      const res = await apiFetch("/api/upload", {
         method: "POST",
         body: formData,
       });

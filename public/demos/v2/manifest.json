@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-07-01T04:39:51.413Z",
+  "version": "v2",
+  "improvements": [
+    "角色肖像 Bible Pipeline (先独立生成面部特写作为 r2v 参考)",
+    "分辨率修正: 1920*1080",
+    "Prompt 结构重组: 角色身份证 → 场景灯光 → 动作情绪",
+    "添加 negative prompt",
+    "镜头间 0.3s crossfade 过渡"
+  ],
+  "demos": [
+    {
+      "id": "banner_hero",
+      "shots": 3,
+      "shot_videos": [
+        "shot_1.mp4",
+        "shot_2.mp4",
+        "shot_3.mp4"
+      ],
+      "final": "final_15s.mp4",
+      "status": "completed",
+      "errors": []
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -146,6 +147,24 @@ export default function GeneratePage() {
   const [selectedEpisodeId, setSelectedEpisodeId] = useState<string>("");
   const [importing, setImporting] = useState(false);
   const [importLoadingEpisodes, setImportLoadingEpisodes] = useState(false);
+
+  // Read URL search params to prefill form
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const promptParam = searchParams.get("prompt");
+    const modelParam = searchParams.get("model");
+    const modeParam = searchParams.get("mode");
+    const aspectParam = searchParams.get("aspect_ratio");
+    const durationParam = searchParams.get("duration");
+    
+    if (promptParam) setPrompt(promptParam);
+    if (modelParam) setModel(modelParam);
+    if (modeParam && (modeParam === "t2v" || modeParam === "r2v")) setMode(modeParam);
+    if (aspectParam) setAspectRatio(aspectParam);
+    if (durationParam) setDuration(parseInt(durationParam));
+  }, [searchParams]);
+
+
 
   const fetchTasks = useCallback(async (pageNum = 0) => {
     try {
